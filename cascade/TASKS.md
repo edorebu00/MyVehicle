@@ -1,73 +1,66 @@
-Data (UTC): 2026-09-26
+Data (UTC): 2026-09-27
 
-PR aperte al momento dello scan: nessuna. PR aperte dei lavoratori (`claude/worker-`): 0.
+PR aperte al momento dello scan: nessuna. PR dei lavoratori non unite: 0.
 
-## T1 — Middleware: risposta 401 JSON per le API invece del rinvio alla pagina di login
-Gravita': Minore (in cima perche' e' un intervento di rafforzamento sulla gestione della sessione)
-File: `web/middleware.ts:44-48`; chiamanti `web/components/GlobalSearch.tsx:36-54`, `web/components/VehicleDetailTabs.tsx:72-80`, `web/components/ChatPanel.tsx:61-69`
-Problema: senza sessione valida anche le richieste a `/api/*` vengono reindirizzate a `/login`. Il client
-riceve HTML, `res.json()` fallisce e la ricerca mostra "servizio non raggiungibile" invece di un errore di
-sessione; le route agent hanno gia' il loro 401 JSON (`notAuthenticated`) che pero' non viene mai raggiunto.
-Correzione richiesta: in `middleware.ts`, quando `!user && !isPublic` e `request.nextUrl.pathname` inizia
-con `/api/`, restituire `NextResponse.json({ error: "Not authenticated" }, { status: 401 })` invece del
-redirect; il comportamento per le pagine resta invariato. Non rendere pubblico alcun percorso `/api/`.
-Lasciare in ChatPanel il ramo `res.redirected` (innocuo). Verificare che con 401 la chat tolga la bolla e
-rimetta il testo nel campo (`data !== null && !data.userMessageSaved` -> `restoreUnsent()`).
-Criterio di accettazione: una POST a `/api/agent/search` senza cookie di sessione riceve 401 con corpo JSON
-(nessun header `Location`); una GET a `/dashboard` senza sessione e' ancora reindirizzata a `/login`;
-`npm run lint` e `npx tsc --noEmit` (in `web/`) passano.
-
-## T2 — Catalogo: MG4 64 kWh, Dacia Bigster GPL e anno 2022 della Toyota GR Corolla
-Gravita': Importante
-File: `web/lib/vehicleData.ts:576-580` (MG4), `web/lib/vehicleData.ts:1127-1131` (Bigster), `web/lib/vehicleData.ts:2306` (GR Corolla)
-Problema: il campo motore e' un menu obbligatorio senza voce "altro" e gli anni seguono la voce scelta.
-Il proprietario di una MG4 64 kWh non trova il suo motore; quello di una Bigster a GPL deve salvarla come
-benzina; una GR Corolla immatricolata nel 2022 non puo' indicare il suo anno (voce aggiunta dalla PR #56 con `yearFrom: 2023`).
-Correzione richiesta: in ENGINE_DATA aggiungere a `MG4` `{ label: "Elettrica Long Range 204cv", yearFrom: 2022, yearTo: null }`
-(fra la Standard e la Extended); aggiungere a `Bigster` `{ label: "1.2 TCe ECO-G 140cv GPL", yearFrom: 2025, yearTo: null }`;
-portare `yearFrom` di `"GR Corolla"` da 2023 a 2022. Non toccare altri modelli.
-Criterio di accettazione: `getEngineVariants("auto", "MG", "MG4")` restituisce 4 voci incluse quella da 204cv;
-`getEngineVariants("auto", "Dacia", "Bigster")` restituisce 4 voci inclusa quella GPL;
-`getEngineVariants("auto", "Toyota", "GR Corolla")` ha `yearFrom: 2022`; lint e typecheck passano.
-
-## T3 — Peugeot 508: aggiungi le motorizzazioni della prima generazione (2010-2018)
-Gravita': Importante
-File: `web/lib/vehicleData.ts:2008-2012` (ENGINE_DATA.auto.Peugeot["508"])
-Problema: la chiave "508" copre entrambe le generazioni ma le voci partono dal 2018: una 508 del 2014 non
-puo' registrare ne' il motore ne' l'anno (scelta una voce, il menu degli anni parte dal 2018).
-Correzione richiesta: aggiungere in testa all'elenco, nello stesso formato delle voci esistenti:
-`{ label: "1.6 VTi 120cv", yearFrom: 2010, yearTo: 2014 }`, `{ label: "1.6 THP 156cv", yearFrom: 2010, yearTo: 2018 }`,
-`{ label: "1.6 e-HDi 112cv", yearFrom: 2011, yearTo: 2014 }`, `{ label: "2.0 HDi 140cv", yearFrom: 2010, yearTo: 2014 }`,
-`{ label: "2.0 HDi 163cv", yearFrom: 2010, yearTo: 2014 }`, `{ label: "2.2 HDi 204cv", yearFrom: 2011, yearTo: 2014 }`,
-`{ label: "2.0 HDi Hybrid4 200cv", yearFrom: 2012, yearTo: 2018 }`, `{ label: "1.6 BlueHDi 120cv", yearFrom: 2014, yearTo: 2018 }`,
-`{ label: "2.0 BlueHDi 150cv", yearFrom: 2014, yearTo: 2018 }`, `{ label: "2.0 BlueHDi 180cv", yearFrom: 2014, yearTo: 2018 }`.
-Lasciare invariate le tre voci esistenti.
-Criterio di accettazione: `getEngineVariants("auto", "Peugeot", "508")` restituisce 13 voci senza etichette
-duplicate e con almeno una voce che copre ogni anno dal 2010 al 2018; lint e typecheck passano.
-
-## T4 — Riquadro motorsport: non mettere in cache per 24 ore una risposta senza `submit_briefing`
+## T1 — Le API senza sessione rispondono con il messaggio tradotto della route
 Gravita': Minore
-File: `web/lib/motorsport.ts:96-101` (`extractBriefing`), `web/lib/motorsport.ts:123-166` (`fetchBriefing`)
-Problema: se la risposta del modello non contiene la chiamata a `submit_briefing` (tetto di token,
-`pause_turn`, sola risposta testuale), `extractBriefing` restituisce `EMPTY` senza errore e `unstable_cache`
-conserva il riquadro vuoto per 24 ore; la pausa con nuovo tentativo di `getMotorsportBriefing` non scatta.
-Correzione richiesta: in `extractBriefing`, quando manca il blocco `tool_use` di `submit_briefing` (o il suo
-`input` non e' un oggetto), lanciare un `Error` con `stop_reason` nel messaggio (passarlo come parametro da
-`fetchBriefing`) invece di restituire `EMPTY`. Un `submit_briefing` con `news: []` resta un risultato valido
-e va ancora in cache. Non cambiare `max_tokens`, i tentativi ne' la durata della cache.
-Criterio di accettazione: con un `content` privo di `submit_briefing`, `fetchBriefing` rifiuta la promessa
-(quindi `getMotorsportBriefing` passa dal `catch`, registra la pausa e restituisce `EMPTY` senza memorizzarlo);
-con `submit_briefing` e `news: []` restituisce `{ news: [] }`; lint e typecheck passano.
+File: `web/middleware.ts:44-49`
+Problema: per i percorsi `/api/` il middleware risponde 401 con il testo fisso inglese "Not authenticated";
+i client (`web/components/GlobalSearch.tsx:41-44`, `web/components/ChatPanel.tsx:66-67`) lo mostrano cosi'
+com'e', quindi chi usa l'app in italiano o tedesco con la sessione scaduta vede un messaggio in inglese. La
+risposta creata da zero non porta inoltre i cookie che il client Supabase ha scritto su `response` durante
+`getUser`. Ogni route in `web/app/api/agent/*` verifica gia' l'utente e risponde 401 JSON tradotto
+(`tErr("notAuthenticated")`).
+Correzione richiesta: nel ramo `/api/` restituire `response` (lasciar proseguire la richiesta) invece di
+`NextResponse.json(...)`, con un commento che spiega che ogni route API fa il proprio controllo e risponde
+401 JSON nella lingua dell'utente. Aggiornare il commento in `web/components/ChatPanel.tsx:56-60` se cita
+ancora il rinvio a /login per sessione scaduta. Non toccare il comportamento per le pagine (rinvio a /login).
+Criterio di accettazione: in `web/middleware.ts` non compare piu' la stringa "Not authenticated"; per
+`/api/*` senza utente il middleware restituisce `response`; le tre route in `web/app/api/agent/*` contengono
+ancora il controllo `getUser` con `tErr("notAuthenticated")`; `npx tsc --noEmit` e `npm run lint` in `web/` passano.
 
-Nota di coordinamento: T2 e T3 modificano entrambi `web/lib/vehicleData.ts` (blocchi distanti, MG/Dacia/Toyota
-e Peugeot): meglio assegnarli allo stesso lavoratore o eseguirli in sequenza. T1 e T4 toccano file separati.
+## T2 — Riquadro motorsport: una risposta troncata non finisce in cache come elenco vuoto
+Gravita': Minore
+File: `web/lib/motorsport.ts:96-107`
+Problema: se la risposta si ferma per `max_tokens` mentre il modello scrive l'input di `submit_briefing`,
+il blocco esiste ma l'input e' parziale e senza array `news`; `extractBriefing` restituisce `{ news: [] }`
+senza errore e `unstable_cache` lo conserva per 24 ore.
+Correzione richiesta: in `extractBriefing` lanciare l'errore (stesso formato di quello esistente, con lo
+`stop_reason`) anche quando `stopReason === "max_tokens"` o quando `input.news` non e' un array; un
+`submit_briefing` completo con `news: []` resta un risultato valido. Aggiornare il commento alle righe 101-103.
+Criterio di accettazione: con `stopReason` "max_tokens" oppure con input `{}` la funzione lancia; con
+input `{ news: [] }` e `stopReason` "tool_use"/"end_turn" restituisce `{ news: [] }`; `npx tsc --noEmit` e
+`npm run lint` in `web/` passano.
+
+## T3 — Toyota bZ4X: togliere la motorizzazione doppia dal menu
+Gravita': Minore
+File: `web/lib/engineExtensions.ts:526`
+Problema: `ENGINE_DATA` (`web/lib/vehicleData.ts:2323-2326`) ha "Elettrica 71.4 kWh 204cv" e "Elettrica 72.8 kWh
+AWD 218cv"; `ENGINE_EXTENSIONS` ha anche "Elettrica 71 kWh 204cv", che e' la stessa versione con un'altra
+etichetta. `getEngineVariants` unisce le due liste scartando solo le etichette identiche, quindi il menu
+mostra tre voci.
+Correzione richiesta: rimuovere la voce `bZ4X` da `web/lib/engineExtensions.ts` (se resta vuoto l'oggetto
+Toyota, rimuovere anche quello, seguendo lo stile del file).
+Criterio di accettazione: `getEngineVariants("auto", "Toyota", "bZ4X")` restituisce esattamente le due
+voci di `ENGINE_DATA`; `grep -n bZ4X web/lib/engineExtensions.ts` non trova nulla; `npx tsc --noEmit` passa.
+
+## T4 — Peugeot e-3008 Dual Motor: correggere batteria e potenza
+Gravita': Minore
+File: `web/lib/vehicleData.ts:2006`
+Problema: la voce "Elettrica Dual Motor 98 kWh 320cv" non corrisponde alla versione reale: la e-3008 Dual
+Motor a trazione integrale ha la batteria da 73 kWh e 325cv (la 98 kWh e' la Long Range a un motore, gia'
+presente come "Elettrica 98 kWh 230cv"). L'etichetta viene usata dalla ricerca IA e dalla chat.
+Correzione richiesta: cambiare l'etichetta in "Elettrica Dual Motor 73 kWh 325cv", lasciando invariati gli anni.
+Criterio di accettazione: `grep -n "Dual Motor" web/lib/vehicleData.ts` mostra per la e-3008 solo
+"Elettrica Dual Motor 73 kWh 325cv"; nessun'altra riga del file cambia.
 
 ## Richiede intervento umano (non assegnare)
 
-- U1 — Il limite d'uso condiviso fra le istanze si appoggia a righe che l'account puo' rimuovere:
-  serve una struttura dedicata con sola aggiunta, cioe' una migrazione in `supabase/` (invariato).
-- U2 — Pausa e promessa condivise del riquadro motorsport restano in memoria di istanza: renderle comuni
-  richiede una struttura condivisa, quindi una scelta di design (invariato).
+- U1 — Limite d'uso condiviso fra le istanze basato su righe rimovibili dall'account: serve una struttura
+  dedicata con sola aggiunta, quindi una migrazione in `supabase/` (`web/lib/rateLimit.ts`).
+- U2 — Pausa del riquadro motorsport dopo un tentativo non riuscito: in memoria di istanza e di durata fissa
+  (`web/lib/motorsport.ts:50, 184-212`); renderla condivisa e crescente richiede una struttura condivisa e
+  una scelta sulle durate.
 
 ## Gia' in PR
 

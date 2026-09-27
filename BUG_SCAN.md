@@ -1,84 +1,91 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-09-26 01:21 UTC
-Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json`, file generati con l'intestazione "GENERATO DA")
-PR aperte al momento dello scan: nessuna (di nessun autore).
+Data scan: 2026-09-27 01:20 UTC
+Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json`, file generati con l'intestazione "GENERATO DA").
+La revisione approfondita si e' concentrata sulle modifiche entrate in `main` dopo lo scan precedente
+(PR #57, #58, #59, #60: `web/middleware.ts`, `web/lib/motorsport.ts`, `web/lib/vehicleData.ts`); il resto
+del codice era gia' stato esaminato e non e' cambiato.
+PR aperte al momento dello scan: nessuna.
 
-Ogni problema qui sotto e' stato verificato leggendo personalmente il codice indicato (file + righe).
-I rilievi I1, I2 e I3 della scansione precedente risultano corretti dalle PR #54 e #55 e non sono ripetuti.
+Ogni problema qui sotto e' stato verificato leggendo personalmente il codice indicato.
+I rilievi I1, I2, M1 e M2 della scansione precedente risultano corretti dalle PR #57-#59.
 
-Rilievi esaminati e scartati (gia' valutati nelle scansioni precedenti, invariati): rimozione della bolla
-in chat quando una risposta 2xx non si legge; scadenza delle route agent calcolata dall'inizio della
-chiamata al modello invece che della richiesta, e condizione `hasOpenAIFallback()` duplicata fra chat e
-ricerca (refactoring; con i valori attuali restano sotto `maxDuration`); "Epiq" in doppio fra
-`CATALOGUE_EXTENSIONS` e `CATALOGUE_SWEEP` (nessun effetto visibile). Il rilievo sul caricamento dei
-documenti a sessione scaduta e' stato ridimensionato: l'upload su Storage e l'inserimento della riga
-avvengono subito prima con la stessa sessione, quindi il caso e' solo teorico; resta il difetto generale
-descritto in M2.
+Rilievi esaminati e scartati: la continuazione di un turno con `stop_reason: pause_turn` nel riquadro
+motorsport (con una sola ricerca web consentita il caso e' improbabile, e la correzione richiederebbe un
+ciclo in piu'); il ramo `res.redirected` in `web/components/ChatPanel.tsx:63` (resta utile per altri
+rinvii, al massimo il commento va aggiornato); la posizione delle aggiunte al catalogo in `ENGINE_DATA`
+invece che in `engineExtensions.ts` (convenzione, nessun effetto visibile se non la duplicazione in M3).
 
 ## Bloccante
 
-Nessun problema bloccante trovato in questa scansione.
+Nessun problema bloccante trovato.
 
 ## Importante
 
-### I1 — Catalogo: alcuni proprietari non possono registrare il proprio motore o anno
-File: `web/lib/vehicleData.ts:576-580` (MG4), `web/lib/vehicleData.ts:1127-1131` (Dacia Bigster),
-`web/lib/vehicleData.ts:2306` (Toyota GR Corolla); menu in `web/app/(dashboard)/veicoli/nuovo/page.tsx:58-67, 280-291`
-
-Quando un modello ha motorizzazioni in catalogo il campo motore e' un menu obbligatorio senza voce
-"altro", e gli anni proposti seguono `yearFrom`/`yearTo` della voce scelta. Mancano quindi:
-- MG4: la versione 64 kWh 204cv (Long Range), la piu' diffusa; oggi il proprietario deve scegliere 170cv o 245cv.
-- Dacia Bigster: la versione a GPL ECO-G 140cv, molto comune in Italia; oggi finisce salvata come benzina.
-- Toyota GR Corolla (voce aggiunta dalla PR #56): `yearFrom: 2023`, ma la vettura e' immatricolata dal 2022;
-  prima della PR il campo era libero, ora un'auto del 2022 non puo' indicare il suo anno.
-L'etichetta scelta finisce in `engine_code` ed e' usata dalla ricerca IA, quindi il dato sbagliato peggiora anche i risultati.
-
-Proposta: aggiungere le due versioni mancanti e portare `yearFrom` della GR Corolla a 2022.
-
-### I2 — Peugeot 508: la prima generazione (2010-2018) non si puo' registrare
-File: `web/lib/vehicleData.ts:2008-2012`
-
-La chiave "508" copre entrambe le generazioni, ma le motorizzazioni in catalogo partono dal 2018. Il
-proprietario di una 508 del 2014 (es. 2.0 HDi) deve scegliere un motore del 2018 o successivo, e il menu
-degli anni parte allora dal 2018. Difetto preesistente, reso piu' visibile dalla PR #56 che ha aggiunto la PSE.
-
-Proposta: aggiungere le motorizzazioni principali della prima generazione con `yearTo: 2018`.
+Nessun problema importante trovato.
 
 ## Minore
 
-### M1 — Riquadro motorsport: un esito senza notizie compilate resta in cache per 24 ore
-File: `web/lib/motorsport.ts:96-101, 123-166, 190-195`
+### M1 — API senza sessione: messaggio in inglese e cookie di sessione non aggiornati
+File: `web/middleware.ts:44-49`; chiamanti `web/components/GlobalSearch.tsx:41-44`, `web/components/ChatPanel.tsx:61-68`
 
-`extractBriefing` restituisce l'elenco vuoto anche quando la risposta del modello non contiene affatto la
-chiamata a `submit_briefing` (per esempio se si ferma per il tetto di token o con `pause_turn`).
-`fetchBriefing` non lancia errore, quindi `unstable_cache` conserva il riquadro vuoto per `CACHE_SECONDS`
-(24 ore) e la pausa con nuovo tentativo, pensata proprio per questo caso (commento alle righe 172-177), non scatta.
+Il ramo aggiunto dalla PR #57 risponde 401 con il testo fisso inglese "Not authenticated", mentre le
+tre route in `web/app/api/agent/*` fanno gia' il proprio controllo e rispondono 401 con il messaggio
+tradotto (`apiErrors.notAuthenticated`). I client mostrano `data.error` cosi' com'e': un utente italiano o
+tedesco con la sessione scaduta legge un messaggio in inglese. Inoltre la risposta costruita da zero
+non porta con se' i cookie che il client Supabase ha appena scritto su `response` durante `getUser`
+(per esempio la cancellazione di una sessione non piu' valida), quindi il browser li conserva.
 
-Proposta: distinguere "chiamata assente" da "elenco vuoto" e lanciare un errore nel primo caso.
+Proposta: per i percorsi `/api/` lasciar proseguire la richiesta (`return response`) e affidarsi al
+controllo gia' presente in ogni route, che risponde in JSON e nella lingua dell'utente.
 
-### M2 — Le richieste alle API senza sessione valida ricevono la pagina di login invece di un 401
-File: `web/middleware.ts:44-48`; chiamanti `web/components/GlobalSearch.tsx:36-54`, `web/components/VehicleDetailTabs.tsx:72-80`
+### M2 — Riquadro motorsport: un submit_briefing troncato dal tetto di token resta in cache per 24 ore
+File: `web/lib/motorsport.ts:96-126, 170`
 
-Il middleware reindirizza a `/login` anche i percorsi `/api/*`. Le route agent hanno gia' il proprio
-controllo con risposta 401 JSON e messaggio tradotto (`notAuthenticated`), ma non vengono mai raggiunte: a
-sessione scaduta la ricerca riceve HTML, `res.json()` fallisce e l'utente vede "Impossibile raggiungere il
-servizio di ricerca" invece di un invito a rientrare. La chat ha un rimedio locale (`res.redirected`).
+Il controllo aggiunto dalla PR #59 verifica solo che il blocco `submit_briefing` esista. Se la risposta
+si ferma per `max_tokens` mentre il modello sta scrivendo l'input dello strumento, il blocco c'e' ma
+l'input e' parziale (senza un array `news`): `extractBriefing` restituisce l'elenco vuoto senza errore e
+`unstable_cache` lo conserva per `CACHE_SECONDS`. E' proprio il caso che il commento alle righe 101-103
+dice di evitare.
 
-Proposta: per i percorsi che iniziano con `/api/` rispondere 401 JSON invece di reindirizzare.
+Proposta: lanciare l'errore anche quando `stop_reason` e' `max_tokens` o quando `input.news` non e' un array.
+
+### M3 — Toyota bZ4X: la stessa motorizzazione compare due volte nel menu
+File: `web/lib/vehicleData.ts:2323-2326` e `web/lib/engineExtensions.ts:526`
+
+La PR #60 ha aggiunto "Elettrica 71.4 kWh 204cv" in `ENGINE_DATA`, ma `ENGINE_EXTENSIONS` aveva gia'
+"Elettrica 71 kWh 204cv". `getEngineVariants` (`web/lib/vehicleData.ts:2835-2849`) scarta i doppioni solo a
+parita' di etichetta, quindi il menu mostra tre voci di cui due sono la stessa versione: i proprietari ne
+scelgono una a caso e i dati salvati diventano incoerenti.
+
+Proposta: togliere la voce bZ4X da `engineExtensions.ts`, lasciando le due piu' precise di `ENGINE_DATA`.
+
+### M4 — Peugeot e-3008 Dual Motor: batteria e potenza indicate in modo errato
+File: `web/lib/vehicleData.ts:2006`
+
+La voce "Elettrica Dual Motor 98 kWh 320cv" non corrisponde a una versione in vendita: la e-3008 a
+trazione integrale Dual Motor ha la batteria da 73 kWh e 325cv; la 98 kWh e' solo la Long Range a un
+motore (gia' presente come "Elettrica 98 kWh 230cv"). L'etichetta finisce in `engine_code` e viene usata
+dalla ricerca IA e dalla chat, che rispondono quindi su dati sbagliati.
+
+Proposta: correggere l'etichetta in "Elettrica Dual Motor 73 kWh 325cv".
 
 ## Richiede intervento umano
 
 ### U1 — Il limite d'uso condiviso fra le istanze si appoggia a righe che l'account puo' rimuovere (invariato)
 File: `web/lib/rateLimit.ts`, usato in `web/app/api/agent/chat/route.ts` e `web/app/api/agent/search/route.ts`;
-policy in `supabase/migrations/0001_init.sql:175-182`
+policy in `supabase/migrations/0001_init.sql`
 
 Serve una struttura dedicata, con sola aggiunta, incrementata prima della chiamata al modello: richiede una migrazione in `supabase/`.
 
-### U2 — Pausa condivisa fra le istanze per il riquadro motorsport (invariato)
-File: `web/lib/motorsport.ts` (pausa dopo un tentativo non riuscito e promessa condivisa)
+### U2 — Pausa del riquadro motorsport dopo un tentativo non riuscito: in memoria di istanza e di durata fissa
+File: `web/lib/motorsport.ts:50, 184-212`
 
-Restano in memoria di istanza; renderle comuni richiede una struttura condivisa (tabella o archivio chiave-valore), quindi una scelta di design.
+Dalla PR #59 anche una risposta senza `submit_briefing` conta come tentativo non riuscito. Se questo
+esito si ripetesse stabilmente, ogni istanza riproverebbe una generazione con ricerca web ogni
+`FAILURE_PAUSE_MS` (2 minuti) per lingua, invece di una volta al giorno. Rendere la pausa condivisa fra le
+istanze e crescente dopo tentativi consecutivi non riusciti richiede una struttura condivisa e una scelta
+sulle durate.
 
 ## Gia' in PR
 
