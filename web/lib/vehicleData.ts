@@ -575,6 +575,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       MG4: [
         { label: "Elettrica Standard 170cv", yearFrom: 2022, yearTo: null },
+        { label: "Elettrica Long Range 204cv", yearFrom: 2022, yearTo: null },
         { label: "Elettrica Extended 245cv", yearFrom: 2022, yearTo: null },
         { label: "XPower Elettrica 435cv", yearFrom: 2023, yearTo: null },
       ],
@@ -612,6 +613,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.4 T-Jet 200cv Esseesse", yearFrom: 2021, yearTo: null },
       ],
       "124 Spider": [{ label: "1.4 MultiAir Turbo 170cv", yearFrom: 2016, yearTo: 2019 }],
+      "500e": [{ label: "Elettrica 42 kWh 155cv", yearFrom: 2023, yearTo: null }],
       "Grande Punto": [
         { label: "1.4 T-Jet 155cv", yearFrom: 2007, yearTo: 2010 },
         { label: "1.9 MultiJet 130cv", yearFrom: 2007, yearTo: 2010 },
@@ -1128,6 +1130,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 TCe 140cv", yearFrom: 2025, yearTo: null },
         { label: "1.2 TCe 4x4 130cv", yearFrom: 2025, yearTo: null },
         { label: "1.8 Hybrid 155cv", yearFrom: 2025, yearTo: null },
+        { label: "1.2 TCe ECO-G 140cv GPL", yearFrom: 2025, yearTo: null },
       ],
       Jogger: [
         { label: "1.0 TCe 110cv", yearFrom: 2022, yearTo: null },
@@ -1298,6 +1301,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 EcoBoost Hybrid 155cv", yearFrom: 2019, yearTo: null },
         { label: "ST 1.5 EcoBoost 200cv", yearFrom: 2020, yearTo: null },
       ],
+      "Puma Gen-E": [{ label: "Elettrica 43 kWh 168cv", yearFrom: 2024, yearTo: null }],
       Kuga: [
         { label: "1.5 EcoBlue 120cv", yearFrom: 2019, yearTo: null },
         { label: "2.5 Duratec Plug-in Hybrid 225cv", yearFrom: 2020, yearTo: null },
@@ -1996,6 +2000,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 PureTech 130cv", yearFrom: 2017, yearTo: null },
         { label: "1.5 BlueHDi 130cv", yearFrom: 2017, yearTo: null },
       ],
+      "e-3008": [
+        { label: "Elettrica 73 kWh 210cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 98 kWh 230cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Dual Motor 98 kWh 320cv", yearFrom: 2024, yearTo: null },
+      ],
       Partner: [
         { label: "1.5 BlueHDi 100cv", yearFrom: 2018, yearTo: null },
         { label: "Elettrica e-Partner 136cv", yearFrom: 2021, yearTo: null },
@@ -2006,6 +2015,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Hybrid 225cv", yearFrom: 2022, yearTo: null },
       ],
       "508": [
+        { label: "1.6 VTi 120cv", yearFrom: 2010, yearTo: 2014 },
+        { label: "1.6 THP 156cv", yearFrom: 2010, yearTo: 2018 },
+        { label: "1.6 e-HDi 112cv", yearFrom: 2011, yearTo: 2014 },
+        { label: "2.0 HDi 140cv", yearFrom: 2010, yearTo: 2014 },
+        { label: "2.0 HDi 163cv", yearFrom: 2010, yearTo: 2014 },
+        { label: "2.2 HDi 204cv", yearFrom: 2011, yearTo: 2014 },
+        { label: "2.0 HDi Hybrid4 200cv", yearFrom: 2012, yearTo: 2018 },
+        { label: "1.6 BlueHDi 120cv", yearFrom: 2014, yearTo: 2018 },
+        { label: "2.0 BlueHDi 150cv", yearFrom: 2014, yearTo: 2018 },
+        { label: "2.0 BlueHDi 180cv", yearFrom: 2014, yearTo: 2018 },
         { label: "1.6 PureTech 225cv", yearFrom: 2018, yearTo: null },
         { label: "2.0 BlueHDi 160cv", yearFrom: 2018, yearTo: null },
         { label: "PSE Hybrid 360cv", yearFrom: 2020, yearTo: 2024 },
@@ -2301,9 +2320,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 61 kWh 174cv", yearFrom: 2025, yearTo: null },
         { label: "Elettrica 61 kWh AWD 184cv", yearFrom: 2025, yearTo: null },
       ],
+      bZ4X: [
+        { label: "Elettrica 71.4 kWh 204cv", yearFrom: 2022, yearTo: null },
+        { label: "Elettrica 72.8 kWh AWD 218cv", yearFrom: 2022, yearTo: null },
+      ],
       GT86: [{ label: "2.0 Boxer 200cv", yearFrom: 2012, yearTo: 2021 }],
       GR86: [{ label: "2.4 Boxer 234cv", yearFrom: 2021, yearTo: null }],
-      "GR Corolla": [{ label: "1.6 Turbo 300cv", yearFrom: 2023, yearTo: null }],
+      "GR Corolla": [{ label: "1.6 Turbo 300cv", yearFrom: 2022, yearTo: null }],
       Verso: [
         { label: "1.8 147cv", yearFrom: 2009, yearTo: 2018 },
         { label: "2.0 D-4D 126cv", yearFrom: 2009, yearTo: 2018 },
