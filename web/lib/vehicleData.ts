@@ -2003,7 +2003,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "e-3008": [
         { label: "Elettrica 73 kWh 210cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 98 kWh 230cv", yearFrom: 2024, yearTo: null },
-        { label: "Elettrica Dual Motor 98 kWh 320cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Dual Motor 73 kWh 325cv", yearFrom: 2024, yearTo: null },
       ],
       Partner: [
         { label: "1.5 BlueHDi 100cv", yearFrom: 2018, yearTo: null },
