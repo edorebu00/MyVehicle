@@ -523,7 +523,6 @@ export const ENGINE_EXTENSIONS: Partial<
         { label: "1.6 Turbo 261cv", yearFrom: 2020, yearTo: null },
         { label: "1.6 Turbo 280cv", yearFrom: 2024, yearTo: null },
       ],
-      bZ4X: [{ label: "Elettrica 71 kWh 204cv", yearFrom: 2022, yearTo: null }],
       "Land Cruiser Prado": [
         { label: "3.0 D-4D 173cv", yearFrom: 2002, yearTo: 2009 },
         { label: "2.8 D-4D 177cv", yearFrom: 2015, yearTo: null },
