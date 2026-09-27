@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Specifiche tecniche — MyVehicle Set B</title>
+<meta name="description" content="P6: specifiche tecniche come riquadri numerici">
+<style>
+:root{
+  --brand-50:#2b2415;--brand-100:#3c3119;--brand-200:#5e4c22;--brand-300:#8c7030;--brand-400:#b6913f;--brand-500:#cca558;--brand-600:#d9b671;--brand-700:#e6cb95;--brand-800:#f0ddb8;--brand-900:#f8ecd6;
+  --g-50:#0a0908;--g-100:#141210;--g-200:#211e1a;--g-300:#332e27;--g-400:#5c5347;--g-500:#8a8072;--g-600:#a89e8f;--g-700:#c4bcae;--g-800:#e0dad0;--g-900:#f6f2ea;
+  --gold-50:#241708;--gold-300:#804a17;--gold-400:#a8631f;--gold-600:#d99a4f;
+  --red-400:#f87171;--red-600:#dc2626;
+  --ease-premium:cubic-bezier(0.16,1,0.3,1);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--g-50);color:var(--g-900);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;margin:0}
+p{margin:0}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- barra del mockup + toggle Prima/Dopo (solo CSS, stesso schema del Set A) ---- */
+.view-input{position:absolute;opacity:0;width:1px;height:1px}
+.mock-bar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(10,9,8,.92);border-bottom:1px solid var(--g-300);backdrop-filter:blur(12px)}
+.mock-title{font-size:13px;color:var(--g-600)}
+.mock-title b{color:var(--g-900);font-family:var(--font-display);font-size:15px}
+.toggle{display:inline-flex;padding:4px;border:1px solid var(--g-500);border-radius:12px;background:var(--g-100)}
+.toggle label{min-width:88px;min-height:44px;display:grid;place-items:center;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;color:var(--g-700);cursor:pointer}
+#v-prima:checked ~ .mock-bar .toggle label[for=v-prima],#v-dopo:checked ~ .mock-bar .toggle label[for=v-dopo]{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+#v-prima:focus-visible ~ .mock-bar .toggle label[for=v-prima],#v-dopo:focus-visible ~ .mock-bar .toggle label[for=v-dopo]{outline:2px solid var(--brand-600);outline-offset:2px}
+.view-dopo{display:none}
+#v-dopo:checked ~ main .view-prima{display:none}
+#v-dopo:checked ~ main .view-dopo{display:block}
+.state-flag{display:inline-block;margin:0 0 12px;padding:2px 10px;border-radius:999px;border:1px solid var(--g-400);font-size:12px;font-weight:600;color:var(--g-700)}
+.view-dopo .state-flag{border-color:var(--brand-400);color:var(--brand-600)}
+.state-label{display:block;margin:28px 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-600)}
+.notes{max-width:72ch;width:calc(100% - 32px);margin:32px auto;padding:16px 20px;border:1px dashed var(--g-400);border-radius:12px;font-size:14px;color:var(--g-600);line-height:1.6}
+.notes h2{font-size:16px;color:var(--g-900);margin-bottom:6px}
+.notes ul{margin:0;padding-left:18px}
+code{font-size:.92em;color:var(--g-800)}
+
+/* ---- token/classi dell'app (web/app/globals.css) ---- */
+.card{border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:20px;border:1px solid var(--g-200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g-100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.glass-panel{border-radius:16px;border:1px solid rgba(33,30,26,.8);background:rgba(20,18,16,.9);padding:24px;backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(246,242,234,.05),0 1px 2px rgba(0,0,0,.3),0 32px 64px -28px rgba(0,0,0,.7)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--brand-500);margin:0}
+.eyebrow::before{content:"";width:20px;height:2px;background:currentColor;border-radius:999px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-50);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s ease-out,box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45)}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-800);cursor:pointer}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--brand-50);color:var(--brand-600);font-size:18px}
+.label{display:block;margin-bottom:4px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-500)}
+.input{width:100%;min-width:0;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 12px;font:14px/1.4 var(--font-sans);color:var(--g-900)}
+.input::placeholder{color:var(--g-500)}
+.input:focus{outline:none;border-color:var(--brand-400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:999px;animation:spin .7s linear infinite;vertical-align:-.2em}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+.skeleton-line{position:relative;overflow:hidden;border-radius:8px;background:var(--g-200)}
+.skeleton-line::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(246,242,234,.12),transparent);animation:shimmer 1.6s ease-in-out infinite}
+@keyframes rise-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.animate-rise-in{animation:rise-in .5s var(--ease-premium) both}
+@keyframes stagger-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.animate-stagger>*{animation:stagger-in .5s var(--ease-premium) both}
+.animate-stagger>*:nth-child(2){animation-delay:.07s}.animate-stagger>*:nth-child(3){animation-delay:.12s}.animate-stagger>*:nth-child(4){animation-delay:.17s}.animate-stagger>*:nth-child(5){animation-delay:.22s}.animate-stagger>*:nth-child(n+6){animation-delay:.27s}
+
+/* ---- guscio app (NavBar + Sidebar semplificati) ---- */
+.nav{border-bottom:1px solid var(--g-200);background:rgba(10,9,8,.85)}
+.nav-in{max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:8px;font:700 18px var(--font-display);text-decoration:none}
+.logo-m{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50);font-size:16px}
+.accent{color:var(--brand-600)}
+.shell{max-width:1152px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:32px 16px}
+.side{display:none}
+.side a{display:flex;align-items:center;min-height:36px;padding:0 12px;border-radius:6px;font-size:14px;font-weight:500;color:var(--g-600);text-decoration:none}
+.side a.on{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.content{min-width:0;flex:1}
+@media (min-width:768px){.shell{flex-direction:row}.side{display:block;width:240px;flex-shrink:0;border-right:1px solid var(--g-200);padding:24px 16px 0 0}}
+.back{display:inline-block;margin-bottom:16px;font-size:14px;color:var(--g-500);text-decoration:none}
+.h1{margin-top:8px;font-size:30px;font-weight:700;color:var(--g-900)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .skeleton-line::after{animation:none!important}
+}
+
+/* ---- specifico di questo mockup ---- */
+
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px}
+.tab{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--g-300);font-size:14px;font-weight:600;color:var(--g-600);white-space:nowrap;text-decoration:none}
+.tab.on{border-color:var(--brand-400);background:var(--brand-50);color:var(--brand-700)}
+.sect-h{margin-bottom:16px;font-size:18px;font-weight:600}
+.gp{padding:16px;margin-bottom:20px}
+.dl-old{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 12px}
+@media (min-width:640px){.dl-old{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dl-old div{border-radius:8px;border:1px solid var(--g-200);background:var(--g-50);padding:8px 12px}
+.dl-old dt{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--g-400)}
+.dl-old dd{margin:2px 0 0;font-size:14px;font-weight:500;color:var(--g-900)}
+.res{display:grid;gap:6px;margin:0;padding:0;list-style:none;font-size:14px}
+.res a{color:var(--brand-600)}
+.own{border:0;background:none;padding:0;font-size:14px;font-weight:500;color:var(--g-500);cursor:pointer}
+/* Dopo */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 14px}
+@media (min-width:640px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{display:flex;flex-direction:column;gap:6px;min-width:0;padding:14px;border-radius:12px;border:1px solid var(--g-300);background:radial-gradient(120% 120% at 0% 0%,rgba(204,165,88,.10),var(--g-50) 70%)}
+.stat dt{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--g-600)}
+.stat dt .ib{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--brand-50);color:var(--brand-600)}
+.stat dd{margin:0}
+.num{font:700 30px/1 var(--font-display);color:var(--g-900);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.unit{margin-left:4px;font-size:14px;font-weight:600;color:var(--brand-600)}
+.rest{display:block;margin-top:4px;font-size:13px;color:var(--g-600)}
+.kv{display:grid;grid-template-columns:1fr;margin:0 0 14px;border-top:1px solid var(--g-300)}
+@media (min-width:640px){.kv{grid-template-columns:1fr 1fr;column-gap:24px}}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid var(--g-300);font-size:14px}
+.kv dt{color:var(--g-600)}
+.kv dd{margin:0;text-align:right;font-weight:500;color:var(--g-900)}
+.src{display:flex;align-items:center;gap:6px;margin-bottom:14px;font-size:12px;color:var(--g-600)}
+.res2{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.res2 a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--g-400);background:var(--g-50);font-size:14px;color:var(--brand-700);text-decoration:none}
+.res2 a:hover{border-color:var(--brand-400)}
+.own2{display:inline-flex;align-items:center;min-height:44px;border:0;background:none;padding:0;font-size:14px;font-weight:500;color:var(--g-600);cursor:pointer}
+.parse{margin-top:20px;padding:14px 16px;border-radius:12px;border:1px dashed var(--g-400);font-size:13px;line-height:1.6;color:var(--g-600)}
+.parse table{width:100%;border-collapse:collapse;margin-top:8px}
+.parse th,.parse td{padding:6px 8px;border-bottom:1px solid var(--g-300);text-align:left;vertical-align:top}
+.parse th{color:var(--g-700);font-weight:600}
+.parse td code{white-space:nowrap}
+.tbl{overflow-x:auto}
+
+</style>
+</head>
+<body>
+<input class="view-input" type="radio" name="vista" id="v-prima" checked aria-label="Mostra la versione Prima">
+<input class="view-input" type="radio" name="vista" id="v-dopo" aria-label="Mostra la versione Dopo">
+<header class="mock-bar">
+  <p class="mock-title"><b>Specifiche tecniche</b> · mockup Set B, 27 set 2026</p>
+  <div class="toggle" role="group" aria-label="Versione mostrata">
+    <label for="v-prima">Prima</label>
+    <label for="v-dopo">Dopo</label>
+  </div>
+</header>
+<main>
+<section class="view-prima" aria-label="Prima: app di oggi"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on" aria-current="page">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Prima · SectionEditor di oggi</span><a class="back" href="#">← Il mio garage</a><div class="hero-panel" style="margin-bottom:20px;padding:28px 24px"><p class="eyebrow">Auto · 2019</p><h1 class="h1">Alfa Romeo Giulia</h1><p style="margin-top:4px;font-size:14px;color:var(--g-600)">2.2 Diesel 160cv · AB 123 CD</p></div><nav class="tabs" aria-label="Sezioni tecniche"><a class="tab on" href="#" aria-current="page">Motore</a><a class="tab" href="#">Trasmissione</a><a class="tab" href="#">Freni</a><a class="tab" href="#">Sospensioni</a><a class="tab" href="#">Documenti</a></nav><div class="card"><h2 class="sect-h">Motore</h2><div class="glass-panel gp"><p class="eyebrow" style="margin-bottom:12px">Dati trovati online</p><dl class="dl-old"><div><dt>Cilindrata</dt><dd>2143 cc</dd></div><div><dt>Potenza</dt><dd>160 cv (118 kW) a 3750 giri/min</dd></div><div><dt>Coppia</dt><dd>450 Nm a 1750 giri/min</dd></div><div><dt>0-100 km/h</dt><dd>8,2 s</dd></div><div><dt>Alimentazione</dt><dd>Gasolio</dd></div><div><dt>Cambio</dt><dd>Automatico ZF a 8 rapporti</dd></div><div><dt>Distribuzione</dt><dd>Catena</dd></div><div><dt>Omologazione</dt><dd>Euro 6d</dd></div></dl><ul class="res"><li><span aria-hidden="true">🗺️</span> <a href="#">Schema impianto AdBlue e sensore NOx</a></li><li><span aria-hidden="true">🔧</span> <a href="#">Kit filtri tagliando 2.2 JTD</a></li></ul></div><button class="own" type="button">+ Aggiungi dati personalizzati <span style="color:var(--g-400)">(opzionale)</span></button></div></div></div></section>
+<section class="view-dopo" aria-label="Dopo: proposta"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on" aria-current="page">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Dopo · riquadri numerici + elenco testuale</span><a class="back" href="#">← Il mio garage</a><div class="hero-panel" style="margin-bottom:20px;padding:28px 24px"><p class="eyebrow">Auto · 2019</p><h1 class="h1">Alfa Romeo Giulia</h1><p style="margin-top:4px;font-size:14px;color:var(--g-600)">2.2 Diesel 160cv · AB 123 CD</p></div><nav class="tabs" aria-label="Sezioni tecniche"><a class="tab on" href="#" aria-current="page">Motore</a><a class="tab" href="#">Trasmissione</a><a class="tab" href="#">Freni</a><a class="tab" href="#">Sospensioni</a><a class="tab" href="#">Documenti</a></nav><div class="card"><h2 class="sect-h">Motore</h2><div class="glass-panel gp"><p class="eyebrow" style="margin-bottom:12px">Dati trovati online</p><dl class="stats animate-stagger"><div class="stat"><dt><span class="ib" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v8H5z"/><path d="M8 9V6h8v3M9 17v2M15 17v2"/></svg></span>Cilindrata</dt><dd><span class="num">2143</span><span class="unit">cc</span></dd></div><div class="stat"><dt><span class="ib" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span>Potenza</dt><dd><span class="num">160</span><span class="unit">cv</span><span class="rest">(118 kW) a 3750 giri/min</span></dd></div><div class="stat"><dt><span class="ib" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M20 4l-6 6M16 4h4v4"/></svg></span>Coppia</dt><dd><span class="num">450</span><span class="unit">Nm</span><span class="rest">a 1750 giri/min</span></dd></div><div class="stat"><dt><span class="ib" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 13V9M10 3h4"/></svg></span>0-100 km/h</dt><dd><span class="num">8,2</span><span class="unit">s</span></dd></div></dl><dl class="kv"><div><dt>Alimentazione</dt><dd>Gasolio</dd></div><div><dt>Cambio</dt><dd>Automatico ZF a 8 rapporti</dd></div><div><dt>Distribuzione</dt><dd>Catena</dd></div><div><dt>Omologazione</dt><dd>Euro 6d</dd></div></dl><p class="src"><span aria-hidden="true">ⓘ</span>Valori trovati online dall'agente IA: verificali sul libretto prima di un intervento.</p><ul class="res2"><li><a href="#"><span aria-hidden="true">🗺️</span>Schema impianto AdBlue e sensore NOx</a></li><li><a href="#"><span aria-hidden="true">🔧</span>Kit filtri tagliando 2.2 JTD</a></li></ul></div><button class="own2" type="button">+ Aggiungi dati personalizzati&nbsp;<span style="color:var(--g-600)">(opzionale)</span></button></div><div class="parse"><b style="color:var(--g-800)">Come si decide cosa diventa un riquadro numerico</b> (solo presentazione, i dati non cambiano). Il valore deve iniziare con un numero seguito da un'unità nota; il resto del testo resta visibile sotto il numero. Se il formato non è riconosciuto, la voce va nell'elenco testuale.<div class="tbl"><table><thead><tr><th scope="col">Valore dall'IA</th><th scope="col">Resa</th></tr></thead><tbody><tr><td><code>160 cv (118 kW) a 3750 giri/min</code></td><td>riquadro: 160 cv + «(118 kW) a 3750 giri/min»</td></tr><tr><td><code>8,2 s</code></td><td>riquadro: 8,2 s</td></tr><tr><td><code>1.540 kg</code></td><td>riquadro: 1.540 kg</td></tr><tr><td><code>circa 160 cv</code></td><td>testo</td></tr><tr><td><code>160-190 cv</code></td><td>testo</td></tr><tr><td><code>Gasolio</code></td><td>testo</td></tr></tbody></table></div></div></div></div></section>
+<aside class="notes" aria-label="Note per lo sviluppo"><h2>Cosa guardare</h2><ul><li>Prima: 8 voci tutte uguali; l'etichetta (<code>dt</code>) è 11px in <code>graphite-400</code> su <code>graphite-50</code>, a 2,6:1 (sotto AA); i link alle risorse sono righe di testo alte meno di 44px.</li>
+<li>Dopo: le voci con un numero e un'unità riconosciuta (cc, cv, kW, Nm, km/h, kg, l, s) diventano riquadri con il numero grande in serif e l'unità in <code>brand-600</code>. Il testo che segue (per esempio “a 3750 giri/min”) resta visibile sotto il numero, quindi nessuna informazione va persa.</li>
+<li>Le altre voci passano in un elenco a due colonne, con etichette in <code>graphite-600</code> (7,5:1).</li>
+<li>Niente indicatori, barre o scale: non esiste un riferimento affidabile (160 cv sono “tanti” o “pochi”?) e inventarne uno darebbe un'informazione falsa. Sono volutamente riquadri di sintesi.</li>
+<li>Una riga ricorda che i valori sono trovati online dall'IA, perché qui “sembrare ufficiale” potrebbe trarre in inganno. I link alle risorse diventano chip alti 44px.</li></ul></aside>
+</main>
+</body>
+</html>

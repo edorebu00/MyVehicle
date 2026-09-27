@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Risultati ricerca IA — MyVehicle Set B</title>
+<meta name="description" content="P5: risultati della ricerca IA come bento per categoria">
+<style>
+:root{
+  --brand-50:#2b2415;--brand-100:#3c3119;--brand-200:#5e4c22;--brand-300:#8c7030;--brand-400:#b6913f;--brand-500:#cca558;--brand-600:#d9b671;--brand-700:#e6cb95;--brand-800:#f0ddb8;--brand-900:#f8ecd6;
+  --g-50:#0a0908;--g-100:#141210;--g-200:#211e1a;--g-300:#332e27;--g-400:#5c5347;--g-500:#8a8072;--g-600:#a89e8f;--g-700:#c4bcae;--g-800:#e0dad0;--g-900:#f6f2ea;
+  --gold-50:#241708;--gold-300:#804a17;--gold-400:#a8631f;--gold-600:#d99a4f;
+  --red-400:#f87171;--red-600:#dc2626;
+  --ease-premium:cubic-bezier(0.16,1,0.3,1);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--g-50);color:var(--g-900);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;margin:0}
+p{margin:0}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- barra del mockup + toggle Prima/Dopo (solo CSS, stesso schema del Set A) ---- */
+.view-input{position:absolute;opacity:0;width:1px;height:1px}
+.mock-bar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(10,9,8,.92);border-bottom:1px solid var(--g-300);backdrop-filter:blur(12px)}
+.mock-title{font-size:13px;color:var(--g-600)}
+.mock-title b{color:var(--g-900);font-family:var(--font-display);font-size:15px}
+.toggle{display:inline-flex;padding:4px;border:1px solid var(--g-500);border-radius:12px;background:var(--g-100)}
+.toggle label{min-width:88px;min-height:44px;display:grid;place-items:center;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;color:var(--g-700);cursor:pointer}
+#v-prima:checked ~ .mock-bar .toggle label[for=v-prima],#v-dopo:checked ~ .mock-bar .toggle label[for=v-dopo]{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+#v-prima:focus-visible ~ .mock-bar .toggle label[for=v-prima],#v-dopo:focus-visible ~ .mock-bar .toggle label[for=v-dopo]{outline:2px solid var(--brand-600);outline-offset:2px}
+.view-dopo{display:none}
+#v-dopo:checked ~ main .view-prima{display:none}
+#v-dopo:checked ~ main .view-dopo{display:block}
+.state-flag{display:inline-block;margin:0 0 12px;padding:2px 10px;border-radius:999px;border:1px solid var(--g-400);font-size:12px;font-weight:600;color:var(--g-700)}
+.view-dopo .state-flag{border-color:var(--brand-400);color:var(--brand-600)}
+.state-label{display:block;margin:28px 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-600)}
+.notes{max-width:72ch;width:calc(100% - 32px);margin:32px auto;padding:16px 20px;border:1px dashed var(--g-400);border-radius:12px;font-size:14px;color:var(--g-600);line-height:1.6}
+.notes h2{font-size:16px;color:var(--g-900);margin-bottom:6px}
+.notes ul{margin:0;padding-left:18px}
+code{font-size:.92em;color:var(--g-800)}
+
+/* ---- token/classi dell'app (web/app/globals.css) ---- */
+.card{border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:20px;border:1px solid var(--g-200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g-100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.glass-panel{border-radius:16px;border:1px solid rgba(33,30,26,.8);background:rgba(20,18,16,.9);padding:24px;backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(246,242,234,.05),0 1px 2px rgba(0,0,0,.3),0 32px 64px -28px rgba(0,0,0,.7)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--brand-500);margin:0}
+.eyebrow::before{content:"";width:20px;height:2px;background:currentColor;border-radius:999px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-50);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s ease-out,box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45)}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-800);cursor:pointer}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--brand-50);color:var(--brand-600);font-size:18px}
+.label{display:block;margin-bottom:4px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-500)}
+.input{width:100%;min-width:0;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 12px;font:14px/1.4 var(--font-sans);color:var(--g-900)}
+.input::placeholder{color:var(--g-500)}
+.input:focus{outline:none;border-color:var(--brand-400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:999px;animation:spin .7s linear infinite;vertical-align:-.2em}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+.skeleton-line{position:relative;overflow:hidden;border-radius:8px;background:var(--g-200)}
+.skeleton-line::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(246,242,234,.12),transparent);animation:shimmer 1.6s ease-in-out infinite}
+@keyframes rise-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.animate-rise-in{animation:rise-in .5s var(--ease-premium) both}
+@keyframes stagger-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.animate-stagger>*{animation:stagger-in .5s var(--ease-premium) both}
+.animate-stagger>*:nth-child(2){animation-delay:.07s}.animate-stagger>*:nth-child(3){animation-delay:.12s}.animate-stagger>*:nth-child(4){animation-delay:.17s}.animate-stagger>*:nth-child(5){animation-delay:.22s}.animate-stagger>*:nth-child(n+6){animation-delay:.27s}
+
+/* ---- guscio app (NavBar + Sidebar semplificati) ---- */
+.nav{border-bottom:1px solid var(--g-200);background:rgba(10,9,8,.85)}
+.nav-in{max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:8px;font:700 18px var(--font-display);text-decoration:none}
+.logo-m{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50);font-size:16px}
+.accent{color:var(--brand-600)}
+.shell{max-width:1152px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:32px 16px}
+.side{display:none}
+.side a{display:flex;align-items:center;min-height:36px;padding:0 12px;border-radius:6px;font-size:14px;font-weight:500;color:var(--g-600);text-decoration:none}
+.side a.on{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.content{min-width:0;flex:1}
+@media (min-width:768px){.shell{flex-direction:row}.side{display:block;width:240px;flex-shrink:0;border-right:1px solid var(--g-200);padding:24px 16px 0 0}}
+.back{display:inline-block;margin-bottom:16px;font-size:14px;color:var(--g-500);text-decoration:none}
+.h1{margin-top:8px;font-size:30px;font-weight:700;color:var(--g-900)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .skeleton-line::after{animation:none!important}
+}
+
+/* ---- specifico di questo mockup ---- */
+
+.sub{margin-top:8px;max-width:36rem;margin-left:auto;margin-right:auto;font-size:14px;color:var(--g-500)}
+.form{display:flex;gap:8px;padding:16px}
+.summary-old{margin-top:16px;white-space:pre-wrap;font-size:14px;color:var(--g-600)}
+.sec{margin-top:24px}
+.ul-old{display:grid;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.li-old{display:flex;align-items:flex-start;gap:12px}
+.li-old .ico{margin-top:2px;font-size:20px}
+.li-old a{font-weight:500;color:var(--brand-600);text-decoration:none}
+.li-old p{margin-top:4px;font-size:14px;color:var(--g-500)}
+.empty-old{font-size:14px;color:var(--g-400)}
+/* Dopo */
+.form2{display:flex;gap:8px;padding:12px}
+.form2 .input{min-height:48px;border-color:var(--g-500);font-size:16px}
+.form2 .btn-primary{min-height:48px;padding:0 20px}
+.lead{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+@media (min-width:900px){.lead{grid-template-columns:2fr 1fr}}
+.sum{padding:20px;background:radial-gradient(110% 130% at 0% 0%,rgba(204,165,88,.12),var(--g-100) 60%)}
+.sum p.t{margin-top:10px;max-width:68ch;font-size:15px;line-height:1.6;color:var(--g-800)}
+.jump{display:grid;gap:8px;padding:16px;align-content:start}
+.jump a{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--g-300);background:var(--g-50);text-decoration:none;font-size:15px;font-weight:600;color:var(--g-800)}
+.jump a:hover{border-color:var(--brand-400)}
+.cnt{min-width:28px;padding:2px 8px;border-radius:999px;background:var(--brand-50);color:var(--brand-700);font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.sec2{margin-top:28px}
+.sec2-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.sec2-h .n{font-size:13px;color:var(--g-600)}
+.rgrid{display:grid;grid-template-columns:1fr;gap:10px;margin:0;padding:0;list-style:none}
+@media (min-width:600px){.rgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1100px){.rgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rc{position:relative;display:flex;flex-direction:column;gap:6px;height:100%;min-height:132px;padding:14px 16px;border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);text-decoration:none;color:inherit;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3);transition:border-color .25s var(--ease-premium),transform .25s var(--ease-premium)}
+.rc:hover{border-color:var(--brand-400);transform:translateY(-3px)}
+.rc:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.rc-top{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--g-600)}
+.rc-top .icon-badge{width:32px;height:32px;font-size:16px}
+.rc-top .dom{margin-left:auto;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%}
+.rc-t{font:600 16px/1.3 var(--font-display);color:var(--brand-700)}
+.rc-d{font-size:14px;line-height:1.5;color:var(--g-600);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rc-x{flex-shrink:0;color:var(--g-600)}
+.rc.wide{grid-column:1/-1}
+@media (min-width:1100px){.rc-feat{grid-column:span 2}}
+.empty2{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:1px dashed var(--g-400);font-size:14px;color:var(--g-600)}
+.sk{display:flex;flex-direction:column;gap:10px;min-height:132px;padding:14px 16px;border-radius:12px;border:1px solid var(--g-200);background:var(--g-100)}
+
+</style>
+</head>
+<body>
+<input class="view-input" type="radio" name="vista" id="v-prima" checked aria-label="Mostra la versione Prima">
+<input class="view-input" type="radio" name="vista" id="v-dopo" aria-label="Mostra la versione Dopo">
+<header class="mock-bar">
+  <p class="mock-title"><b>Risultati ricerca IA</b> · mockup Set B, 27 set 2026</p>
+  <div class="toggle" role="group" aria-label="Versione mostrata">
+    <label for="v-prima">Prima</label>
+    <label for="v-dopo">Dopo</label>
+  </div>
+</header>
+<main>
+<section class="view-prima" aria-label="Prima: app di oggi"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#">Il mio garage</a><a href="#">Circuiti</a><a href="#" class="on" aria-current="page">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Prima · elenco verticale di oggi</span><div class="hero-panel" style="padding:32px 24px;text-align:center"><p class="eyebrow">Agente IA</p><h1 class="h1">Ricerca risorse online</h1><p class="sub">Cerca forum, manuali PDF, video e pezzi di ricambio su qualsiasi veicolo o argomento, non necessariamente legato a uno dei tuoi veicoli salvati.</p></div><div style="margin-top:24px"><form class="glass-panel form" onsubmit="return false"><input class="input" aria-label="Cerca" value="Alfa Romeo Giulia 2.2 diesel manutenzione"><button class="btn-primary" type="submit">Cerca</button></form><p class="summary-old">Ho trovato il manuale ufficiale, il piano di manutenzione e il catalogo ricambi della Giulia 2.2 Diesel, più due discussioni recenti sui problemi di AdBlue e sulla scelta dell'olio. Nessun video pertinente.</p><div class="sec"><h3 class="eyebrow" style="margin-bottom:8px">📄 Documenti</h3><ul class="ul-old"><li class="card li-old"><span class="ico" aria-hidden="true">📕</span><span style="min-width:0"><a href="#">Alfa Romeo Giulia 952 — manuale di uso e manutenzione (PDF)</a><p>Edizione 2023 in italiano: intervalli di tagliando, specifiche dei fluidi, pressioni pneumatici e spie del cruscotto.</p></span></li><li class="card li-old"><span class="ico" aria-hidden="true">🛠️</span><span style="min-width:0"><a href="#">Piano di manutenzione programmata 2.2 JTD</a><p>Tabella ufficiale degli interventi ogni 15.000 km o 12 mesi, con sostituzione della cinghia servizi a 120.000 km.</p></span></li><li class="card li-old"><span class="ico" aria-hidden="true">🛒</span><span style="min-width:0"><a href="#">Catalogo ricambi originali Giulia 2.2 Diesel</a><p>Esplosi e codici dei ricambi originali per motore, freni e sospensioni, con ricerca per telaio.</p></span></li><li class="card li-old"><span class="ico" aria-hidden="true">🔧</span><span style="min-width:0"><a href="#">Kit filtri tagliando (olio, aria, abitacolo, gasolio)</a><p>Kit compatibile con il 2.2 da 160 e 190 cv, dal 2016 in poi: verifica il codice motore prima dell'acquisto.</p></span></li><li class="card li-old"><span class="ico" aria-hidden="true">🗺️</span><span style="min-width:0"><a href="#">Schema impianto AdBlue e sensore NOx</a><p>Schema commentato dell'impianto SCR, con la posizione dei connettori e gli errori più comuni.</p></span></li></ul></div><div class="sec"><h3 class="eyebrow" style="margin-bottom:8px">💬 Forum</h3><ul class="ul-old"><li class="card li-old"><span class="ico" aria-hidden="true">💬</span><span style="min-width:0"><a href="#">Giulia 2.2 diesel: spia avaria motore e AdBlue a 70.000 km</a><p>Discussione di 48 risposte: nella maggior parte dei casi il guasto riguardava il sensore NOx a valle del DPF.</p></span></li><li class="card li-old"><span class="ico" aria-hidden="true">💬</span><span style="min-width:0"><a href="#">Quale olio 0W-20 per il 2.2 JTD? Esperienze e consigli</a><p>Confronto tra oli che rispettano la specifica 9.55535-DS1, con cambi olio e consumi riportati dagli utenti.</p></span></li></ul></div><div class="sec"><h3 class="eyebrow" style="margin-bottom:8px">🎥 Video</h3><p class="empty-old">Nessun video trovato online per questo veicolo.</p></div></div></div></div></section>
+<section class="view-dopo" aria-label="Dopo: proposta"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#">Il mio garage</a><a href="#">Circuiti</a><a href="#" class="on" aria-current="page">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Dopo · sintesi + griglia a bento</span><div class="hero-panel" style="padding:32px 24px;text-align:center"><p class="eyebrow">Agente IA</p><h1 class="h1">Ricerca risorse online</h1><p class="sub">Cerca forum, manuali PDF, video e pezzi di ricambio su qualsiasi veicolo o argomento, non necessariamente legato a uno dei tuoi veicoli salvati.</p></div><div style="margin-top:24px"><form class="glass-panel form2" role="search" onsubmit="return false"><label class="sr-only" for="q2">Cosa vuoi cercare</label><input id="q2" class="input" value="Alfa Romeo Giulia 2.2 diesel manutenzione"><button class="btn-primary" type="submit">Cerca</button></form><div class="lead animate-stagger"><section class="card sum" aria-labelledby="sum-t"><p class="eyebrow" id="sum-t">Sintesi dell'agente</p><p class="t">Ho trovato il manuale ufficiale, il piano di manutenzione e il catalogo ricambi della Giulia 2.2 Diesel, più due discussioni recenti sui problemi di AdBlue e sulla scelta dell'olio. Nessun video pertinente.</p></section><nav class="card jump" aria-label="Vai alla categoria"><a href="#sec-documenti"><span>📄 Documenti</span><span class="cnt">5</span></a><a href="#sec-forum"><span>💬 Forum</span><span class="cnt">2</span></a><a href="#sec-video"><span>🎥 Video</span><span class="cnt">0</span></a></nav></div><section class="sec2" id="sec-documenti" aria-labelledby="h-documenti"><div class="sec2-h"><h2 class="eyebrow" id="h-documenti">📄 Documenti</h2><span class="n">5 risultati</span></div><ul class="rgrid animate-stagger"><li class="rc-feat"><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">📕</span>Manuale d'officina<span class="dom">alfaromeo.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Alfa Romeo Giulia 952 — manuale di uso e manutenzione (PDF)<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Edizione 2023 in italiano: intervalli di tagliando, specifiche dei fluidi, pressioni pneumatici e spie del cruscotto.</span></a></li><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">🛠️</span>Piano manutenzione<span class="dom">alfaromeo.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Piano di manutenzione programmata 2.2 JTD<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Tabella ufficiale degli interventi ogni 15.000 km o 12 mesi, con sostituzione della cinghia servizi a 120.000 km.</span></a></li><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">🛒</span>Catalogo ricambi<span class="dom">mopar.eu</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Catalogo ricambi originali Giulia 2.2 Diesel<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Esplosi e codici dei ricambi originali per motore, freni e sospensioni, con ricerca per telaio.</span></a></li><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">🔧</span>Ricambio<span class="dom">autodoc.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Kit filtri tagliando (olio, aria, abitacolo, gasolio)<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Kit compatibile con il 2.2 da 160 e 190 cv, dal 2016 in poi: verifica il codice motore prima dell'acquisto.</span></a></li><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">🗺️</span>Schema tecnico<span class="dom">forum.alfaromeo-club.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Schema impianto AdBlue e sensore NOx<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Schema commentato dell'impianto SCR, con la posizione dei connettori e gli errori più comuni.</span></a></li></ul></section><section class="sec2" id="sec-forum" aria-labelledby="h-forum"><div class="sec2-h"><h2 class="eyebrow" id="h-forum">💬 Forum</h2><span class="n">2 risultati</span></div><ul class="rgrid animate-stagger"><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">💬</span>Forum<span class="dom">alfaclub-italia.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Giulia 2.2 diesel: spia avaria motore e AdBlue a 70.000 km<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Discussione di 48 risposte: nella maggior parte dei casi il guasto riguardava il sensore NOx a valle del DPF.</span></a></li><li class=""><a class="rc" href="#" target="_blank" rel="noopener noreferrer"><span class="rc-top"><span class="icon-badge" aria-hidden="true">💬</span>Forum<span class="dom">alfaromeo-club.it</span><svg class="rc-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></span><span class="rc-t">Quale olio 0W-20 per il 2.2 JTD? Esperienze e consigli<span class="sr-only"> (si apre in una nuova scheda)</span></span><span class="rc-d">Confronto tra oli che rispettano la specifica 9.55535-DS1, con cambi olio e consumi riportati dagli utenti.</span></a></li></ul></section><section class="sec2" id="sec-video" aria-labelledby="h-video"><div class="sec2-h"><h2 class="eyebrow" id="h-video">🎥 Video</h2><span class="n">0 risultati</span></div><p class="empty2"><span aria-hidden="true">🎥</span>Nessun video trovato online per questo veicolo.</p></section><span class="state-label" style="margin-top:40px">Stato di caricamento · skeleton nella stessa griglia</span><p style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:14px;color:var(--g-600)"><span class="spinner" style="color:var(--brand-600)" aria-hidden="true"></span>L'agente IA sta cercando risorse online…</p><ul class="rgrid" aria-hidden="true"><li class="sk"><div style="display:flex;gap:8px;align-items:center"><div class="skeleton-line" style="width:32px;height:32px"></div><div class="skeleton-line" style="height:10px;width:30%"></div></div><div class="skeleton-line" style="height:14px;width:80%"></div><div class="skeleton-line" style="height:10px;width:95%"></div><div class="skeleton-line" style="height:10px;width:60%"></div></li><li class="sk"><div style="display:flex;gap:8px;align-items:center"><div class="skeleton-line" style="width:32px;height:32px"></div><div class="skeleton-line" style="height:10px;width:30%"></div></div><div class="skeleton-line" style="height:14px;width:80%"></div><div class="skeleton-line" style="height:10px;width:95%"></div><div class="skeleton-line" style="height:10px;width:60%"></div></li><li class="sk"><div style="display:flex;gap:8px;align-items:center"><div class="skeleton-line" style="width:32px;height:32px"></div><div class="skeleton-line" style="height:10px;width:30%"></div></div><div class="skeleton-line" style="height:14px;width:80%"></div><div class="skeleton-line" style="height:10px;width:95%"></div><div class="skeleton-line" style="height:10px;width:60%"></div></li></ul></div></div></div></section>
+<aside class="notes" aria-label="Note per lo sviluppo"><h2>Cosa guardare</h2><ul><li>Prima: la sintesi è un paragrafo grigio schiacciato sotto il campo; i risultati sono una colonna di card alte, e solo il titolo è cliccabile (un link di una riga, alto circa 24px); l'elenco vuoto usa <code>graphite-400</code> su fondo scuro, a 2,6:1.</li>
+<li>Dopo: la sintesi diventa la cella principale del bento, affiancata da un indice con il numero di risultati per categoria (link interni alti 48px). Sotto, ogni categoria è una griglia da 1, 2 o 3 colonne.</li>
+<li>Tutta la card è il link (almeno 132px di altezza). Il dominio è ricavato da <code>new URL(href).hostname</code> dopo <code>safeExternalUrl</code>, quindi non serve nessun dato nuovo dal modello. La descrizione si ferma a 3 righe e il testo “si apre in una nuova scheda” è riservato agli screen reader.</li>
+<li>Il primo risultato “documenti” occupa 2 colonne su desktop: è una scelta di layout, non una classifica inventata, perché l'ordine è quello restituito dall'agente.</li>
+<li>Lo skeleton di caricamento usa la stessa griglia, così il layout non salta quando arrivano i risultati.</li></ul></aside>
+</main>
+</body>
+</html>

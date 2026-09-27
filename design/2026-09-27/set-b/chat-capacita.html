@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Chat IA sui documenti — MyVehicle Set B</title>
+<meta name="description" content="P4: chat IA con trasparenza sulle capacità e recupero dall'errore">
+<style>
+:root{
+  --brand-50:#2b2415;--brand-100:#3c3119;--brand-200:#5e4c22;--brand-300:#8c7030;--brand-400:#b6913f;--brand-500:#cca558;--brand-600:#d9b671;--brand-700:#e6cb95;--brand-800:#f0ddb8;--brand-900:#f8ecd6;
+  --g-50:#0a0908;--g-100:#141210;--g-200:#211e1a;--g-300:#332e27;--g-400:#5c5347;--g-500:#8a8072;--g-600:#a89e8f;--g-700:#c4bcae;--g-800:#e0dad0;--g-900:#f6f2ea;
+  --gold-50:#241708;--gold-300:#804a17;--gold-400:#a8631f;--gold-600:#d99a4f;
+  --red-400:#f87171;--red-600:#dc2626;
+  --ease-premium:cubic-bezier(0.16,1,0.3,1);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--g-50);color:var(--g-900);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;margin:0}
+p{margin:0}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- barra del mockup + toggle Prima/Dopo (solo CSS, stesso schema del Set A) ---- */
+.view-input{position:absolute;opacity:0;width:1px;height:1px}
+.mock-bar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(10,9,8,.92);border-bottom:1px solid var(--g-300);backdrop-filter:blur(12px)}
+.mock-title{font-size:13px;color:var(--g-600)}
+.mock-title b{color:var(--g-900);font-family:var(--font-display);font-size:15px}
+.toggle{display:inline-flex;padding:4px;border:1px solid var(--g-500);border-radius:12px;background:var(--g-100)}
+.toggle label{min-width:88px;min-height:44px;display:grid;place-items:center;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;color:var(--g-700);cursor:pointer}
+#v-prima:checked ~ .mock-bar .toggle label[for=v-prima],#v-dopo:checked ~ .mock-bar .toggle label[for=v-dopo]{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+#v-prima:focus-visible ~ .mock-bar .toggle label[for=v-prima],#v-dopo:focus-visible ~ .mock-bar .toggle label[for=v-dopo]{outline:2px solid var(--brand-600);outline-offset:2px}
+.view-dopo{display:none}
+#v-dopo:checked ~ main .view-prima{display:none}
+#v-dopo:checked ~ main .view-dopo{display:block}
+.state-flag{display:inline-block;margin:0 0 12px;padding:2px 10px;border-radius:999px;border:1px solid var(--g-400);font-size:12px;font-weight:600;color:var(--g-700)}
+.view-dopo .state-flag{border-color:var(--brand-400);color:var(--brand-600)}
+.state-label{display:block;margin:28px 0 8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-600)}
+.notes{max-width:72ch;width:calc(100% - 32px);margin:32px auto;padding:16px 20px;border:1px dashed var(--g-400);border-radius:12px;font-size:14px;color:var(--g-600);line-height:1.6}
+.notes h2{font-size:16px;color:var(--g-900);margin-bottom:6px}
+.notes ul{margin:0;padding-left:18px}
+code{font-size:.92em;color:var(--g-800)}
+
+/* ---- token/classi dell'app (web/app/globals.css) ---- */
+.card{border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:20px;border:1px solid var(--g-200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g-100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.glass-panel{border-radius:16px;border:1px solid rgba(33,30,26,.8);background:rgba(20,18,16,.9);padding:24px;backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(246,242,234,.05),0 1px 2px rgba(0,0,0,.3),0 32px 64px -28px rgba(0,0,0,.7)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--brand-500);margin:0}
+.eyebrow::before{content:"";width:20px;height:2px;background:currentColor;border-radius:999px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-50);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s ease-out,box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45)}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-800);cursor:pointer}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--brand-50);color:var(--brand-600);font-size:18px}
+.label{display:block;margin-bottom:4px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-500)}
+.input{width:100%;min-width:0;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 12px;font:14px/1.4 var(--font-sans);color:var(--g-900)}
+.input::placeholder{color:var(--g-500)}
+.input:focus{outline:none;border-color:var(--brand-400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:999px;animation:spin .7s linear infinite;vertical-align:-.2em}
+@keyframes shimmer{100%{transform:translateX(100%)}}
+.skeleton-line{position:relative;overflow:hidden;border-radius:8px;background:var(--g-200)}
+.skeleton-line::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(246,242,234,.12),transparent);animation:shimmer 1.6s ease-in-out infinite}
+@keyframes rise-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.animate-rise-in{animation:rise-in .5s var(--ease-premium) both}
+@keyframes stagger-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.animate-stagger>*{animation:stagger-in .5s var(--ease-premium) both}
+.animate-stagger>*:nth-child(2){animation-delay:.07s}.animate-stagger>*:nth-child(3){animation-delay:.12s}.animate-stagger>*:nth-child(4){animation-delay:.17s}.animate-stagger>*:nth-child(5){animation-delay:.22s}.animate-stagger>*:nth-child(n+6){animation-delay:.27s}
+
+/* ---- guscio app (NavBar + Sidebar semplificati) ---- */
+.nav{border-bottom:1px solid var(--g-200);background:rgba(10,9,8,.85)}
+.nav-in{max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:8px;font:700 18px var(--font-display);text-decoration:none}
+.logo-m{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50);font-size:16px}
+.accent{color:var(--brand-600)}
+.shell{max-width:1152px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:32px 16px}
+.side{display:none}
+.side a{display:flex;align-items:center;min-height:36px;padding:0 12px;border-radius:6px;font-size:14px;font-weight:500;color:var(--g-600);text-decoration:none}
+.side a.on{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.content{min-width:0;flex:1}
+@media (min-width:768px){.shell{flex-direction:row}.side{display:block;width:240px;flex-shrink:0;border-right:1px solid var(--g-200);padding:24px 16px 0 0}}
+.back{display:inline-block;margin-bottom:16px;font-size:14px;color:var(--g-500);text-decoration:none}
+.h1{margin-top:8px;font-size:30px;font-weight:700;color:var(--g-900)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .skeleton-line::after{animation:none!important}
+}
+
+/* ---- specifico di questo mockup ---- */
+
+.docs-grid{display:grid;grid-template-columns:1fr;gap:24px}
+@media (min-width:1024px){.docs-grid{grid-template-columns:1fr 1fr}}
+.doc{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid var(--g-200);background:var(--g-50);font-size:14px}
+.doc small{display:block;font-size:12px;color:var(--g-600)}
+.doclist{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+/* Prima: ChatPanel di oggi */
+.chat-old{display:flex;flex-direction:column;height:520px}
+.co-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.b{max-width:80%;white-space:pre-wrap;border-radius:8px;padding:8px 12px;font-size:14px}
+.b-u{align-self:flex-end;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.b-a{align-self:flex-start;border:1px solid var(--g-200);background:var(--g-50);color:var(--g-800)}
+.co-form{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--g-200)}
+.err-old{margin-top:8px;font-size:14px;color:var(--red-600)}
+/* Dopo */
+.chat{display:flex;flex-direction:column;height:min(600px,78dvh);min-height:460px;padding:0;overflow:hidden}
+.chat-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:16px 20px;border-bottom:1px solid var(--g-200)}
+.ctx{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--g-400);font-size:12px;font-weight:600;color:var(--g-700)}
+.ctx svg{color:var(--brand-600)}
+.chat-s{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:20px}
+.cap h3{font-size:20px;font-weight:600}
+.cap-l{display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none;font-size:14px;line-height:1.55;color:var(--g-700)}
+.cap-l li{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.cap-l svg{margin-top:2px;color:var(--brand-500)}
+.cap-l .lim{color:var(--g-600)}
+.cap-l .lim svg{color:var(--g-600)}
+.sugg-t{margin-top:20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--g-600)}
+.sugg{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid var(--g-500);background:var(--g-50);color:var(--g-800);font-size:14px;text-align:left;cursor:pointer;transition:border-color .2s var(--ease-premium),background .2s}
+.chip:hover{border-color:var(--brand-400);background:var(--brand-50)}
+.msg{display:flex;flex-direction:column;gap:4px;max-width:min(88%,68ch)}
+.msg-u{align-self:flex-end;align-items:flex-end}
+.who{font-size:12px;font-weight:600;color:var(--g-600)}
+.bub{white-space:pre-wrap;border-radius:14px;padding:10px 14px;font-size:15px;line-height:1.6}
+.msg-u .bub{border-bottom-right-radius:4px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.msg-a .bub{border-bottom-left-radius:4px;border:1px solid var(--g-300);background:var(--g-50);color:var(--g-800)}
+.alert{display:grid;grid-template-columns:22px 1fr;gap:10px;margin:0 20px 0;padding:12px 14px;border-radius:10px;border:1px solid rgba(248,113,113,.45);background:rgba(248,113,113,.08);font-size:14px;color:var(--g-800)}
+.alert svg{color:var(--red-400);margin-top:1px}
+.alert b{display:block;color:var(--red-400);font-weight:600}
+.alert-a{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.alert .btn-secondary{min-height:44px;border-color:var(--g-500)}
+.comp{display:flex;align-items:flex-end;gap:8px;padding:12px 16px 16px;border-top:1px solid var(--g-200);background:var(--g-100)}
+.comp .input{min-height:48px;border-color:var(--g-500);font-size:16px}
+.send{min-width:48px;min-height:48px;padding:0 14px;border-radius:10px}
+.send svg{flex-shrink:0;width:20px;height:20px}
+.send .t{display:none}
+.chat.auto{height:auto}
+@media (min-width:640px){.send .t{display:inline}}
+.hint{padding:0 16px 12px;font-size:12px;color:var(--g-600);background:var(--g-100)}
+
+</style>
+</head>
+<body>
+<input class="view-input" type="radio" name="vista" id="v-prima" checked aria-label="Mostra la versione Prima">
+<input class="view-input" type="radio" name="vista" id="v-dopo" aria-label="Mostra la versione Dopo">
+<header class="mock-bar">
+  <p class="mock-title"><b>Chat IA sui documenti</b> · mockup Set B, 27 set 2026</p>
+  <div class="toggle" role="group" aria-label="Versione mostrata">
+    <label for="v-prima">Prima</label>
+    <label for="v-dopo">Dopo</label>
+  </div>
+</header>
+<main>
+<section class="view-prima" aria-label="Prima: app di oggi"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on" aria-current="page">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Prima · ChatPanel di oggi</span><a class="back" href="#">← Torna a Alfa Romeo Giulia</a><div class="hero-panel" style="margin-bottom:24px;padding:28px 24px"><p class="eyebrow">Alfa Romeo Giulia</p><h1 class="h1">Documenti</h1></div><div class="docs-grid"><div><div class="card"><p class="eyebrow" style="margin-bottom:12px">Documenti caricati</p><ul class="doclist">
+<li class="doc"><span class="icon-badge" aria-hidden="true">📕</span><span>Libretto uso e manutenzione.pdf<small>4,2 MB · caricato il 12 mar 2026</small></span></li>
+<li class="doc"><span class="icon-badge" aria-hidden="true">🧾</span><span>Fattura tagliando 60.000 km.pdf<small>310 KB · caricato il 3 set 2026</small></span></li>
+<li class="doc"><span class="icon-badge" aria-hidden="true">📄</span><span>Polizza RCA 2026.pdf<small>188 KB · caricato il 20 gen 2026</small></span></li></ul></div></div><div><span class="state-label">Stato 1 · nessun messaggio</span><div class="card chat-old"><p class="eyebrow" style="margin-bottom:12px">🤖 Assistente IA</p><div class="co-scroll"><p style="font-size:14px;color:var(--g-500)">Fai una domanda sul tuo veicolo: l'assistente risponderà usando i documenti caricati.</p></div>
+<form class="co-form" onsubmit="return false"><input class="input" placeholder="Scrivi una domanda…" aria-label="Scrivi una domanda"><button class="btn-primary" type="submit">Invia</button></form></div><span class="state-label">Stato 2 · conversazione con errore di rete (altezza libera solo nel mockup, per mostrare tutto)</span><div class="card chat-old"><p class="eyebrow" style="margin-bottom:12px">🤖 Assistente IA</p><div class="co-scroll"><div class="b b-u">Ogni quanti km va cambiato l'olio?</div><div class="b b-a">Secondo il libretto di uso e manutenzione, sulla Giulia 2.2 Diesel il cambio olio e filtro è previsto ogni 15.000 km oppure ogni 12 mesi, a seconda di quale scadenza arriva prima. L'ultimo tagliando in fattura risale a 60.000 km (3 settembre 2026): il prossimo è quindi intorno ai 75.000 km.</div><div class="b b-u">E che olio devo usare?</div></div><p class="err-old">Impossibile contattare l'assistente. Riprova più tardi.</p>
+<form class="co-form" onsubmit="return false"><input class="input" placeholder="Scrivi una domanda…" aria-label="Scrivi una domanda" value="E che olio devo usare?"><button class="btn-primary" type="submit">Invia</button></form></div></div></div></div></div></section>
+<section class="view-dopo" aria-label="Dopo: proposta"><div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m" aria-hidden="true">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div><div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on" aria-current="page">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label" style="padding:16px 12px 0">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster 937</a></nav><div class="content"><span class="state-flag">Dopo · capacità, suggerimenti, recupero</span><a class="back" href="#">← Torna a Alfa Romeo Giulia</a><div class="hero-panel" style="margin-bottom:24px;padding:28px 24px"><p class="eyebrow">Alfa Romeo Giulia</p><h1 class="h1">Documenti</h1></div><div class="docs-grid"><div><div class="card"><p class="eyebrow" style="margin-bottom:12px">Documenti caricati</p><ul class="doclist">
+<li class="doc"><span class="icon-badge" aria-hidden="true">📕</span><span>Libretto uso e manutenzione.pdf<small>4,2 MB · caricato il 12 mar 2026</small></span></li>
+<li class="doc"><span class="icon-badge" aria-hidden="true">🧾</span><span>Fattura tagliando 60.000 km.pdf<small>310 KB · caricato il 3 set 2026</small></span></li>
+<li class="doc"><span class="icon-badge" aria-hidden="true">📄</span><span>Polizza RCA 2026.pdf<small>188 KB · caricato il 20 gen 2026</small></span></li></ul></div></div><div><span class="state-label">Stato 1 · nessun messaggio</span><div class="card chat"><div class="chat-h"><p class="eyebrow">Assistente IA</p><span class="ctx"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>Legge 3 documenti</span></div>
+<div class="chat-s" aria-live="polite"><div class="cap"><h3 id="cap-e">Cosa posso fare per te</h3><ul class="cap-l" aria-labelledby="cap-e">
+<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Rispondere usando i <b style="color:var(--g-900)">3 documenti</b> caricati per questa Giulia.</span></li>
+<li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Trovare scadenze, intervalli di manutenzione e dati tecnici scritti nel libretto.</span></li>
+<li class="lim"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>Non leggo documenti che non hai caricato e posso sbagliare: controlla sul manuale i valori critici, come coppie di serraggio e pressioni.</span></li></ul>
+<p class="sugg-t" id="sg-e">Prova a chiedere</p><div class="sugg" role="group" aria-labelledby="sg-e">
+<button class="chip" type="button">Quando scade il prossimo tagliando?</button><button class="chip" type="button">Che olio motore serve?</button><button class="chip" type="button">Cosa copre la polizza RCA?</button></div></div></div>
+<form class="comp" onsubmit="return false"><label class="sr-only" for="q-e">Domanda per l'assistente</label><input id="q-e" class="input" placeholder="Scrivi una domanda sulla tua Giulia…"><button class="btn-primary send" type="submit" aria-label="Invia"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="t" aria-hidden="true">Invia</span></button></form></div><span class="state-label">Stato 2 · conversazione con errore di rete (altezza libera solo nel mockup, per mostrare tutto)</span><div class="card chat auto"><div class="chat-h"><p class="eyebrow">Assistente IA</p><span class="ctx"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>Legge 3 documenti</span></div>
+<div class="chat-s" aria-live="polite"><div class="msg msg-u"><span class="who">Tu</span><div class="bub">Ogni quanti km va cambiato l'olio?</div></div>
+<div class="msg msg-a"><span class="who">Assistente</span><div class="bub">Secondo il libretto di uso e manutenzione, sulla Giulia 2.2 Diesel il cambio olio e filtro è previsto ogni 15.000 km oppure ogni 12 mesi, a seconda di quale scadenza arriva prima.
+
+L'ultimo tagliando in fattura risale a 60.000 km (3 settembre 2026): il prossimo è quindi intorno ai 75.000 km.</div></div></div><div class="alert" role="alert"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg><div><b>Risposta non arrivata</b>Non sono riuscito a contattare l'assistente. La tua domanda è di nuovo nel campo qui sotto.<div class="alert-a"><button class="btn-secondary" type="button">Riprova</button></div></div></div>
+<form class="comp" onsubmit="return false"><label class="sr-only" for="q-c">Domanda per l'assistente</label><input id="q-c" class="input" placeholder="Scrivi una domanda sulla tua Giulia…" value="E che olio devo usare?"><button class="btn-primary send" type="submit" aria-label="Invia"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="t" aria-hidden="true">Invia</span></button></form></div></div></div></div></div></section>
+<aside class="notes" aria-label="Note per lo sviluppo"><h2>Cosa guardare</h2><ul><li>Prima: la chat vuota ha una sola frase grigia; il campo ha il bordo <code>graphite-300</code> (1,4:1, un “campo fantasma”); l'errore in <code>red-600</code> su <code>graphite-100</code> arriva a 3,9:1, sotto AA; il pulsante Invia è alto circa 34px.</li>
+<li>Dopo, a chat vuota: che cosa sa fare l'assistente, un limite dichiarato e tre domande d'esempio (chip alti 44px). Un clic su un chip riempie il campo e non invia subito.</li>
+<li>Bolle più leggibili: testo a 15px, interlinea 1,6 e al massimo 68 caratteri per riga. Ogni bolla ha l'etichetta “Tu” o “Assistente”, quindi il mittente non si capisce solo dal colore.</li>
+<li>Errore: riquadro <code>role="alert"</code> in <code>red-400</code> (6,8:1), che dice che la domanda è tornata nel campo, con il pulsante “Riprova”. Il testo dell'errore resta quello che arriva dal server o da <code>t("errorContact")</code>: la logica 401 e redirect di ChatPanel e <code>middleware.ts</code> (task M1) non cambia.</li>
+<li>Composer: campo e pulsante alti 48px, bordo <code>graphite-500</code> (4,8:1). Il campo usa testo a 16px, così iOS non ingrandisce la pagina. Su mobile il pulsante Invia mostra solo l'icona, con <code>aria-label</code>.</li></ul></aside>
+</main>
+</body>
+</html>
