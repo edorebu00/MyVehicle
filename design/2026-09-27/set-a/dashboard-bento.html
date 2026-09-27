@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Dashboard bento — MyVehicle Set A</title>
+<meta name="description" content="P1: dashboard come bento grid">
+<style>
+:root{
+  --brand-50:#2b2415;--brand-100:#3c3119;--brand-200:#5e4c22;--brand-300:#8c7030;--brand-400:#b6913f;--brand-500:#cca558;--brand-600:#d9b671;--brand-700:#e6cb95;--brand-800:#f0ddb8;--brand-900:#f8ecd6;
+  --g-50:#0a0908;--g-100:#141210;--g-200:#211e1a;--g-300:#332e27;--g-400:#5c5347;--g-500:#8a8072;--g-600:#a89e8f;--g-700:#c4bcae;--g-800:#e0dad0;--g-900:#f6f2ea;
+  --gold-50:#241708;--gold-300:#804a17;--gold-400:#a8631f;--gold-600:#d99a4f;
+  --ease-premium:cubic-bezier(0.16,1,0.3,1);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--g-50);color:var(--g-900);font-family:var(--font-sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.015em;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- barra del mockup + toggle Prima/Dopo (solo CSS) ---- */
+.mock-bar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(10,9,8,.92);border-bottom:1px solid var(--g-300);backdrop-filter:blur(12px)}
+.mock-title{font-size:13px;color:var(--g-600)}
+.mock-title b{color:var(--g-900);font-family:var(--font-display);font-size:15px}
+.toggle{display:inline-flex;padding:4px;border:1px solid var(--g-500);border-radius:12px;background:var(--g-100)}
+
+.toggle label{min-width:88px;min-height:44px;display:grid;place-items:center;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;color:var(--g-700);cursor:pointer}
+#v-prima:checked ~ .mock-bar .toggle label[for=v-prima],#v-dopo:checked ~ .mock-bar .toggle label[for=v-dopo]{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+#v-prima:focus-visible ~ .mock-bar .toggle label[for=v-prima],#v-dopo:focus-visible ~ .mock-bar .toggle label[for=v-dopo]{outline:2px solid var(--brand-600);outline-offset:2px}
+.view-dopo{display:none}
+#v-dopo:checked ~ main .view-prima{display:none}
+#v-dopo:checked ~ main .view-dopo{display:block}
+.state-flag{display:inline-block;margin:0 0 12px;padding:2px 10px;border-radius:999px;border:1px solid var(--g-400);font-size:12px;font-weight:600;color:var(--g-700)}
+.view-dopo .state-flag{border-color:var(--brand-400);color:var(--brand-600)}
+.notes{max-width:72ch;width:calc(100% - 32px);margin:32px auto 32px;padding:16px 20px;border:1px dashed var(--g-400);border-radius:12px;font-size:14px;color:var(--g-600);line-height:1.6}
+.notes h2{font-size:16px;color:var(--g-900);margin-bottom:6px}
+.notes ul{margin:0;padding-left:18px}
+
+/* ---- token/classi dell'app (web/app/globals.css) ---- */
+.card{border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:20px;border:1px solid var(--g-200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g-100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--brand-500)}
+.eyebrow::before{content:"";width:20px;height:2px;background:currentColor;border-radius:999px}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:0;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));padding:8px 16px;font:600 14px/1.2 var(--font-sans);color:var(--g-50);text-decoration:none;cursor:pointer;transition:transform .2s ease-out,box-shadow .2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45)}
+.btn-primary:active{transform:scale(.97)}
+.metric-chip{border-radius:8px;border:1px solid var(--g-200);background:var(--g-50);padding:8px 12px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--brand-50);color:var(--brand-600);font-size:18px}
+.label{display:block;margin-bottom:4px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-500)}
+.input{width:100%;border-radius:8px;border:1px solid var(--g-300);background:var(--g-100);padding:8px 12px;font:14px/1.4 var(--font-sans);color:var(--g-900)}
+.input:focus{outline:none;border-color:var(--brand-400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+@keyframes rise-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.animate-rise-in{animation:rise-in .5s var(--ease-premium) both}
+@keyframes stagger-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.animate-stagger>*{animation:stagger-in .5s var(--ease-premium) both}
+.animate-stagger>*:nth-child(2){animation-delay:.07s}.animate-stagger>*:nth-child(3){animation-delay:.12s}.animate-stagger>*:nth-child(4){animation-delay:.17s}.animate-stagger>*:nth-child(5){animation-delay:.22s}.animate-stagger>*:nth-child(n+6){animation-delay:.27s}
+
+/* ---- guscio app (NavBar + Sidebar semplificati) ---- */
+.nav{border-bottom:1px solid var(--g-200);background:rgba(10,9,8,.85)}
+.nav-in{max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:8px;font:700 18px var(--font-display);text-decoration:none}
+.logo-m{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50);font-size:16px}
+.accent{color:var(--brand-600)}
+.shell{max-width:1152px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding:32px 16px}
+.side{display:none}
+.side a{display:flex;align-items:center;min-height:36px;padding:0 12px;border-radius:6px;font-size:14px;font-weight:500;color:var(--g-600);text-decoration:none}
+.side a.on{background:linear-gradient(to bottom,var(--brand-500),var(--brand-400));color:var(--g-50)}
+.side .label{padding:16px 12px 0}
+.content{min-width:0;flex:1}
+@media (min-width:768px){.shell{flex-direction:row}.side{display:block;width:240px;flex-shrink:0;border-right:1px solid var(--g-200);padding:24px 16px 0 0}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+.view-input{position:absolute;opacity:0;width:1px;height:1px}
+
+/* ---- specifico di questo mockup ---- */
+
+.h1{margin-top:8px;font-size:30px;font-weight:700;color:var(--g-900)}
+.sub{margin-top:4px;font-size:14px;color:var(--g-500)}
+.hp{position:relative;display:flex;flex-direction:column;gap:16px}
+.hp-r{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.mc{display:flex;align-items:center;gap:10px}
+.mv{font:700 20px/1 var(--font-display);color:var(--g-900)}
+.ml{margin-top:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g-500)}
+@media (min-width:640px){.hp{flex-direction:row;align-items:center;justify-content:space-between}.hp-r{align-items:flex-end}}
+.grid-old{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:640px){.grid-old{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.grid-old{grid-template-columns:repeat(3,1fr)}}
+.vc{display:block;overflow:hidden;border-radius:12px;border:1px solid var(--g-200);background:var(--g-100);text-decoration:none;transition:transform .3s var(--ease-premium),border-color .3s}
+.vc:hover{transform:translateY(-6px);border-color:rgba(182,145,63,.6)}
+.vc-art{position:relative;display:flex;align-items:center;justify-content:center;height:128px;background:linear-gradient(135deg,var(--brand-50),var(--g-100))}
+.vc-emoji{font-size:48px;filter:grayscale(.3)}
+.pill{position:absolute;top:12px;padding:2px 8px;border-radius:999px;background:rgba(10,9,8,.9);font-size:12px;font-weight:500}
+.pill.l{left:12px;color:var(--brand-600)}.pill.r{right:12px;color:var(--g-600)}
+.vc-body{padding:16px}
+.vc-body h3{font-size:18px;font-weight:600}
+.t5{margin-top:4px;font-size:14px;color:var(--g-500)}
+.t4{margin-top:4px;font-size:14px;color:var(--g-400)}
+.open{margin-top:16px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-600)}
+
+/* Dopo */
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px;padding:24px}
+.bento{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.bx{position:relative;border-radius:16px;border:1px solid var(--g-200);background:var(--g-100);padding:16px;text-decoration:none;color:inherit;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3);transition:border-color .25s var(--ease-premium),transform .25s var(--ease-premium)}
+a.bx:hover{border-color:var(--brand-400);transform:translateY(-3px)}
+a.bx:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+.bx-feat{grid-column:1/-1;display:flex;flex-direction:column;gap:12px;padding:20px;background:radial-gradient(110% 120% at 85% 10%,rgba(204,165,88,.14),var(--g-100) 60%)}
+.feat-top{display:flex;justify-content:space-between}
+.tag{padding:2px 10px;border-radius:999px;border:1px solid var(--brand-300);font-size:12px;font-weight:600;color:var(--brand-600)}
+.tag-n{border-color:var(--g-400);color:var(--g-700)}
+.feat-art{display:grid;place-items:center;min-height:110px;color:var(--brand-500)}
+.feat-name{font:700 26px/1.1 var(--font-display);letter-spacing:-.015em}
+.feat-specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid var(--g-300)}
+.feat-specs span{font-size:14px;color:var(--g-800);overflow-wrap:anywhere}
+.feat-specs em{display:block;font-style:normal;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--g-500)}
+.feat-cta{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--brand-600)}
+.bx-metric{display:flex;flex-direction:column;gap:4px;min-height:140px}
+.big{font:700 40px/1 var(--font-display);margin-top:4px}
+.split{display:flex;gap:3px;height:6px;margin-top:auto;border-radius:999px;overflow:hidden}
+.split span{background:var(--brand-500)}.split .m{background:var(--gold-600)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font-size:13px;color:var(--g-600)}
+.bx-ai .leg{margin-top:auto}
+.d{display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:2px;background:var(--brand-500)}.d.m{background:var(--gold-600)}
+.bx-veh{grid-column:1/-1;display:flex;align-items:center;gap:14px;min-height:72px}
+.bx-ico{display:grid;place-items:center;width:48px;height:48px;flex-shrink:0;border-radius:12px;background:var(--brand-50);color:var(--brand-600)}
+.bx-vt{display:flex;flex-direction:column;min-width:0;flex:1}
+.bx-name{font:600 17px/1.25 var(--font-display)}
+.bx-meta{font-size:13px;color:var(--g-600)}
+.bx-plate{font-size:13px;color:var(--g-500);font-variant-numeric:tabular-nums}
+.chev{color:var(--brand-600)}
+@media (min-width:640px){
+  .bx-veh{grid-column:auto;flex-direction:column;align-items:flex-start}
+  .chev{position:absolute;right:16px;top:16px}
+}
+@media (min-width:1024px){
+  .bento{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(150px,auto)}
+  .bx-feat{grid-column:1/3;grid-row:1/3}
+  .bx-metric{grid-column:auto}
+}
+
+</style>
+</head>
+<body>
+<input class="view-input" type="radio" name="vista" id="v-prima" checked>
+<input class="view-input" type="radio" name="vista" id="v-dopo">
+<header class="mock-bar">
+  <p class="mock-title"><b>Dashboard bento</b> · mockup Set A, 27 set 2026</p>
+  <div class="toggle" role="group" aria-label="Versione mostrata">
+    <label for="v-prima">Prima</label>
+    <label for="v-dopo">Dopo</label>
+  </div>
+</header>
+<main>
+<section class="view-prima" aria-label="Prima: app di oggi">
+<div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div>
+<div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster</a><a href="#">Volkswagen Golf</a><a href="#">Fiat Panda</a><a href="#" style="color:var(--brand-600)">+ Aggiungi veicolo</a></nav>
+<div class="content"><span class="state-flag">Prima · dashboard di oggi</span>
+<div class="hero-panel" style="margin-bottom:32px;padding:32px 24px"><div class="hp">
+<div><p class="eyebrow">La tua collezione</p><h1 class="h1">Il mio garage</h1><p class="sub">4 veicoli in collezione.</p></div>
+<div class="hp-r"><div style="display:flex;gap:8px">
+<div class="metric-chip mc"><span class="icon-badge" aria-hidden="true">🚗</span><span><p class="mv">4</p><p class="ml">in garage</p></span></div>
+<div class="metric-chip mc"><span class="icon-badge" aria-hidden="true">⚡</span><span><p class="mv accent">24/7</p><p class="ml">pronto</p></span></div></div>
+<a href="#" class="btn-primary">+ Aggiungi veicolo</a></div></div></div>
+<div class="grid-old animate-stagger"><a href="#" class="vc" aria-label="Apri la scheda di Alfa Romeo Giulia"><div class="vc-art"><span class="vc-emoji">🚗</span><span class="pill l">Auto</span><span class="pill r">2021</span></div>
+<div class="vc-body"><h3>Alfa Romeo Giulia</h3><p class="t5">Motore: 2.2 Diesel 160cv</p><p class="t4">Targa: GH 482 KL</p><p class="open">Apri scheda <span aria-hidden="true">→</span></p></div></a><a href="#" class="vc" aria-label="Apri la scheda di Ducati Monster"><div class="vc-art"><span class="vc-emoji">🏍️</span><span class="pill l">Moto</span><span class="pill r">2023</span></div>
+<div class="vc-body"><h3>Ducati Monster</h3><p class="t5">Motore: 937 111cv</p><p class="t4">Targa: EW 48213</p><p class="open">Apri scheda <span aria-hidden="true">→</span></p></div></a><a href="#" class="vc" aria-label="Apri la scheda di Volkswagen Golf"><div class="vc-art"><span class="vc-emoji">🚗</span><span class="pill l">Auto</span><span class="pill r">2020</span></div>
+<div class="vc-body"><h3>Volkswagen Golf</h3><p class="t5">Motore: 1.5 eTSI 150cv</p><p class="t4">Targa: GB 227 MN</p><p class="open">Apri scheda <span aria-hidden="true">→</span></p></div></a><a href="#" class="vc" aria-label="Apri la scheda di Fiat Panda"><div class="vc-art"><span class="vc-emoji">🚗</span><span class="pill l">Auto</span><span class="pill r">2022</span></div>
+<div class="vc-body"><h3>Fiat Panda</h3><p class="t5">Motore: 1.0 Hybrid 70cv</p><p class="t4">Targa: FZ 913 TR</p><p class="open">Apri scheda <span aria-hidden="true">→</span></p></div></a></div></div></div>
+</section>
+<section class="view-dopo" aria-label="Dopo: proposta">
+<div class="nav"><div class="nav-in"><a class="logo" href="#"><span class="logo-m">M</span><span>My<span class="accent">Vehicle</span></span></a><span style="font-size:14px;color:var(--g-600)">Esci</span></div></div>
+<div class="shell"><nav class="side" aria-label="Navigazione"><a href="#" class="on">Il mio garage</a><a href="#">Circuiti</a><a href="#">Ricerca</a><p class="label">I miei veicoli</p><a href="#">Alfa Romeo Giulia</a><a href="#">Ducati Monster</a><a href="#">Volkswagen Golf</a><a href="#">Fiat Panda</a><a href="#" style="color:var(--brand-600)">+ Aggiungi veicolo</a></nav>
+<div class="content"><span class="state-flag">Dopo · bento grid</span>
+<div class="hero-panel head"><div><p class="eyebrow">La tua collezione</p><h1 class="h1">Il mio garage</h1></div>
+<a href="#" class="btn-primary">+ Aggiungi veicolo</a></div>
+<div class="bento animate-stagger">
+  <a href="#" class="bx bx-feat" aria-label="Apri la scheda di Alfa Romeo Giulia, ultimo aggiunto">
+    <span class="feat-top"><span class="tag">Ultimo aggiunto</span><span class="tag tag-n">2021</span></span>
+    <span class="feat-art"><svg viewBox="0 0 48 48" width="96" height="96" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 30v-6l5-9h20l7 9h4a2 2 0 0 1 2 2v4"/><path d="M6 30h38"/><circle cx="14" cy="32" r="4"/><circle cx="36" cy="32" r="4"/><path d="M12 24h28"/></svg></span>
+    <span class="feat-name">Alfa Romeo Giulia</span>
+    <span class="feat-specs"><span><em>Motore</em>2.2 Diesel 160cv</span><span><em>Targa</em>GH 482 KL</span><span><em>Tipo</em>Auto</span></span>
+    <span class="feat-cta">Apri scheda <span aria-hidden="true">→</span></span>
+  </a>
+  <div class="bx bx-metric"><p class="ml">In garage</p><p class="big">4</p>
+    <div class="split" role="img" aria-label="3 auto e 1 moto"><span style="flex:3"></span><span class="m" style="flex:1"></span></div>
+    <p class="leg"><span><i class="d"></i>3 auto</span><span><i class="d m"></i>1 moto</span></p></div>
+  <a href="#" class="bx bx-metric bx-ai"><p class="ml">Assistente IA</p><p class="big accent">24/7</p><p class="leg">Chiedi su ricambi, manutenzione, documenti <span aria-hidden="true">→</span></p></a>
+  <a href="#" class="bx bx-veh" aria-label="Apri la scheda di Ducati Monster">
+<span class="bx-ico"><svg viewBox="0 0 48 48" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="32" r="7"/><circle cx="37" cy="32" r="7"/><path d="M11 32l9-12h8l9 12"/><path d="M26 20l-3-6h6"/><path d="M20 20l4 12h13"/></svg></span><span class="bx-vt"><span class="bx-name">Ducati Monster</span><span class="bx-meta">937 111cv · 2023</span><span class="bx-plate">EW 48213</span></span><span class="chev" aria-hidden="true">→</span></a><a href="#" class="bx bx-veh" aria-label="Apri la scheda di Volkswagen Golf">
+<span class="bx-ico"><svg viewBox="0 0 48 48" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 30v-6l5-9h20l7 9h4a2 2 0 0 1 2 2v4"/><path d="M6 30h38"/><circle cx="14" cy="32" r="4"/><circle cx="36" cy="32" r="4"/><path d="M12 24h28"/></svg></span><span class="bx-vt"><span class="bx-name">Volkswagen Golf</span><span class="bx-meta">1.5 eTSI 150cv · 2020</span><span class="bx-plate">GB 227 MN</span></span><span class="chev" aria-hidden="true">→</span></a><a href="#" class="bx bx-veh" aria-label="Apri la scheda di Fiat Panda">
+<span class="bx-ico"><svg viewBox="0 0 48 48" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 30v-6l5-9h20l7 9h4a2 2 0 0 1 2 2v4"/><path d="M6 30h38"/><circle cx="14" cy="32" r="4"/><circle cx="36" cy="32" r="4"/><path d="M12 24h28"/></svg></span><span class="bx-vt"><span class="bx-name">Fiat Panda</span><span class="bx-meta">1.0 Hybrid 70cv · 2022</span><span class="bx-plate">FZ 913 TR</span></span><span class="chev" aria-hidden="true">→</span></a>
+</div></div></div>
+</section>
+<aside class="notes" aria-label="Note per lo sviluppo">
+<h2>Cosa guardare</h2><ul>
+<li>Prima: hero con metric-chip + griglia uniforme di VehicleCard (ogni card ha la stessa altezza a prescindere dall'importanza).</li>
+<li>Dopo: header piu' compatto, una cella grande per l'ultimo veicolo aggiunto (primo di <code>created_at desc</code>, nessun dato nuovo), due celle metrica (conteggio con ripartizione auto/moto, IA), gli altri veicoli in celle compatte.</li>
+<li>Mobile: cella grande a tutta larghezza, metriche affiancate 2×1, veicoli come righe da 72px (target di tocco ampio).</li>
+<li>Targa in <code>graphite-500</code> (4,8:1) invece di <code>graphite-400</code> (2,5:1, sotto AA).</li></ul>
+</aside>
+</main>
+</body>
+</html>
