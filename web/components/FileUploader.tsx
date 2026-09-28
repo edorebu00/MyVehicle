@@ -132,6 +132,7 @@ export default function FileUploader({ vehicleId }: { vehicleId: string }) {
         />
       </label>
       <p className="mt-1 text-xs text-graphite-400">{t("supportedFormats")}</p>
+      <p className="mt-1 text-xs text-graphite-400">{t("personalDataHint")}</p>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );

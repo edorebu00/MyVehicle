@@ -8,7 +8,7 @@ interface CookieToSet {
 }
 
 // Percorsi pubblici esatti: il confronto è per uguaglianza ("/" con startsWith matcherebbe tutto).
-const PUBLIC_EXACT_PATHS = ["/", "/offline", "/login", "/registrati", "/auth/callback", "/circuiti"];
+const PUBLIC_EXACT_PATHS = ["/", "/offline", "/login", "/registrati", "/auth/callback", "/circuiti", "/privacy"];
 // Prefissi pubblici: il confronto richiede il separatore ("/circuiti/monza" sì, "/circuitiX" no),
 // così un percorso che inizia per caso con lo stesso testo non eredita l'esenzione dal login.
 const PUBLIC_PREFIX_PATHS = ["/auth/callback/", "/circuiti/"];

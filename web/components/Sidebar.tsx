@@ -34,6 +34,7 @@ const ICONS = {
   garage: "M2.5 15 V9.5 L4 5.5 H14 L15.5 9.5 V15 M2.5 15 H15.5 M4.5 12 H4.51 M13.5 12 H13.51",
   flag: "M4 15.5 V2.5 M4 3 H13 L11 6 L13 9 H4",
   search: "M8 13.5 A5.5 5.5 0 1 0 8 2.5 A5.5 5.5 0 0 0 8 13.5 Z M12 12 L16 16",
+  user: "M9 8.5 A3 3 0 1 0 9 2.5 A3 3 0 0 0 9 8.5 Z M3 15.5 C3 12.5 5.7 10.5 9 10.5 C12.3 10.5 15 12.5 15 15.5",
 } as const;
 
 function NavIcon({ d }: { d: string }) {
@@ -55,6 +56,7 @@ export default function Sidebar({ vehicles }: { vehicles: Vehicle[] }) {
         <NavLink href="/dashboard"><NavIcon d={ICONS.garage} /> {t("garage")}</NavLink>
         <NavLink href="/circuiti"><NavIcon d={ICONS.flag} /> {t("circuits")}</NavLink>
         <NavLink href="/ricerca"><NavIcon d={ICONS.search} /> {t("search")}</NavLink>
+        <NavLink href="/account"><NavIcon d={ICONS.user} /> {t("account")}</NavLink>
 
         <div className="pt-4">
           <p className="label px-3">{t("myVehicles")}</p>

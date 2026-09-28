@@ -15,7 +15,8 @@
     "myVehicles": "My vehicles",
     "noVehicles": "No vehicles added yet.",
     "addVehicle": "+ Add vehicle",
-    "logout": "Log out"
+    "logout": "Log out",
+    "account": "Account"
   },
   "publicHeader": {
     "login": "Log in",
@@ -265,7 +266,8 @@
     "confirmEmailEyebrow": "One last step",
     "confirmEmailTitle": "Check your email",
     "confirmEmailText": "We sent a confirmation link to <b>{email}</b>. Open the link to activate your account, then come back here to log in.",
-    "goToLogin": "Go to login"
+    "goToLogin": "Go to login",
+    "privacyNotice": "By signing up you confirm you have read the <link>privacy notice</link>."
   },
   "dashboard": {
     "eyebrow": "Your collection",
@@ -396,7 +398,8 @@
     "saveError": "Error while saving the document.",
     "unsupportedFileType": "Unsupported format: upload a PDF or a text file.",
     "fileTooLarge": "File too large: the limit is 20 MB.",
-    "processingNotStarted": "text extraction did not start, upload the file again to retry."
+    "processingNotStarted": "text extraction did not start, upload the file again to retry.",
+    "personalDataHint": "Upload manuals and technical documents. Avoid documents with personal data, such as the registration certificate: the assistant does not need them."
   },
   "documentList": {
     "noFiles": "No files uploaded for this vehicle.",
@@ -468,5 +471,85 @@
     "emptyDocuments": "No documents found online for this vehicle.",
     "emptyForum": "No forums found online for this vehicle.",
     "emptyVideo": "No videos found online for this vehicle."
+  },
+  "account": {
+    "eyebrow": "Your profile",
+    "title": "Account",
+    "emailLabel": "Sign-in email",
+    "privacyText": "How your data is handled is explained in the <link>privacy notice</link>.",
+    "deleteTitle": "Delete account",
+    "deleteText": "Permanently delete your account together with all vehicles, sheets, uploaded documents and images, searches and conversations with the assistant. This cannot be undone.",
+    "deleteButton": "Delete my account",
+    "deleting": "Deleting…",
+    "deleteConfirm": "Permanently delete your account and all related data? This cannot be undone.",
+    "deleteError": "Could not delete the account: {message}"
+  },
+  "privacy": {
+    "eyebrow": "Privacy",
+    "title": "Privacy notice",
+    "lastUpdated": "Last updated: 28 September 2026",
+    "footerLink": "Privacy",
+    "contactTitle": "Data controller and contact",
+    "contactText": "MyVehicle is a personal, non-commercial project. The data controller is the person who runs it, whom you can contact with any question or request about your data:",
+    "contactMissing": "Contact address not configured yet.",
+    "sections": [
+      {
+        "title": "What data we process",
+        "paragraphs": [
+          "Account data: your email address and password, which the authentication provider stores in a non-readable form.",
+          "Vehicle data you enter: type, make, model, year, engine code, licence plate, VIN, notes, sheet characteristics and uploaded images.",
+          "Documents you upload (PDF or text) and the text extracted from them for the chat, the questions you ask the assistant with its answers, the searches you run and the saved results.",
+          "Technical access data, such as IP address and request times, logged by the hosting providers to run and secure the service."
+        ]
+      },
+      {
+        "title": "Why we process it",
+        "paragraphs": [
+          "To provide the service you request by signing up: storing your vehicles and documents, finding resources online and answering your questions (Art. 6(1)(b) GDPR).",
+          "To protect the service from abuse, for example with limits on the number of requests to the assistant (legitimate interest, Art. 6(1)(f) GDPR).",
+          "Data is not used for advertising or profiling and is not sold or given to third parties."
+        ]
+      },
+      {
+        "title": "Who receives it",
+        "paragraphs": [
+          "Supabase (authentication, database and file storage) and Vercel (application hosting) process data as service providers.",
+          "Anthropic receives what the AI features need: your questions, the vehicle's make, model, year and engine code and, for the chat, the text of the documents uploaded for that vehicle. Licence plate and VIN are never sent. If configured, OpenAI receives the same content only when Anthropic does not respond.",
+          "Some of these providers may process data outside the European Union; in that case the transfer relies on the safeguards provided by the GDPR (for example standard contractual clauses) set out in each provider's terms."
+        ]
+      },
+      {
+        "title": "How long we keep it",
+        "paragraphs": [
+          "Data is kept as long as you keep your account. Deleting a vehicle deletes its data and files; deleting your account from the Account page deletes all your data and files.",
+          "Backups managed by the providers may retain deleted data for a limited period, after which it is overwritten."
+        ]
+      },
+      {
+        "title": "What is best not to upload",
+        "paragraphs": [
+          "The app does not need documents with personal data, such as the registration certificate, contracts or ID documents. Upload manuals and technical documentation: the text of your documents is sent to the assistant with every question."
+        ]
+      },
+      {
+        "title": "Cookies and browser storage",
+        "paragraphs": [
+          "We only use technical cookies: the sign-in session cookies and the one that remembers your language. Your browser also stores locally whether you dismissed the install prompt. There are no analytics or profiling cookies."
+        ]
+      },
+      {
+        "title": "Your rights",
+        "paragraphs": [
+          "You can request access to your data, rectification, erasure, restriction of processing and portability, and you can object to processing, by writing to the contact above. Vehicles, documents and your account can also be edited and deleted directly in the app.",
+          "If you believe the processing infringes the GDPR you can lodge a complaint with the Italian Data Protection Authority (garanteprivacy.it) or with the authority of your country."
+        ]
+      },
+      {
+        "title": "Changes",
+        "paragraphs": [
+          "If this notice changes, the date at the top of the page is updated. For significant changes we will let you know in the app."
+        ]
+      }
+    ]
   }
 }

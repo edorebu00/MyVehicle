@@ -15,7 +15,8 @@
     "myVehicles": "Meine Fahrzeuge",
     "noVehicles": "Noch kein Fahrzeug hinzugefügt.",
     "addVehicle": "+ Fahrzeug hinzufügen",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "account": "Konto"
   },
   "publicHeader": {
     "login": "Anmelden",
@@ -265,7 +266,8 @@
     "confirmEmailEyebrow": "Ein letzter Schritt",
     "confirmEmailTitle": "Überprüfe deine E-Mail",
     "confirmEmailText": "Wir haben einen Bestätigungslink an <b>{email}</b> gesendet. Öffne den Link, um dein Konto zu aktivieren, und komm dann hierher zurück, um dich anzumelden.",
-    "goToLogin": "Zur Anmeldung"
+    "goToLogin": "Zur Anmeldung",
+    "privacyNotice": "Mit der Registrierung bestätigst du, dass du die <link>Datenschutzerklärung</link> gelesen hast."
   },
   "dashboard": {
     "eyebrow": "Deine Sammlung",
@@ -396,7 +398,8 @@
     "saveError": "Fehler beim Speichern des Dokuments.",
     "unsupportedFileType": "Nicht unterstütztes Format: lade eine PDF- oder Textdatei hoch.",
     "fileTooLarge": "Datei zu groß: das Limit liegt bei 20 MB.",
-    "processingNotStarted": "Textextraktion nicht gestartet, lade die Datei erneut hoch."
+    "processingNotStarted": "Textextraktion nicht gestartet, lade die Datei erneut hoch.",
+    "personalDataHint": "Lade Handbücher und technische Unterlagen hoch. Vermeide Dokumente mit personenbezogenen Daten wie den Fahrzeugschein: Der Assistent braucht sie nicht."
   },
   "documentList": {
     "noFiles": "Für dieses Fahrzeug wurden keine Dateien hochgeladen.",
@@ -468,5 +471,85 @@
     "emptyDocuments": "Für dieses Fahrzeug wurden online keine Dokumente gefunden.",
     "emptyForum": "Für dieses Fahrzeug wurden online keine Foren gefunden.",
     "emptyVideo": "Für dieses Fahrzeug wurden online keine Videos gefunden."
+  },
+  "account": {
+    "eyebrow": "Dein Profil",
+    "title": "Konto",
+    "emailLabel": "Anmelde-E-Mail",
+    "privacyText": "Wie deine Daten verarbeitet werden, erklärt die <link>Datenschutzerklärung</link>.",
+    "deleteTitle": "Konto löschen",
+    "deleteText": "Lösche dein Konto endgültig zusammen mit allen Fahrzeugen, Datenblättern, hochgeladenen Dokumenten und Bildern, Suchen und Gesprächen mit dem Assistenten. Dies kann nicht rückgängig gemacht werden.",
+    "deleteButton": "Mein Konto löschen",
+    "deleting": "Wird gelöscht…",
+    "deleteConfirm": "Konto und alle zugehörigen Daten endgültig löschen? Dies kann nicht rückgängig gemacht werden.",
+    "deleteError": "Das Konto konnte nicht gelöscht werden: {message}"
+  },
+  "privacy": {
+    "eyebrow": "Datenschutz",
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Zuletzt aktualisiert: 28. September 2026",
+    "footerLink": "Datenschutz",
+    "contactTitle": "Verantwortlicher und Kontakt",
+    "contactText": "MyVehicle ist ein privates, nicht kommerzielles Projekt. Verantwortlicher ist die Person, die es betreibt; bei Fragen oder Anliegen zu deinen Daten kannst du dich hier melden:",
+    "contactMissing": "Kontaktadresse noch nicht eingerichtet.",
+    "sections": [
+      {
+        "title": "Welche Daten wir verarbeiten",
+        "paragraphs": [
+          "Kontodaten: deine E-Mail-Adresse und dein Passwort, das der Authentifizierungsanbieter in nicht lesbarer Form speichert.",
+          "Fahrzeugdaten, die du eingibst: Typ, Marke, Modell, Baujahr, Motorcode, Kennzeichen, Fahrgestellnummer, Notizen, Merkmale der Datenblätter und hochgeladene Bilder.",
+          "Dokumente, die du hochlädst (PDF oder Text), und der daraus für den Chat extrahierte Text, deine Fragen an den Assistenten mit den Antworten, deine Suchen und die gespeicherten Ergebnisse.",
+          "Technische Zugriffsdaten wie IP-Adresse und Zeitpunkt der Anfragen, die von den Hosting-Anbietern für Betrieb und Sicherheit des Dienstes protokolliert werden."
+        ]
+      },
+      {
+        "title": "Wozu wir sie verarbeiten",
+        "paragraphs": [
+          "Um den Dienst zu erbringen, den du mit der Registrierung anforderst: deine Fahrzeuge und Dokumente speichern, Online-Ressourcen finden und deine Fragen beantworten (Art. 6 Abs. 1 lit. b DSGVO).",
+          "Um den Dienst vor Missbrauch zu schützen, zum Beispiel durch Begrenzung der Anfragen an den Assistenten (berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO).",
+          "Die Daten werden nicht für Werbung oder Profiling verwendet und weder verkauft noch an Dritte weitergegeben."
+        ]
+      },
+      {
+        "title": "Wer sie erhält",
+        "paragraphs": [
+          "Supabase (Authentifizierung, Datenbank und Dateispeicher) und Vercel (Hosting der Anwendung) verarbeiten die Daten als Dienstleister.",
+          "Anthropic erhält, was die KI-Funktionen benötigen: deine Fragen, Marke, Modell, Baujahr und Motorcode des Fahrzeugs und für den Chat den Text der für dieses Fahrzeug hochgeladenen Dokumente. Kennzeichen und Fahrgestellnummer werden nicht übermittelt. Falls eingerichtet, erhält OpenAI dieselben Inhalte nur dann, wenn Anthropic nicht antwortet.",
+          "Einige dieser Anbieter können Daten außerhalb der Europäischen Union verarbeiten; in diesem Fall erfolgt die Übermittlung auf Grundlage der von der DSGVO vorgesehenen Garantien (zum Beispiel Standardvertragsklauseln), die in den Bedingungen des jeweiligen Anbieters angegeben sind."
+        ]
+      },
+      {
+        "title": "Wie lange wir sie speichern",
+        "paragraphs": [
+          "Die Daten bleiben gespeichert, solange du dein Konto behältst. Wenn du ein Fahrzeug löschst, werden seine Daten und Dateien gelöscht; wenn du dein Konto auf der Seite Konto löschst, werden alle deine Daten und Dateien gelöscht.",
+          "Von den Anbietern verwaltete Sicherungskopien können gelöschte Daten für begrenzte Zeit enthalten, danach werden sie überschrieben."
+        ]
+      },
+      {
+        "title": "Was du besser nicht hochlädst",
+        "paragraphs": [
+          "Für die App brauchst du keine Dokumente mit personenbezogenen Daten wie Fahrzeugschein, Verträge oder Ausweise. Lade Handbücher und technische Unterlagen hoch: Der Text deiner Dokumente wird bei jeder Frage an den Assistenten gesendet."
+        ]
+      },
+      {
+        "title": "Cookies und Browserspeicher",
+        "paragraphs": [
+          "Wir verwenden nur technisch notwendige Cookies: die der Anmeldesitzung und eines, das die gewählte Sprache speichert. Dein Browser speichert außerdem lokal, ob du den Installationshinweis geschlossen hast. Es gibt keine Analyse- oder Profiling-Cookies."
+        ]
+      },
+      {
+        "title": "Deine Rechte",
+        "paragraphs": [
+          "Du kannst Auskunft über deine Daten, Berichtigung, Löschung, Einschränkung der Verarbeitung und Datenübertragbarkeit verlangen und der Verarbeitung widersprechen, indem du an den oben genannten Kontakt schreibst. Fahrzeuge, Dokumente und das Konto kannst du auch direkt in der App bearbeiten und löschen.",
+          "Wenn du der Ansicht bist, dass die Verarbeitung gegen die DSGVO verstößt, kannst du dich bei der italienischen Datenschutzbehörde (garanteprivacy.it) oder bei der Behörde deines Landes beschweren."
+        ]
+      },
+      {
+        "title": "Änderungen",
+        "paragraphs": [
+          "Wenn sich diese Erklärung ändert, wird das Datum oben auf der Seite aktualisiert. Über wesentliche Änderungen informieren wir dich in der App."
+        ]
+      }
+    ]
   }
 }

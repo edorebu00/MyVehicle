@@ -15,7 +15,8 @@
     "myVehicles": "I miei veicoli",
     "noVehicles": "Nessun veicolo aggiunto.",
     "addVehicle": "+ Aggiungi veicolo",
-    "logout": "Esci"
+    "logout": "Esci",
+    "account": "Account"
   },
   "publicHeader": {
     "login": "Accedi",
@@ -265,7 +266,8 @@
     "confirmEmailEyebrow": "Un ultimo passo",
     "confirmEmailTitle": "Controlla la tua email",
     "confirmEmailText": "Ti abbiamo inviato un link di conferma a <b>{email}</b>. Apri il link per attivare l'account, poi torna qui per accedere.",
-    "goToLogin": "Vai al login"
+    "goToLogin": "Vai al login",
+    "privacyNotice": "Registrandoti confermi di aver letto l'<link>informativa privacy</link>."
   },
   "dashboard": {
     "eyebrow": "La tua collezione",
@@ -396,7 +398,8 @@
     "saveError": "Errore durante il salvataggio del documento.",
     "unsupportedFileType": "Formato non supportato: carica un PDF o un file di testo.",
     "fileTooLarge": "File troppo grande: il limite è 20 MB.",
-    "processingNotStarted": "estrazione del testo non avviata, ricarica il file per riprovare."
+    "processingNotStarted": "estrazione del testo non avviata, ricarica il file per riprovare.",
+    "personalDataHint": "Carica manuali e documenti tecnici. Evita documenti con dati personali, come la carta di circolazione: all'assistente non servono."
   },
   "documentList": {
     "noFiles": "Nessun file caricato per questo veicolo.",
@@ -468,5 +471,85 @@
     "emptyDocuments": "Nessun documento trovato online per questo veicolo.",
     "emptyForum": "Nessun forum trovato online per questo veicolo.",
     "emptyVideo": "Nessun video trovato online per questo veicolo."
+  },
+  "account": {
+    "eyebrow": "Il tuo profilo",
+    "title": "Account",
+    "emailLabel": "Email di accesso",
+    "privacyText": "Come vengono trattati i tuoi dati è spiegato nell'<link>informativa privacy</link>.",
+    "deleteTitle": "Elimina account",
+    "deleteText": "Elimina definitivamente il tuo account insieme a tutti i veicoli, le schede, i documenti e le immagini caricate, le ricerche e le conversazioni con l'assistente. L'operazione non si può annullare.",
+    "deleteButton": "Elimina il mio account",
+    "deleting": "Eliminazione in corso…",
+    "deleteConfirm": "Eliminare definitivamente l'account e tutti i dati collegati? L'operazione non si può annullare.",
+    "deleteError": "Impossibile eliminare l'account: {message}"
+  },
+  "privacy": {
+    "eyebrow": "Privacy",
+    "title": "Informativa privacy",
+    "lastUpdated": "Ultimo aggiornamento: 28 settembre 2026",
+    "footerLink": "Privacy",
+    "contactTitle": "Titolare del trattamento e contatti",
+    "contactText": "MyVehicle è un progetto personale e non commerciale. Titolare del trattamento è la persona che lo gestisce, a cui puoi scrivere per qualsiasi domanda o richiesta sui tuoi dati:",
+    "contactMissing": "Indirizzo di contatto non ancora configurato.",
+    "sections": [
+      {
+        "title": "Quali dati trattiamo",
+        "paragraphs": [
+          "Dati dell'account: l'indirizzo email e la password, che il fornitore di autenticazione conserva in forma non leggibile.",
+          "Dati dei veicoli che inserisci: tipo, marca, modello, anno, codice motore, targa, numero di telaio, note, caratteristiche delle schede e immagini caricate.",
+          "Documenti che carichi (PDF o testo) e il testo estratto da essi per la chat, le domande che fai all'assistente con le relative risposte, le ricerche effettuate e i risultati salvati.",
+          "Dati tecnici di accesso, come indirizzo IP e orari delle richieste, registrati dai fornitori di hosting per il funzionamento e la sicurezza del servizio."
+        ]
+      },
+      {
+        "title": "Perché li trattiamo",
+        "paragraphs": [
+          "Per fornirti il servizio che richiedi registrandoti: conservare i tuoi veicoli e documenti, cercare risorse online e rispondere alle tue domande (art. 6, par. 1, lett. b GDPR).",
+          "Per proteggere il servizio da abusi, ad esempio con i limiti al numero di richieste all'assistente (legittimo interesse, art. 6, par. 1, lett. f GDPR).",
+          "I dati non vengono usati per pubblicità o profilazione e non vengono venduti o ceduti a terzi."
+        ]
+      },
+      {
+        "title": "A chi vengono comunicati",
+        "paragraphs": [
+          "Supabase (autenticazione, database e archiviazione dei file) e Vercel (hosting dell'applicazione) trattano i dati come fornitori del servizio.",
+          "Anthropic riceve i contenuti necessari alle funzioni di intelligenza artificiale: le tue domande, marca, modello, anno e codice motore del veicolo e, per la chat, il testo dei documenti caricati per quel veicolo. Targa e numero di telaio non vengono inviati. Se configurato, OpenAI riceve gli stessi contenuti solo quando Anthropic non risponde.",
+          "Alcuni di questi fornitori possono trattare i dati fuori dall'Unione europea; in tal caso il trasferimento avviene sulla base delle garanzie previste dal GDPR (ad esempio clausole contrattuali standard) indicate nei termini di ciascun fornitore."
+        ]
+      },
+      {
+        "title": "Per quanto tempo",
+        "paragraphs": [
+          "I dati restano finché mantieni l'account. Eliminando un veicolo vengono eliminati i suoi dati e i file collegati; eliminando l'account dalla pagina Account vengono eliminati tutti i tuoi dati e file.",
+          "Le copie di sicurezza gestite dai fornitori possono conservare i dati eliminati per un periodo limitato, dopo il quale vengono sovrascritte."
+        ]
+      },
+      {
+        "title": "Cosa è meglio non caricare",
+        "paragraphs": [
+          "Per usare l'app non servono documenti con dati personali, come la carta di circolazione, contratti o documenti d'identità. Carica manuali e documentazione tecnica: il testo dei documenti viene inviato all'assistente a ogni domanda."
+        ]
+      },
+      {
+        "title": "Cookie e memoria del browser",
+        "paragraphs": [
+          "Usiamo solo cookie tecnici: quelli della sessione di accesso e quello che ricorda la lingua scelta. Il browser conserva inoltre localmente se hai chiuso l'invito a installare l'app. Non ci sono cookie di analisi o di profilazione."
+        ]
+      },
+      {
+        "title": "I tuoi diritti",
+        "paragraphs": [
+          "Puoi chiedere l'accesso ai tuoi dati, la rettifica, la cancellazione, la limitazione del trattamento, la portabilità e opporti al trattamento, scrivendo al contatto indicato sopra. Veicoli, documenti e account si possono anche modificare ed eliminare direttamente dall'app.",
+          "Se ritieni che il trattamento violi il GDPR puoi proporre reclamo al Garante per la protezione dei dati personali (garanteprivacy.it) o all'autorità del tuo Paese."
+        ]
+      },
+      {
+        "title": "Modifiche",
+        "paragraphs": [
+          "Se questa informativa cambia, la data in cima alla pagina viene aggiornata. Per modifiche rilevanti ti avviseremo nell'app."
+        ]
+      }
+    ]
   }
 }

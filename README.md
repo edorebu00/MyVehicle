@@ -27,7 +27,7 @@ Level Security) e chiamano l'API Anthropic lato server, senza mai esporre la chi
 ## 1. Configurare Supabase
 
 1. Crea un nuovo progetto su [supabase.com](https://supabase.com).
-2. Vai su **SQL Editor** e incolla il contenuto di [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql), poi esegui. Questo crea tutte le tabelle, le policy di Row Level Security e i bucket di storage (`vehicle-files`, `vehicle-images`), entrambi privati.
+2. Vai su **SQL Editor** e incolla il contenuto di [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql), poi esegui (e allo stesso modo le migrazioni successive, in ordine: la `0005` serve alla cancellazione dell'account). Questo crea tutte le tabelle, le policy di Row Level Security e i bucket di storage (`vehicle-files`, `vehicle-images`), entrambi privati.
 3. In **Authentication > Providers** assicurati che *Email* sia abilitato (è il default). Se vuoi saltare la conferma email in fase di test, disattiva "Confirm email" in **Authentication > Settings**.
 4. Recupera in **Project Settings > API**:
    - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
@@ -47,6 +47,8 @@ Level Security) e chiamano l'API Anthropic lato server, senza mai esporre la chi
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `ANTHROPIC_API_KEY`
    - `CLAUDE_MODEL` (opzionale, default `claude-sonnet-5`)
+   - `PRIVACY_CONTACT_EMAIL`: indirizzo del titolare mostrato nell'informativa `/privacy` (sta in una
+     variabile perché la repo è pubblica; se manca, la pagina dice che il contatto non è configurato)
 4. Deploy. Fatto: l'app è online, gratuita, e utilizzabile da chiunque abbia il link.
 
 ## 4. Sviluppo locale
@@ -108,12 +110,26 @@ passassero dentro verrebbero rimandati al login e l'app non risulterebbe mai ins
 guasto silenzioso, l'app continua a funzionare e sembra solo che «l'installazione non si possa
 fare».
 
-### Cosa resta da fare prima di renderla pubblica
+### Privacy e cancellazione dell'account
 
 La PWA evita i costi e le revisioni degli store, **ma non gli obblighi di legge**: l'app tratta
-email, targhe, numeri di telaio e documenti caricati. Mancano ancora un'informativa privacy e la
-cancellazione dell'account (oggi si cancella un veicolo, non il proprio profilo). Entrambe sono
-richieste dal GDPR a prescindere da dove l'app viene distribuita.
+email, targhe, numeri di telaio e documenti caricati.
+
+- **Informativa** su `/privacy` (pubblica, in tre lingue, testi in `messages/*.json` sotto
+  `privacy`), collegata dal piè di pagina pubblico, dalla registrazione e dalla pagina Account.
+  Descrive quello che il codice fa davvero: all'IA arrivano domande, marca/modello/anno/codice
+  motore e il testo dei documenti, mai targa e telaio. **Se cambia cosa viene inviato ai
+  fornitori, va aggiornata insieme alla data in cima.** È un testo di partenza scritto sul
+  comportamento dell'app, non una consulenza legale: prima di aprire l'app a sconosciuti conviene
+  farlo rileggere e verificare nei termini di Supabase, Vercel e Anthropic la regione dei dati e
+  le garanzie per i trasferimenti extra UE.
+- **Cancellazione dell'account** dalla pagina `/account`. Senza `service_role key` il browser non
+  può eliminare un utente: lo fa la funzione `delete_own_account` della migrazione
+  [`0005`](supabase/migrations/0005_delete_own_account.sql), che agisce solo su chi la chiama; le
+  tabelle seguono in cascata. I file nei bucket vanno invece rimossi con l'API Storage, quindi il
+  client li cancella prima (sono i percorsi registrati in `documents` e `section_images`) e solo
+  dopo chiama la funzione. Una chiamata di prova iniziale fa sì che, se la migrazione non è stata
+  applicata, ci si fermi senza aver cancellato nessun file.
 
 ## Consumo di token (costo delle funzioni IA)
 

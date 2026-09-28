@@ -147,6 +147,16 @@ export default function RegisterPage() {
                 />
               </div>
 
+              <p className="text-xs text-graphite-500">
+                {t.rich("privacyNotice", {
+                  link: (chunks) => (
+                    <Link href="/privacy" className="font-medium text-brand-600 hover:underline">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </p>
+
               {error && <p className="text-sm text-red-400">{error}</p>}
 
               <button type="submit" disabled={loading} className="btn-primary w-full py-3 text-base">
