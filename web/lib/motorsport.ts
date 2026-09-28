@@ -98,16 +98,20 @@ function extractBriefing(content: Anthropic.ContentBlock[], stopReason: string |
     .reverse()
     .find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === "submit_briefing");
 
-  // Senza submit_briefing (tetto di token, pausa, sola risposta testuale) non c'e' un riquadro da
-  // conservare: l'errore evita che la cache tenga l'elenco vuoto per 24 ore e fa scattare la pausa
-  // con nuovo tentativo. Un submit_briefing con `news: []` resta invece un risultato valido.
-  if (!toolUse || typeof toolUse.input !== "object" || toolUse.input === null) {
+  // Senza un submit_briefing completo (assente, oppure troncato dal tetto di token con l'input a meta'
+  // e senza l'array `news`) non c'e' un riquadro da conservare: l'errore evita che la cache tenga
+  // l'elenco vuoto per 24 ore e fa scattare la pausa con nuovo tentativo. Un submit_briefing con
+  // `news: []` resta invece un risultato valido.
+  const input =
+    toolUse && typeof toolUse.input === "object" && toolUse.input !== null
+      ? (toolUse.input as Record<string, unknown>)
+      : null;
+  if (!input || stopReason === "max_tokens" || !Array.isArray(input.news)) {
     throw new Error(`Risposta senza submit_briefing (stop_reason: ${stopReason ?? "sconosciuto"})`);
   }
-  const input = toolUse.input as Record<string, unknown>;
 
   const news: MotorsportNews[] = [];
-  for (const raw of Array.isArray(input.news) ? input.news : []) {
+  for (const raw of input.news) {
     const item = raw as Record<string, unknown>;
     // Gli URL arrivano dal modello: fuori da http/https non diventano link cliccabili.
     const url = safeExternalUrl(item?.url);
