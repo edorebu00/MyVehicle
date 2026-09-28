@@ -1794,6 +1794,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 Cooper 136cv", yearFrom: 2014, yearTo: null },
         { label: "2.0 Cooper S 178cv", yearFrom: 2014, yearTo: null },
         { label: "John Cooper Works 231cv", yearFrom: 2014, yearTo: null },
+        { label: "Elettrica John Cooper Works 49.2 kWh 258cv", yearFrom: 2025, yearTo: null },
+      ],
+      Aceman: [
+        { label: "Elettrica E 38.5 kWh 184cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica SE 49.2 kWh 218cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica John Cooper Works 49.2 kWh 258cv", yearFrom: 2025, yearTo: null },
       ],
       Countryman: [
         { label: "1.5 Cooper 136cv", yearFrom: 2017, yearTo: null },
@@ -1927,7 +1933,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Antara: [{ label: "2.2 CDTI 184cv", yearFrom: 2010, yearTo: 2015 }],
       Agila: [{ label: "1.2 16v 86cv", yearFrom: 2008, yearTo: 2014 }],
       Adam: [{ label: "1.4 87cv", yearFrom: 2013, yearTo: 2019 }],
-      Frontera: [{ label: "2.2 DTI 120cv", yearFrom: 1998, yearTo: 2004 }],
+      Frontera: [
+        { label: "2.2 DTI 120cv", yearFrom: 1998, yearTo: 2004 },
+        { label: "1.2 Turbo Hybrid 100cv", yearFrom: 2024, yearTo: null },
+        { label: "1.2 Turbo Hybrid 136cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 44 kWh 113cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Extended Range 54 kWh 113cv", yearFrom: 2025, yearTo: null },
+      ],
       Karl: [{ label: "1.0 75cv", yearFrom: 2015, yearTo: 2019 }],
     },
     Peugeot: {
