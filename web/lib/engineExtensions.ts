@@ -804,10 +804,6 @@ export const ENGINE_EXTENSIONS: Partial<
         { label: "Cooper 1.6 122cv", yearFrom: 2012, yearTo: 2015 },
         { label: "Cooper S 1.6 184cv", yearFrom: 2012, yearTo: 2015 },
       ],
-      Aceman: [
-        { label: "Elettrica 42,5 kWh 184cv", yearFrom: 2024, yearTo: null },
-        { label: "Elettrica 54,2 kWh 218cv", yearFrom: 2024, yearTo: null },
-      ],
     },
 
     Smart: {
