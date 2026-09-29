@@ -199,7 +199,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Pontiac: ["Fiero", "Grand Am", "GTO", "Sunfire"],
     Porsche: ["356", "550 Spyder", "718 Spyder", "912", "914", "918 Spyder", "959", "968", "Boxster", "Carrera GT", "Cayman", "Mission R", "Taycan Cross Turismo"],
     RAM: ["2500", "3500", "ProMaster"],
-    Renault: ["11", "14", "18", "20", "21", "25", "30", "Alaskan", "Avantime", "Estafette", "Fuego", "Master", "Rafale", "R5 E-Tech", "Safrane", "Sport Spider", "Symbioz", "Vel Satis", "Wind"],
+    Renault: ["11", "14", "18", "20", "21", "25", "30", "4 E-Tech", "Alaskan", "Avantime", "Estafette", "Fuego", "Master", "Rafale", "R5 E-Tech", "Safrane", "Sport Spider", "Symbioz", "Vel Satis", "Wind"],
     "Rolls Royce": ["Camargue", "Cullinan", "Dawn", "Ghost", "Park Ward", "Silver Cloud", "Silver Spirit", "Spectre"],
     Rover: ["25", "45", "200", "400", "600", "800", "Metro", "Mini", "P6", "SD1"],
     Saab: ["900", "9000", "9-2X", "9-4X", "9-7X"],
@@ -998,6 +998,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "eDrive40 340cv", yearFrom: 2021, yearTo: null },
         { label: "M50 544cv", yearFrom: 2021, yearTo: null },
       ],
+      i5: [
+        { label: "eDrive40 340cv", yearFrom: 2023, yearTo: null },
+        { label: "M60 601cv", yearFrom: 2023, yearTo: null },
+      ],
       X7: [
         { label: "30d 3.0 286cv", yearFrom: 2019, yearTo: null },
         { label: "M60i 4.4 530cv", yearFrom: 2022, yearTo: null },
@@ -1005,6 +1009,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       iX: [
         { label: "xDrive40 326cv", yearFrom: 2021, yearTo: null },
         { label: "xDrive50 523cv", yearFrom: 2021, yearTo: null },
+        { label: "M60 619cv", yearFrom: 2023, yearTo: null },
       ],
     },
     Citroën: {
