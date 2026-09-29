@@ -1,22 +1,23 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-09-28 01:25 UTC
+Data scan: 2026-09-29 01:21 UTC
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json`, file generati con l'intestazione "GENERATO DA").
 La revisione approfondita si e' concentrata sulle modifiche entrate in `main` dopo lo scan precedente
-(PR #61, #62, #63: `web/lib/motorsport.ts`, `web/lib/vehicleData.ts`, `web/lib/engineExtensions.ts`) e
-sui rilievi ancora aperti; il resto del codice era gia' stato esaminato e non e' cambiato.
+(PR #64 `web/components/ChatPanel.tsx`, PR #65 `web/lib/engineExtensions.ts`, PR #66 `web/lib/vehicleData.ts`)
+e sui rilievi ancora aperti. Nessuna route sotto `web/app/api/` e' cambiata dallo scan precedente.
 PR aperte al momento dello scan: nessuna.
 
 Ogni problema qui sotto e' stato verificato leggendo personalmente il codice indicato.
-I rilievi M2, M3 e M4 della scansione precedente risultano corretti dalle PR #61 e #62. M1 (risposta
-401 del middleware) e' ancora presente e resta qui sotto.
+I rilievi M2 (Mini Aceman doppia) e M3 (domanda rimessa nel campo) dello scan precedente sono stati
+corretti dalle PR #65 e #64. M1 (401 del middleware) e' ancora presente: il lavoratore 4 non l'ha
+applicato perche' la modifica e' stata fermata dal controllo dei permessi, quindi ora e' tra quelli che
+richiedono intervento umano.
 
-Rilievi esaminati e scartati: un submit_briefing i cui elementi vengono tutti scartati dal filtro URL
-(caso improbabile con lo schema dello strumento, e un errore in piu' aumenterebbe i tentativi descritti
-in U2); le chiavi di `unstable_cache` non cambiate dopo la correzione del riquadro motorsport (le voci
-vecchie scadono entro 24 ore, gia' trascorse); il margine di tempo della route chat senza modello di
-riserva (ipotetico, non osservato); la duplicazione della logica dei timeout fra le route chat e ricerca
-(solo stile).
+Rilievi esaminati e scartati: le nuove motorizzazioni BMW i5 / iX M60 e il modello Renault "4 E-Tech"
+(PR #66) non creano doppioni nel menu, perche' "4 E-Tech" e' un modello distinto dalla "R4" storica.
+Il fatto che "4 E-Tech" compaia sia in `CATALOGUE_EXTENSIONS` (`web/lib/vehicleData.ts:202`) sia in
+`CATALOGUE_SWEEP` (`web/lib/catalogueSweep.ts:83`) non cambia nulla per l'utente, perche' `getModels()` toglie
+i doppioni; e' solo ridondanza, quindi nessun task.
 
 ## Bloccante
 
@@ -28,40 +29,44 @@ Nessun problema importante trovato.
 
 ## Minore
 
-### M1 — API senza sessione: messaggio in inglese e cookie di sessione non aggiornati (invariato)
-File: `web/middleware.ts:44-49`; chiamanti `web/components/GlobalSearch.tsx:41-44`, `web/components/ChatPanel.tsx:61-68`
+### M1 — Chat: il testo di riserva della risposta e' fisso in italiano
+File: `web/app/api/agent/chat/route.ts:245` e `:84`
 
-Il middleware risponde 401 con il testo fisso inglese "Not authenticated", mentre le route in
-`web/app/api/agent/*` fanno gia' il proprio controllo e rispondono 401 con il messaggio tradotto
-(`apiErrors.notAuthenticated`). I client mostrano `data.error` cosi' com'e': un utente italiano o tedesco
-con la sessione scaduta legge un messaggio in inglese. Inoltre la risposta costruita da zero non porta
-i cookie che il client Supabase ha scritto su `response` durante `getUser`.
+Quando il modello non restituisce testo (per esempio perche' il ragionamento esaurisce `max_tokens`), la
+route risponde e salva in cronologia "Non sono riuscito a generare una risposta." in italiano, qualunque
+sia la lingua dell'utente. Lo stesso accade nel ramo del modello di riserva (riga 84). Ogni altro messaggio
+della route passa invece da `getTranslations("apiErrors")`.
 
-Proposta: per i percorsi `/api/` lasciar proseguire la richiesta (`return response`) e affidarsi al
-controllo gia' presente in ogni route.
+Proposta: aggiungere una chiave (per esempio `apiErrors.emptyReply`) in `it.json`, `en.json` e `de.json`,
+e usarla in entrambi i punti.
 
-### M2 — Mini Aceman: le stesse motorizzazioni compaiono due volte nel menu
-File: `web/lib/vehicleData.ts:1799-1803` e `web/lib/engineExtensions.ts:807-810`
+### M2 — API senza sessione: messaggio in inglese e cookie di sessione non aggiornati (invariato)
+File: `web/middleware.ts:44-49`
 
-La PR #63 ha aggiunto Aceman in `ENGINE_DATA` ("Elettrica E 38.5 kWh 184cv", "Elettrica SE 49.2 kWh
-218cv", "Elettrica John Cooper Works 49.2 kWh 258cv"), ma `ENGINE_EXTENSIONS` aveva gia' "Elettrica 42,5
-kWh 184cv" e "Elettrica 54,2 kWh 218cv" (capacita' lorde delle stesse batterie). `getEngineVariants`
-scarta i doppioni solo a parita' di etichetta, quindi il menu mostra cinque voci di cui due coppie sono
-la stessa versione. E' lo stesso difetto gia' corretto per la bZ4X.
+Il middleware risponde 401 con il testo fisso inglese "Not authenticated", mentre le route sotto
+`web/app/api/agent/*` fanno gia' lo stesso controllo e rispondono con il messaggio tradotto. Inoltre la
+risposta costruita da zero non porta i cookie scritti durante `getUser`.
 
-Proposta: togliere la voce Aceman da `engineExtensions.ts`, lasciando le tre di `ENGINE_DATA`.
+Proposta: per `/api/` lasciar proseguire la richiesta verso la route. Vedi U3: serve il via libera del proprietario.
 
-### M3 — Chat: con una risposta riuscita ma dal corpo illeggibile la domanda viene rimessa nel campo anche se e' gia' salvata
-File: `web/components/ChatPanel.tsx:56-66`
+### M3 — Chat: dopo un invio dall'esito incerto la cronologia mostrata puo' non corrispondere a quella salvata
+File: `web/components/ChatPanel.tsx:62-88`, `web/app/api/agent/chat/route.ts:189-196, 260`
 
-Il ramo `res.ok && data === null` tratta la risposta come "la richiesta non ha raggiunto la route". Pero'
-la route risponde sempre in JSON e il middleware risponde 401 per le API invece di reindirizzare, quindi
-un 200 non leggibile arriva in pratica solo quando la connessione cade durante la lettura del corpo, cioe'
-dopo che la route ha salvato sia la domanda sia la risposta. La bolla viene tolta e il testo rimesso nel
-campo: se l'utente lo reinvia, la cronologia contiene la domanda due volte con due risposte.
+Il client deduce dalla forma della risposta se la domanda e' stata salvata. Restano quattro casi imprecisi:
+- Se la connessione cade dopo l'invio (`catch`, riga 85), la bolla viene tolta e il testo rimesso nel
+  campo anche se il server ha gia' salvato la domanda e poi la risposta. Un reinvio duplica lo scambio.
+- Con un 200 dal corpo illeggibile (riga 67) la risposta gia' salvata non viene mostrata e compare un errore
+  generico; ricaricando la pagina lo scambio c'e'.
+- Con un errore non JSON (502/504, riga 69) la bolla resta e il campo resta vuoto: se la route non aveva
+  salvato nulla, il testo si perde.
+- La risposta 200 non riporta `userMessageSaved`, quindi se il salvataggio della domanda non riesce la bolla
+  resta e sparisce al ricaricamento.
 
-Proposta: con `res.ok && data === null` mostrare l'errore generico senza chiamare `restoreUnsent()`
-(la bolla resta, come per i 502/504); `restoreUnsent()` resta solo per `res.redirected`.
+Il ramo `res.redirected` (riga 64) non si verifica piu' in pratica, perche' per `/api/` il middleware
+risponde 401 invece di rinviare a /login.
+
+Proposta: un identificativo del messaggio generato dal client e usato come chiave di inserimento
+idempotente. Richiede una migrazione (vedi U4).
 
 ## Richiede intervento umano
 
@@ -75,10 +80,19 @@ migrazione in `supabase/`.
 ### U2 — Pausa del riquadro motorsport dopo un tentativo non riuscito: in memoria di istanza e di durata fissa (invariato)
 File: `web/lib/motorsport.ts:50, 184-212`
 
-Dalle PR #59 e #61 anche una risposta senza `submit_briefing` completo conta come tentativo non riuscito.
-Se l'esito si ripetesse stabilmente, ogni istanza riproverebbe una generazione con ricerca web ogni
-`FAILURE_PAUSE_MS` (2 minuti) per lingua invece di una volta al giorno. Rendere la pausa condivisa fra le
-istanze e crescente richiede una struttura condivisa e una scelta sulle durate.
+Rendere la pausa condivisa fra le istanze e crescente richiede una struttura condivisa e una scelta sulle durate.
+
+### U3 — Risposta del middleware per le API senza sessione (M2)
+File: `web/middleware.ts:44-49`
+
+La correzione e' definita (lasciar proseguire `/api/` verso la route, che risponde gia' 401 tradotto), ma ieri
+il lavoratore l'ha sospesa perche' tocca il controllo della sessione ed e' stata fermata dal controllo dei
+permessi. Serve il via libera esplicito del proprietario prima di riassegnarla.
+
+### U4 — Invio della chat idempotente (M3)
+File: `web/components/ChatPanel.tsx`, `web/app/api/agent/chat/route.ts`, tabella `chat_messages`
+
+Richiede una colonna o un vincolo univoco in `supabase/` e una scelta su cosa mostrare nei casi incerti.
 
 ## Gia' in PR
 
