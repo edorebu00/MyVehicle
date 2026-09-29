@@ -450,6 +450,7 @@
     "notAuthenticated": "Nicht angemeldet.",
     "emptyMessage": "Die Nachricht darf nicht leer sein.",
     "chatError": "Fehler beim Generieren der Antwort. Bitte später erneut versuchen.",
+    "emptyReply": "Ich konnte keine Antwort erzeugen.",
     "searchQueryTooShort": "Gib ein Modell oder einen Motorcode zum Suchen an.",
     "searchNoUsableResult": "Die Suche hat kein verwertbares Ergebnis geliefert. Bitte erneut versuchen.",
     "searchTruncated": "Die Suche hat zu viele Ergebnisse geliefert und wurde abgebrochen. Versuche eine spezifischere Suche.",

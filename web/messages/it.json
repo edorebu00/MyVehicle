@@ -450,6 +450,7 @@
     "notAuthenticated": "Non autenticato.",
     "emptyMessage": "Il messaggio non può essere vuoto.",
     "chatError": "Errore durante la generazione della risposta. Riprova più tardi.",
+    "emptyReply": "Non sono riuscito a generare una risposta.",
     "searchQueryTooShort": "Specifica un modello o un codice motore da cercare.",
     "searchNoUsableResult": "La ricerca non ha prodotto un risultato utilizzabile. Riprova.",
     "searchTruncated": "La ricerca ha prodotto troppi risultati ed è stata interrotta. Riprova con una ricerca più specifica.",
