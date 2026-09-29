@@ -81,7 +81,7 @@ async function chatWithOpenAI(systemPrompt: string, messages: ChatHistoryItem[])
     },
     { timeout: OPENAI_TIMEOUT_MS, maxRetries: 0 }
   );
-  return completion.choices[0]?.message?.content || "Non sono riuscito a generare una risposta.";
+  return completion.choices[0]?.message?.content || "";
 }
 
 export async function POST(request: Request) {
@@ -242,11 +242,11 @@ export async function POST(request: Request) {
       const textBlock = response.content.find((b) => b.type === "text") as
         | { type: "text"; text: string }
         | undefined;
-      reply = textBlock?.text || "Non sono riuscito a generare una risposta.";
+      reply = textBlock?.text || tErr("emptyReply");
     } catch (primaryErr) {
       if (!hasOpenAIFallback()) throw primaryErr;
       console.error("Anthropic non disponibile per la chat, uso il fallback OpenAI:", primaryErr);
-      reply = await chatWithOpenAI(systemPrompt, messages);
+      reply = (await chatWithOpenAI(systemPrompt, messages)) || tErr("emptyReply");
     }
 
     const { error: replyInsertError } = await supabase.from("chat_messages").insert({

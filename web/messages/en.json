@@ -450,6 +450,7 @@
     "notAuthenticated": "Not authenticated.",
     "emptyMessage": "The message cannot be empty.",
     "chatError": "Error while generating the reply. Please try again later.",
+    "emptyReply": "I couldn't generate a reply.",
     "searchQueryTooShort": "Specify a model or engine code to search for.",
     "searchNoUsableResult": "The search did not produce a usable result. Please try again.",
     "searchTruncated": "The search produced too many results and was interrupted. Try a more specific search.",
