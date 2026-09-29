@@ -1,2 +1,2 @@
-Data (UTC): 2026-09-28
-nessun problema risolvibile (T2 e T3 unite con PR #65 e #64, verificate su main 2acedac; nessun rilievo di revisione aperto; nessuna PR aperta; T1 web/middleware.ts non applicato dal lavoratore 4 per permesso negato: resta alla decisione del proprietario; U1 e U2 richiedono intervento umano)
+Data (UTC): 2026-09-29
+nessun problema risolvibile (M1/T1 unito con PR #67 e verificato su main 180550c; nessun rilievo di revisione aperto; lavoratori 5 e 6 senza task e senza segno di oggi; M2 e M3 = U3 e U4, richiedono intervento umano come U1 e U2; PR #68 aperta su supabase/ non toccata)
