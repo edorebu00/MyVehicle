@@ -81,6 +81,9 @@ async function chatWithOpenAI(systemPrompt: string, messages: ChatHistoryItem[])
     },
     { timeout: OPENAI_TIMEOUT_MS, maxRetries: 0 }
   );
+  if (completion.choices[0]?.finish_reason === "length") {
+    console.warn("Chat IA: risposta del fallback troncata, max_tokens raggiunto.");
+  }
   return completion.choices[0]?.message?.content || "";
 }
 
@@ -242,22 +245,26 @@ export async function POST(request: Request) {
       const textBlock = response.content.find((b) => b.type === "text") as
         | { type: "text"; text: string }
         | undefined;
-      reply = textBlock?.text || tErr("emptyReply");
+      reply = textBlock?.text || "";
     } catch (primaryErr) {
       if (!hasOpenAIFallback()) throw primaryErr;
       console.error("Anthropic non disponibile per la chat, uso il fallback OpenAI:", primaryErr);
-      reply = (await chatWithOpenAI(systemPrompt, messages)) || tErr("emptyReply");
+      reply = await chatWithOpenAI(systemPrompt, messages);
     }
 
-    const { error: replyInsertError } = await supabase.from("chat_messages").insert({
-      user_id: user.id,
-      vehicle_id: vehicleId,
-      role: "assistant",
-      content: reply,
-    });
-    if (replyInsertError) console.error("Chat IA: salvataggio della risposta non riuscito:", replyInsertError);
+    // Il testo di riserva va solo al client: salvato in cronologia verrebbe rimandato al modello
+    // come se fosse una sua risposta.
+    if (reply) {
+      const { error: replyInsertError } = await supabase.from("chat_messages").insert({
+        user_id: user.id,
+        vehicle_id: vehicleId,
+        role: "assistant",
+        content: reply,
+      });
+      if (replyInsertError) console.error("Chat IA: salvataggio della risposta non riuscito:", replyInsertError);
+    }
 
-    return NextResponse.json({ reply, documentsUsed: (docs || []).map((d) => d.file_name) });
+    return NextResponse.json({ reply: reply || tErr("emptyReply"), documentsUsed: (docs || []).map((d) => d.file_name) });
   } catch (err) {
     console.error("Errore chat IA:", err);
     return NextResponse.json({ error: tErr("chatError"), userMessageSaved }, { status: 500 });
