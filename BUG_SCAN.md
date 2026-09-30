@@ -1,23 +1,21 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-09-29 01:21 UTC
+Data scan: 2026-09-30 01:20 UTC
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json`, file generati con l'intestazione "GENERATO DA").
 La revisione approfondita si e' concentrata sulle modifiche entrate in `main` dopo lo scan precedente
-(PR #64 `web/components/ChatPanel.tsx`, PR #65 `web/lib/engineExtensions.ts`, PR #66 `web/lib/vehicleData.ts`)
-e sui rilievi ancora aperti. Nessuna route sotto `web/app/api/` e' cambiata dallo scan precedente.
-PR aperte al momento dello scan: nessuna.
+(PR #67 `web/app/api/agent/chat/route.ts` + `web/messages/*.json`, PR #69 `web/lib/vehicleData.ts`)
+e sui rilievi ancora aperti. Nessun'altra route sotto `web/app/api/` e' cambiata.
+PR aperte al momento dello scan: #68 (solo `supabase/`). PR dei lavoratori non unite: 0.
 
 Ogni problema qui sotto e' stato verificato leggendo personalmente il codice indicato.
-I rilievi M2 (Mini Aceman doppia) e M3 (domanda rimessa nel campo) dello scan precedente sono stati
-corretti dalle PR #65 e #64. M1 (401 del middleware) e' ancora presente: il lavoratore 4 non l'ha
-applicato perche' la modifica e' stata fermata dal controllo dei permessi, quindi ora e' tra quelli che
-richiedono intervento umano.
+Il rilievo M1 dello scan precedente (testo di riserva della chat fisso in italiano) e' stato corretto dalla PR #67.
 
-Rilievi esaminati e scartati: le nuove motorizzazioni BMW i5 / iX M60 e il modello Renault "4 E-Tech"
-(PR #66) non creano doppioni nel menu, perche' "4 E-Tech" e' un modello distinto dalla "R4" storica.
-Il fatto che "4 E-Tech" compaia sia in `CATALOGUE_EXTENSIONS` (`web/lib/vehicleData.ts:202`) sia in
-`CATALOGUE_SWEEP` (`web/lib/catalogueSweep.ts:83`) non cambia nulla per l'utente, perche' `getModels()` toglie
-i doppioni; e' solo ridondanza, quindi nessun task.
+Rilievi esaminati e scartati:
+- Uso del solo primo blocco di testo della risposta (`chat/route.ts:242`): la chat non usa strumenti, quindi in pratica
+  la risposta ha un solo blocco di testo; nessun difetto osservabile.
+- Le nuove voci Ineos e Rafale hanno gia' il modello/marca in `CATALOGUE_EXTENSIONS` (`vehicleData.ts:171, 202`) e non
+  creano doppioni con `engineExtensions.ts`.
+- "GSE Elettrica 281cv" per la Corsa (`vehicleData.ts:1905`): non verificabile senza una fonte, lasciato com'e'.
 
 ## Bloccante
 
@@ -29,71 +27,62 @@ Nessun problema importante trovato.
 
 ## Minore
 
-### M1 — Chat: il testo di riserva della risposta e' fisso in italiano
-File: `web/app/api/agent/chat/route.ts:245` e `:84`
+### M1 — Chat: il messaggio di riserva "nessuna risposta" viene salvato come vera risposta dell'assistente
+File: `web/app/api/agent/chat/route.ts:245-256`
 
-Quando il modello non restituisce testo (per esempio perche' il ragionamento esaurisce `max_tokens`), la
-route risponde e salva in cronologia "Non sono riuscito a generare una risposta." in italiano, qualunque
-sia la lingua dell'utente. Lo stesso accade nel ramo del modello di riserva (riga 84). Ogni altro messaggio
-della route passa invece da `getTranslations("apiErrors")`.
+Quando il modello non restituisce testo, la route risponde con `apiErrors.emptyReply` e lo inserisce in
+`chat_messages` come messaggio `assistant`. Alle richieste successive la cronologia lo rimanda al modello, che si
+"vede" aver detto di non poter rispondere, e il testo resta fisso nella lingua attiva in quel momento.
+Inoltre il `|| tErr("emptyReply")` e' ripetuto nei due rami.
 
-Proposta: aggiungere una chiave (per esempio `apiErrors.emptyReply`) in `it.json`, `en.json` e `de.json`,
-e usarla in entrambi i punti.
+Proposta: mostrare il messaggio al client ma salvare in `chat_messages` solo una risposta con testo reale
+(un solo punto di ripiego dopo il try/catch).
 
-### M2 — API senza sessione: messaggio in inglese e cookie di sessione non aggiornati (invariato)
+### M2 — Chat: una risposta del modello di riserva troncata non lascia traccia nei log
+File: `web/app/api/agent/chat/route.ts:71-85`
+
+Il ramo Anthropic registra `stop_reason === "max_tokens"` (riga 235); il ramo OpenAI con `max_tokens: 2048` non
+controlla `finish_reason === "length"`, quindi una risposta tagliata a meta' viene mostrata e salvata senza avviso.
+
+Proposta: `console.warn` quando `finish_reason === "length"`, come nel ramo principale.
+
+### M3 — Chat: una risposta vuota del modello principale non passa al modello di riserva
+File: `web/app/api/agent/chat/route.ts:242-246`
+
+Il ripiego su OpenAI scatta solo se la chiamata fallisce; una risposta riuscita ma senza testo porta direttamente al
+messaggio di riserva. Tentare anche il secondo modello raddoppia il costo di quella richiesta: e' una scelta (vedi U5).
+
+### M4 — Catalogo: manca la Corsa elettrica 156cv
+File: `web/lib/vehicleData.ts:1899-1906`
+
+Dal 2023 la Corsa elettrica si vende anche con 156cv (115 kW), ma il catalogo offre solo "Elettrica 136cv" (piu' la GSE).
+Chi ha quella versione deve scegliere un motore sbagliato o scriverlo a mano.
+
+Proposta: aggiungere `{ label: "Elettrica 156cv", yearFrom: 2023, yearTo: null }`.
+
+### M5 — Catalogo: Rafale plug-in 300cv con anno di inizio anticipato
+File: `web/lib/vehicleData.ts:2124-2127`
+
+La versione "E-Tech Plug-in Hybrid 4x4 300cv" e' in vendita dal 2025, ma il catalogo la fa partire dal 2024, quindi il
+selettore dell'anno offre un abbinamento motore/anno che non esiste.
+
+Proposta: `yearFrom: 2025` per quella voce.
+
+### M6 — API senza sessione: messaggio in inglese dal middleware (invariato, = U3)
 File: `web/middleware.ts:44-49`
 
-Il middleware risponde 401 con il testo fisso inglese "Not authenticated", mentre le route sotto
-`web/app/api/agent/*` fanno gia' lo stesso controllo e rispondono con il messaggio tradotto. Inoltre la
-risposta costruita da zero non porta i cookie scritti durante `getUser`.
-
-Proposta: per `/api/` lasciar proseguire la richiesta verso la route. Vedi U3: serve il via libera del proprietario.
-
-### M3 — Chat: dopo un invio dall'esito incerto la cronologia mostrata puo' non corrispondere a quella salvata
-File: `web/components/ChatPanel.tsx:62-88`, `web/app/api/agent/chat/route.ts:189-196, 260`
-
-Il client deduce dalla forma della risposta se la domanda e' stata salvata. Restano quattro casi imprecisi:
-- Se la connessione cade dopo l'invio (`catch`, riga 85), la bolla viene tolta e il testo rimesso nel
-  campo anche se il server ha gia' salvato la domanda e poi la risposta. Un reinvio duplica lo scambio.
-- Con un 200 dal corpo illeggibile (riga 67) la risposta gia' salvata non viene mostrata e compare un errore
-  generico; ricaricando la pagina lo scambio c'e'.
-- Con un errore non JSON (502/504, riga 69) la bolla resta e il campo resta vuoto: se la route non aveva
-  salvato nulla, il testo si perde.
-- La risposta 200 non riporta `userMessageSaved`, quindi se il salvataggio della domanda non riesce la bolla
-  resta e sparisce al ricaricamento.
-
-Il ramo `res.redirected` (riga 64) non si verifica piu' in pratica, perche' per `/api/` il middleware
-risponde 401 invece di rinviare a /login.
-
-Proposta: un identificativo del messaggio generato dal client e usato come chiave di inserimento
-idempotente. Richiede una migrazione (vedi U4).
+### M7 — Chat: cronologia mostrata diversa da quella salvata dopo un invio dall'esito incerto (invariato, = U4)
+File: `web/components/ChatPanel.tsx:62-88`, `web/app/api/agent/chat/route.ts`
 
 ## Richiede intervento umano
 
-### U1 — Il limite d'uso condiviso fra le istanze si appoggia a righe che l'account puo' rimuovere (invariato)
-File: `web/lib/rateLimit.ts`, usato in `web/app/api/agent/chat/route.ts` e `web/app/api/agent/search/route.ts`;
-policy in `supabase/migrations/0001_init.sql`
-
-Serve una struttura dedicata, con sola aggiunta, incrementata prima della chiamata al modello: richiede una
-migrazione in `supabase/`.
-
-### U2 — Pausa del riquadro motorsport dopo un tentativo non riuscito: in memoria di istanza e di durata fissa (invariato)
-File: `web/lib/motorsport.ts:50, 184-212`
-
-Rendere la pausa condivisa fra le istanze e crescente richiede una struttura condivisa e una scelta sulle durate.
-
-### U3 — Risposta del middleware per le API senza sessione (M2)
-File: `web/middleware.ts:44-49`
-
-La correzione e' definita (lasciar proseguire `/api/` verso la route, che risponde gia' 401 tradotto), ma ieri
-il lavoratore l'ha sospesa perche' tocca il controllo della sessione ed e' stata fermata dal controllo dei
-permessi. Serve il via libera esplicito del proprietario prima di riassegnarla.
-
-### U4 — Invio della chat idempotente (M3)
-File: `web/components/ChatPanel.tsx`, `web/app/api/agent/chat/route.ts`, tabella `chat_messages`
-
-Richiede una colonna o un vincolo univoco in `supabase/` e una scelta su cosa mostrare nei casi incerti.
+- U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in
+  `supabase/` (invariato; la PR #68 non tocca questo punto).
+- U2 — Pausa del riquadro motorsport in memoria di istanza e di durata fissa (`web/lib/motorsport.ts`), invariato.
+- U3 — Risposta del middleware per le API senza sessione (M6): serve il via libera del proprietario.
+- U4 — Invio della chat idempotente (M7): serve una migrazione.
+- U5 — Decidere se una risposta vuota del modello principale debba tentare il modello di riserva (M3): scelta di costo.
 
 ## Gia' in PR
 
-Nessuna: al momento dello scan non ci sono pull request aperte.
+- #68 "Supabase: migrazione 0005 di rafforzamento della RLS" (solo `supabase/`): nessun rilievo di questo scan la duplica.
