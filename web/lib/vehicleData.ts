@@ -1902,6 +1902,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 136cv", yearFrom: 2020, yearTo: null },
         { label: "OPC 1.6 Turbo 192cv", yearFrom: 2007, yearTo: 2014 },
         { label: "OPC 1.6 Turbo 207cv", yearFrom: 2015, yearTo: 2019 },
+        { label: "GSE Elettrica 281cv", yearFrom: 2026, yearTo: null },
       ],
       Astra: [
         { label: "1.2 Turbo 110cv", yearFrom: 2021, yearTo: null },
@@ -2119,6 +2120,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Austral: [
         { label: "1.3 TCe 140cv", yearFrom: 2022, yearTo: null },
         { label: "E-Tech Full Hybrid 200cv", yearFrom: 2022, yearTo: null },
+      ],
+      Rafale: [
+        { label: "E-Tech Full Hybrid 200cv", yearFrom: 2024, yearTo: null },
+        { label: "E-Tech Plug-in Hybrid 4x4 300cv", yearFrom: 2024, yearTo: null },
       ],
       Espace: [
         { label: "1.8 TCe 225cv", yearFrom: 2015, yearTo: 2023 },
@@ -2558,6 +2563,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       EC40: [
         { label: "Elettrica 231cv", yearFrom: 2023, yearTo: null },
         { label: "Twin Motor 402cv", yearFrom: 2023, yearTo: null },
+      ],
+    },
+    Ineos: {
+      Grenadier: [
+        { label: "3.0 Turbo 286cv", yearFrom: 2022, yearTo: null },
+        { label: "3.0 Diesel 249cv", yearFrom: 2022, yearTo: null },
+      ],
+      Quartermaster: [
+        { label: "3.0 Turbo 286cv", yearFrom: 2023, yearTo: null },
+        { label: "3.0 Diesel 249cv", yearFrom: 2023, yearTo: null },
       ],
     },
   },
