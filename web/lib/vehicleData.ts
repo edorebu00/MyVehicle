@@ -1583,6 +1583,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 69cv", yearFrom: 2011, yearTo: null },
         { label: "0.9 TwinAir 85cv", yearFrom: 2011, yearTo: 2021 },
         { label: "1.0 Hybrid 70cv", yearFrom: 2021, yearTo: null },
+        { label: "HF Elettrica 280cv", yearFrom: 2025, yearTo: null },
       ],
       Delta: [
         { label: "1.4 MultiAir 120cv", yearFrom: 2008, yearTo: 2014 },
@@ -1900,6 +1901,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 75cv", yearFrom: 2019, yearTo: null },
         { label: "1.2 Turbo 100cv", yearFrom: 2019, yearTo: null },
         { label: "Elettrica 136cv", yearFrom: 2020, yearTo: null },
+        { label: "Elettrica 156cv", yearFrom: 2023, yearTo: null },
         { label: "OPC 1.6 Turbo 192cv", yearFrom: 2007, yearTo: 2014 },
         { label: "OPC 1.6 Turbo 207cv", yearFrom: 2015, yearTo: 2019 },
         { label: "GSE Elettrica 281cv", yearFrom: 2026, yearTo: null },
@@ -1907,6 +1909,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Astra: [
         { label: "1.2 Turbo 110cv", yearFrom: 2021, yearTo: null },
         { label: "1.5 Diesel 122cv", yearFrom: 2021, yearTo: null },
+        { label: "GSe Plug-in Hybrid 225cv", yearFrom: 2023, yearTo: null },
       ],
       Insignia: [
         { label: "1.5 Turbo 165cv", yearFrom: 2017, yearTo: null },
@@ -1923,6 +1926,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Grandland: [
         { label: "1.2 Turbo 130cv", yearFrom: 2017, yearTo: null },
         { label: "Hybrid Plug-in 224cv", yearFrom: 2019, yearTo: null },
+        { label: "Elettrica Dual Motor 325cv", yearFrom: 2025, yearTo: null },
       ],
       Zafira: [{ label: "1.6 CDTI 136cv", yearFrom: 2011, yearTo: 2019 }],
       Combo: [{ label: "1.5 Diesel 100cv", yearFrom: 2018, yearTo: null }],
@@ -2123,7 +2127,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       Rafale: [
         { label: "E-Tech Full Hybrid 200cv", yearFrom: 2024, yearTo: null },
-        { label: "E-Tech Plug-in Hybrid 4x4 300cv", yearFrom: 2024, yearTo: null },
+        { label: "E-Tech Plug-in Hybrid 4x4 300cv", yearFrom: 2025, yearTo: null },
       ],
       Espace: [
         { label: "1.8 TCe 225cv", yearFrom: 2015, yearTo: 2023 },
@@ -2412,7 +2416,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 TSI 130cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 TDI 105cv", yearFrom: 2012, yearTo: 2019 },
         { label: "2.0 TDI 150cv", yearFrom: 2012, yearTo: null },
-        { label: "2.0 TSI GTI 245cv", yearFrom: 2013, yearTo: null },
+        { label: "2.0 TSI GTI 245cv", yearFrom: 2013, yearTo: 2024 },
+        { label: "2.0 TSI GTI 265cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TSI GTI Clubsport 300cv", yearFrom: 2021, yearTo: null },
         { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2017 },
         { label: "2.0 TSI R 320cv", yearFrom: 2021, yearTo: 2023 },
         { label: "2.0 TSI R 333cv", yearFrom: 2024, yearTo: null },
