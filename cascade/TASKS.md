@@ -1,43 +1,50 @@
-Data (UTC): 2026-09-30
+Data (UTC): 2026-10-01
 
-PR aperte al momento dello scan: #68 (solo supabase/, del proprietario). PR dei lavoratori non unite: 0.
+# Task della cascata notturna
 
-## T1 — Chat: non salvare il messaggio di riserva come risposta dell'assistente
+Nessun task di rafforzamento questa notte. PR dei lavoratori aperte: 0.
+
+## T1 — Chat: cronologia senza righe di riserva e risposte di soli spazi trattate come vuote
 Gravita': Minore
-File: web/app/api/agent/chat/route.ts:238-256 (ramo Anthropic, ramo OpenAI, inserimento della risposta)
-Problema: se il modello non restituisce testo, `tErr("emptyReply")` viene inserito in `chat_messages` con role
-`assistant` e rimandato al modello nelle richieste successive come se fosse una sua risposta.
-Correzione: lasciare che i due rami producano il testo reale (anche vuoto), applicare `tErr("emptyReply")` una sola
-volta dopo il try/catch per la risposta al client, e fare l'insert `role: "assistant"` solo se il testo reale non e'
-vuoto. Il limite condiviso conta solo le righe `role: "user"`, quindi non cambia.
-Accettazione: con una risposta senza testo la route restituisce 200 con `reply` = emptyReply tradotto e NON inserisce
-righe assistant; con una risposta normale il comportamento e' identico a oggi; `emptyReply` compare una sola volta nel
-file; `npm run lint` e `npx tsc --noEmit` in web/ passano.
+File: `web/app/api/agent/chat/route.ts` (righe 50-67 `toAlternatingMessages`, 245-269)
 
-## T2 — Chat: segnalare nei log una risposta del modello di riserva troncata
+Problema: (a) le righe `assistant` salvate prima della PR #71 con il testo di riserva (`apiErrors.emptyReply` in
+`web/messages/it.json`, `en.json`, `de.json`, riga 453) vengono ancora mandate al modello come sue risposte;
+(b) una risposta di soli spazi (es. `"\n\n"`) supera `if (reply)`, viene salvata e il client mostra una bolla vuota.
+
+Correzione richiesta: (a) scartare dalla cronologia le righe con ruolo `assistant` il cui contenuto, dopo `trim()`,
+e' uguale al testo `emptyReply` di una qualunque lingua disponibile (riusare i messaggi esistenti, senza ricopiare i
+testi a mano se si possono importare); (b) applicare `trim()` alla risposta del modello (entrambi i rami) prima del
+controllo `if (reply)` e del ripiego `reply || tErr("emptyReply")`.
+
+Criterio di accettazione: una cronologia con una riga `assistant` uguale a "Non sono riuscito a generare una risposta."
+(o alla versione en/de) non la include nei `messages` inviati al modello; una risposta `"  \n"` non viene salvata e il
+client riceve il testo `emptyReply`; `npm run lint` e `npx tsc --noEmit` in `web/` passano.
+
+## T2 — Catalogo: Golf GTI 2013-2017 e Grandland GSe
 Gravita': Minore
-File: web/app/api/agent/chat/route.ts:71-85 (`chatWithOpenAI`)
-Problema: il ramo principale avvisa quando la risposta e' troncata (riga 235), il ramo OpenAI no.
-Correzione: se `completion.choices[0]?.finish_reason === "length"`, `console.warn("Chat IA: risposta del fallback troncata, max_tokens raggiunto.")`.
-Accettazione: il warn esiste solo per `finish_reason === "length"`; il valore restituito non cambia; lint e tsc passano.
-Nota: tocca lo stesso file di T1; se assegnati a lavoratori diversi, il secondo deve partire da main aggiornato.
+File: `web/lib/vehicleData.ts` (Golf righe 2414-2425, Grandland righe 1926-1930)
 
-## T3 — Catalogo: aggiungere la Corsa elettrica 156cv e correggere l'anno della Rafale plug-in
-Gravita': Minore
-File: web/lib/vehicleData.ts:1899-1906 (Opel Corsa), :2124-2127 (Renault Rafale)
-Problema: manca la Corsa elettrica 156cv (in vendita dal 2023); la Rafale "E-Tech Plug-in Hybrid 4x4 300cv" parte dal
-2024 ma e' in vendita dal 2025.
-Correzione: aggiungere `{ label: "Elettrica 156cv", yearFrom: 2023, yearTo: null }` alla Corsa; portare a 2025 lo
-`yearFrom` della Rafale plug-in. Nessun'altra modifica al catalogo.
-Accettazione: `getEngines` (o la funzione equivalente) per Opel Corsa 2024 include "Elettrica 156cv"; la Rafale
-plug-in non compare per il 2024 e compare per il 2025; nessuna voce doppia; lint e tsc passano.
+Problema: la Golf GTI 245cv parte dal 2013, ma fino al 2017 la GTI aveva 220cv (230cv la Performance), che mancano; la
+Grandland GSe plug-in 4x4 300cv (2022-2024), annunciata dal commit della PR #72, non e' stata aggiunta.
 
-## Richiede intervento umano (non assegnare)
-- U1 — Limite d'uso condiviso basato su righe che l'account puo' rimuovere: serve una struttura dedicata in supabase/.
-- U2 — Pausa del riquadro motorsport condivisa fra le istanze e crescente: serve una struttura condivisa e una scelta sulle durate.
-- U3 — Middleware: lasciar proseguire /api/ verso le route (401 tradotto): serve il via libera del proprietario.
-- U4 — Invio della chat idempotente: serve una migrazione in supabase/.
+Correzione richiesta: Golf: `"2.0 TSI GTI 245cv"` con `yearFrom: 2017`; aggiungere
+`{ label: "2.0 TSI GTI 220cv", yearFrom: 2013, yearTo: 2017 }` e
+`{ label: "2.0 TSI GTI Performance 230cv", yearFrom: 2013, yearTo: 2017 }`. Grandland: aggiungere
+`{ label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2022, yearTo: 2024 }`. Non toccare altre voci.
+
+Criterio di accettazione: per una Golf del 2014 il selettore offre le GTI 220cv e 230cv e non la 245cv; per una Grandland
+del 2023 compare la GSe 300cv; nessuna voce duplicata con `lib/engineExtensions.ts`; `npx tsc --noEmit` passa.
+
+## Richiede intervento umano (NON assegnare)
+
+- U1 — Limite d'uso condiviso appoggiato a righe rimovibili dall'account: serve una struttura dedicata in `supabase/`.
+- U2 — Pausa del riquadro motorsport in memoria di istanza (`web/lib/motorsport.ts`).
+- U3 — Messaggio in inglese del middleware per le API senza sessione (`web/middleware.ts:44-49`).
+- U4 — Invio della chat idempotente: serve una migrazione.
 - U5 — Risposta vuota del modello principale: tentare o no il modello di riserva (scelta di costo).
+- U6 — Testo di riserva della chat mostrato come bolla o come errore nel client (`web/components/ChatPanel.tsx:71-83`).
 
 ## Gia' in PR
-- #68 (supabase/migrations/0005_rls_hardening.sql): nessun task di oggi la duplica.
+
+- #68 (solo `supabase/`): nessun task la duplica.

@@ -1,21 +1,21 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-09-30 01:20 UTC
-Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json`, file generati con l'intestazione "GENERATO DA").
+Data scan: 2026-10-01 (UTC)
+Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
 La revisione approfondita si e' concentrata sulle modifiche entrate in `main` dopo lo scan precedente
-(PR #67 `web/app/api/agent/chat/route.ts` + `web/messages/*.json`, PR #69 `web/lib/vehicleData.ts`)
-e sui rilievi ancora aperti. Nessun'altra route sotto `web/app/api/` e' cambiata.
+(PR #70 e #71 dei lavoratori: `web/app/api/agent/chat/route.ts`, `web/lib/vehicleData.ts`; PR #72: `web/lib/vehicleData.ts`).
+Nessun'altra route sotto `web/app/api/` e' cambiata.
 PR aperte al momento dello scan: #68 (solo `supabase/`). PR dei lavoratori non unite: 0.
 
 Ogni problema qui sotto e' stato verificato leggendo personalmente il codice indicato.
-Il rilievo M1 dello scan precedente (testo di riserva della chat fisso in italiano) e' stato corretto dalla PR #67.
+I rilievi M1, M2, M4 e M5 dello scan precedente sono stati corretti dalle PR #70 e #71.
 
 Rilievi esaminati e scartati:
-- Uso del solo primo blocco di testo della risposta (`chat/route.ts:242`): la chat non usa strumenti, quindi in pratica
-  la risposta ha un solo blocco di testo; nessun difetto osservabile.
-- Le nuove voci Ineos e Rafale hanno gia' il modello/marca in `CATALOGUE_EXTENSIONS` (`vehicleData.ts:171, 202`) e non
-  creano doppioni con `engineExtensions.ts`.
-- "GSE Elettrica 281cv" per la Corsa (`vehicleData.ts:1905`): non verificabile senza una fonte, lasciato com'e'.
+- Le nuove voci della PR #72 sono state scritte in `ENGINE_DATA` invece che in `lib/engineExtensions.ts`, contro quanto
+  dice il commento di quel file. Le ultime PR di catalogo del proprietario fanno tutte cosi': e' la pratica attuale e non
+  produce difetti visibili. Non e' un task.
+- Le risposte troncate vengono comunque salvate in cronologia (`chat/route.ts:238-241`, `84-86`): scartarle o marcarle
+  e' una scelta di prodotto, non un difetto certo.
 
 ## Bloccante
 
@@ -27,51 +27,54 @@ Nessun problema importante trovato.
 
 ## Minore
 
-### M1 — Chat: il messaggio di riserva "nessuna risposta" viene salvato come vera risposta dell'assistente
-File: `web/app/api/agent/chat/route.ts:245-256`
+### M1 — Chat: le righe salvate prima della PR #71 con il testo di riserva tornano al modello
+File: `web/app/api/agent/chat/route.ts:190-207`
 
-Quando il modello non restituisce testo, la route risponde con `apiErrors.emptyReply` e lo inserisce in
-`chat_messages` come messaggio `assistant`. Alle richieste successive la cronologia lo rimanda al modello, che si
-"vede" aver detto di non poter rispondere, e il testo resta fisso nella lingua attiva in quel momento.
-Inoltre il `|| tErr("emptyReply")` e' ripetuto nei due rami.
+La PR #71 non salva piu' il testo "nessuna risposta" come risposta dell'assistente, ma le righe gia' salvate prima
+(it/en/de, da `messages/*.json:453`) vengono ancora caricate in cronologia e mandate al modello come sue risposte.
 
-Proposta: mostrare il messaggio al client ma salvare in `chat_messages` solo una risposta con testo reale
-(un solo punto di ripiego dopo il try/catch).
+Proposta: in `toAlternatingMessages` (o subito prima), scartare le righe `assistant` il cui testo, senza spazi iniziali
+e finali, coincide con `apiErrors.emptyReply` in una delle lingue disponibili.
 
-### M2 — Chat: una risposta del modello di riserva troncata non lascia traccia nei log
-File: `web/app/api/agent/chat/route.ts:71-85`
+### M2 — Chat: una risposta fatta solo di spazi viene salvata e mostrata come bolla vuota
+File: `web/app/api/agent/chat/route.ts:248, 252, 259, 269`
 
-Il ramo Anthropic registra `stop_reason === "max_tokens"` (riga 235); il ramo OpenAI con `max_tokens: 2048` non
-controlla `finish_reason === "length"`, quindi una risposta tagliata a meta' viene mostrata e salvata senza avviso.
+`if (reply)` e `reply || tErr("emptyReply")` considerano valida una risposta come `"\n\n"`. La riga viene salvata
+(e scartata comunque alla richiesta dopo da `toAlternatingMessages`, che fa `trim()`) e il client mostra una bolla vuota
+invece del testo di riserva.
 
-Proposta: `console.warn` quando `finish_reason === "length"`, come nel ramo principale.
+Proposta: `reply = reply.trim()` prima del controllo.
 
-### M3 — Chat: una risposta vuota del modello principale non passa al modello di riserva
-File: `web/app/api/agent/chat/route.ts:242-246`
+### M3 — Catalogo: Golf GTI 245cv offerta dal 2013 e GTI 220/230cv assenti
+File: `web/lib/vehicleData.ts:2419`
 
-Il ripiego su OpenAI scatta solo se la chiamata fallisce; una risposta riuscita ma senza testo porta direttamente al
-messaggio di riserva. Tentare anche il secondo modello raddoppia il costo di quella richiesta: e' una scelta (vedi U5).
+La Golf 7 GTI (2013-2017) aveva 220cv (230cv la Performance); i 245cv arrivano solo con il restyling 2017. Oggi chi ha una
+GTI del 2013-2016 trova solo il motore 245cv.
 
-### M4 — Catalogo: manca la Corsa elettrica 156cv
-File: `web/lib/vehicleData.ts:1899-1906`
+Proposta: `yearFrom: 2017` per la 245cv e aggiungere "2.0 TSI GTI 220cv" e "2.0 TSI GTI Performance 230cv" (2013-2017).
 
-Dal 2023 la Corsa elettrica si vende anche con 156cv (115 kW), ma il catalogo offre solo "Elettrica 136cv" (piu' la GSE).
-Chi ha quella versione deve scegliere un motore sbagliato o scriverlo a mano.
+### M4 — Catalogo: manca la Grandland GSe annunciata dal commit della PR #72
+File: `web/lib/vehicleData.ts:1926-1930`
 
-Proposta: aggiungere `{ label: "Elettrica 156cv", yearFrom: 2023, yearTo: null }`.
+Il commit dice "Opel Astra/Grandland GSe", ma per la Grandland e' stata aggiunta la "Elettrica Dual Motor 325cv". La
+Grandland GSe (plug-in 4x4 da 300cv, 2022-2024) resta assente.
 
-### M5 — Catalogo: Rafale plug-in 300cv con anno di inizio anticipato
-File: `web/lib/vehicleData.ts:2124-2127`
+Proposta: aggiungere `{ label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2022, yearTo: 2024 }`.
 
-La versione "E-Tech Plug-in Hybrid 4x4 300cv" e' in vendita dal 2025, ma il catalogo la fa partire dal 2024, quindi il
-selettore dell'anno offre un abbinamento motore/anno che non esiste.
+### M5 — Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina
+File: `web/components/ChatPanel.tsx:71-83`, `web/app/api/agent/chat/route.ts:269`
 
-Proposta: `yearFrom: 2025` per quella voce.
+Dopo la PR #71 il testo di riserva non e' piu' salvato, ma il client lo mostra come una bolla dell'assistente: dopo un
+ricaricamento sparisce e la domanda resta senza risposta. Mostrarlo come errore cambia il contratto della risposta: e'
+una scelta (vedi U6).
 
-### M6 — API senza sessione: messaggio in inglese dal middleware (invariato, = U3)
+### M6 — Chat: una risposta vuota del modello principale non passa al modello di riserva (invariato, = U5)
+File: `web/app/api/agent/chat/route.ts:245-253`
+
+### M7 — API senza sessione: messaggio in inglese dal middleware (invariato, = U3)
 File: `web/middleware.ts:44-49`
 
-### M7 — Chat: cronologia mostrata diversa da quella salvata dopo un invio dall'esito incerto (invariato, = U4)
+### M8 — Chat: cronologia mostrata diversa da quella salvata dopo un invio dall'esito incerto (invariato, = U4)
 File: `web/components/ChatPanel.tsx:62-88`, `web/app/api/agent/chat/route.ts`
 
 ## Richiede intervento umano
@@ -79,9 +82,10 @@ File: `web/components/ChatPanel.tsx:62-88`, `web/app/api/agent/chat/route.ts`
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in
   `supabase/` (invariato; la PR #68 non tocca questo punto).
 - U2 — Pausa del riquadro motorsport in memoria di istanza e di durata fissa (`web/lib/motorsport.ts`), invariato.
-- U3 — Risposta del middleware per le API senza sessione (M6): serve il via libera del proprietario.
-- U4 — Invio della chat idempotente (M7): serve una migrazione.
-- U5 — Decidere se una risposta vuota del modello principale debba tentare il modello di riserva (M3): scelta di costo.
+- U3 — Risposta del middleware per le API senza sessione (M7): serve il via libera del proprietario.
+- U4 — Invio della chat idempotente (M8): serve una migrazione.
+- U5 — Decidere se una risposta vuota del modello principale debba tentare il modello di riserva (M6): scelta di costo.
+- U6 — Decidere come mostrare il testo di riserva nel client (bolla o messaggio d'errore) (M5).
 
 ## Gia' in PR
 
