@@ -1926,6 +1926,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Grandland: [
         { label: "1.2 Turbo 130cv", yearFrom: 2017, yearTo: null },
         { label: "Hybrid Plug-in 224cv", yearFrom: 2019, yearTo: null },
+        { label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2022, yearTo: 2024 },
         { label: "Elettrica Dual Motor 325cv", yearFrom: 2025, yearTo: null },
       ],
       Zafira: [{ label: "1.6 CDTI 136cv", yearFrom: 2011, yearTo: 2019 }],
@@ -2416,7 +2417,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 TSI 130cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 TDI 105cv", yearFrom: 2012, yearTo: 2019 },
         { label: "2.0 TDI 150cv", yearFrom: 2012, yearTo: null },
-        { label: "2.0 TSI GTI 245cv", yearFrom: 2013, yearTo: 2024 },
+        { label: "2.0 TSI GTI 220cv", yearFrom: 2013, yearTo: 2017 },
+        { label: "2.0 TSI GTI Performance 230cv", yearFrom: 2013, yearTo: 2017 },
+        { label: "2.0 TSI GTI 245cv", yearFrom: 2017, yearTo: 2024 },
         { label: "2.0 TSI GTI 265cv", yearFrom: 2024, yearTo: null },
         { label: "2.0 TSI GTI Clubsport 300cv", yearFrom: 2021, yearTo: null },
         { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2017 },
