@@ -30,6 +30,7 @@ export default function NewVehiclePage() {
   const [modelChoice, setModelChoice] = useState("");
   const [customModel, setCustomModel] = useState("");
   const [engineCode, setEngineCode] = useState("");
+  const [customEngine, setCustomEngine] = useState("");
   const [year, setYear] = useState("");
   const [plate, setPlate] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +55,9 @@ export default function NewVehiclePage() {
     () => (make && model && !isCustomMake && !isCustomModel ? getEngineVariants(type, make, model) : null),
     [type, make, model, isCustomMake, isCustomModel]
   );
+  // Con la voce "Altro" non c'è una motorizzazione scelta: selectedVariant resta null e gli
+  // anni coprono l'intervallo completo.
+  const isCustomEngine = !!variants && engineCode === OTHER;
   const selectedVariant = variants?.find((v) => v.label === engineCode) || null;
 
   const yearOptions = useMemo(() => {
@@ -73,6 +77,7 @@ export default function NewVehiclePage() {
     setModelChoice("");
     setCustomModel("");
     setEngineCode("");
+    setCustomEngine("");
     setYear("");
   }
 
@@ -82,6 +87,7 @@ export default function NewVehiclePage() {
     setModelChoice("");
     setCustomModel("");
     setEngineCode("");
+    setCustomEngine("");
     setYear("");
   }
 
@@ -89,11 +95,13 @@ export default function NewVehiclePage() {
     setModelChoice(next);
     setCustomModel("");
     setEngineCode("");
+    setCustomEngine("");
     setYear("");
   }
 
   function handleVariantChange(label: string) {
     setEngineCode(label);
+    setCustomEngine("");
     setYear("");
   }
 
@@ -119,7 +127,7 @@ export default function NewVehiclePage() {
         type,
         make,
         model,
-        engine_code: engineCode || null,
+        engine_code: isCustomEngine ? customEngine.trim() || null : engineCode || null,
         year: year ? Number(year) : null,
         plate: plate || null,
       })
@@ -278,22 +286,35 @@ export default function NewVehiclePage() {
               {t("engineLabel")}
             </label>
             {variants ? (
-              <select
-                id="engineCode"
-                required
-                className="input"
-                value={engineCode}
-                onChange={(e) => handleVariantChange(e.target.value)}
-              >
-                <option value="" disabled>
-                  {t("engineSelectPlaceholder")}
-                </option>
-                {variants.map((v) => (
-                  <option key={v.label} value={v.label}>
-                    {v.label}
+              <>
+                <select
+                  id="engineCode"
+                  required
+                  className="input"
+                  value={engineCode}
+                  onChange={(e) => handleVariantChange(e.target.value)}
+                >
+                  <option value="" disabled>
+                    {t("engineSelectPlaceholder")}
                   </option>
-                ))}
-              </select>
+                  {variants.map((v) => (
+                    <option key={v.label} value={v.label}>
+                      {v.label}
+                    </option>
+                  ))}
+                  <option value={OTHER}>{t("otherOption")}</option>
+                </select>
+                {isCustomEngine && (
+                  <input
+                    className="input mt-2"
+                    value={customEngine}
+                    onChange={(e) => setCustomEngine(e.target.value)}
+                    placeholder={t("enginePlaceholderFree")}
+                    autoComplete="off"
+                    aria-label={t("enginePlaceholderFree")}
+                  />
+                )}
+              </>
             ) : (
               // Senza motorizzazioni in catalogo non c'è un elenco da proporre, e inventarlo
               // significherebbe mettere in bocca all'utente dati sbagliati. Resta un campo
