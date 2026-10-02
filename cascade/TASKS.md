@@ -1,50 +1,57 @@
-Data (UTC): 2026-10-01
+Data (UTC): 2026-10-02
 
 # Task della cascata notturna
 
-Nessun task di rafforzamento questa notte. PR dei lavoratori aperte: 0.
+PR aperte dei lavoratori: 1 (#73). Nessun task di rafforzamento questa notte.
 
-## T1 — Chat: cronologia senza righe di riserva e risposte di soli spazi trattate come vuote
+### T1 — Nuovo veicolo: voce "Altro" nel menu del motore
+Gravita': Importante
+File: `web/app/(dashboard)/veicoli/nuovo/page.tsx` (righe 15-20 costante `OTHER`, 53-67 `variants`/`selectedVariant`/`yearOptions`, 69-97 handler, 120-123 insert, 280-312 campo motore)
+Problema: se il modello ha motorizzazioni in catalogo, il campo motore e' un `<select required>` senza la voce "Altro"
+e gli anni seguono la voce scelta. Chi ha un motore non in elenco non puo' salvare il veicolo senza un'etichetta
+sbagliata, che limita gli anni e finisce in `engine_code` e nella ricerca IA. Marca e modello hanno gia' la voce
+`OTHER` ("Altro (non in elenco)"), il motore no, contro quanto dice il commento sulla costante `OTHER`.
+Correzione richiesta: nel ramo `variants` aggiungere in fondo al menu `<option value={OTHER}>{t("otherOption")}</option>`,
+seguendo lo schema gia' usato per il modello (righe 255-268). Con la voce `OTHER` scelta: mostrare sotto il menu un
+`<input>` di testo libero (non obbligatorio, placeholder `t("enginePlaceholderFree")`, `aria-label` uguale)
+legato a uno stato separato (es. `customEngine`); `selectedVariant` resta `null`, quindi gli anni coprono l'intervallo
+completo; all'inserimento `engine_code` vale il testo libero ripulito con `trim()`, oppure `null` se vuoto (mai la stringa
+`__altro__`). Il cambio di tipo, marca, modello o motore azzera anche il testo libero. Non modificare i file `messages/*.json`:
+le chiavi `otherOption` ed `enginePlaceholderFree` esistono gia'.
+Criterio di accettazione: per Volkswagen > Golf il menu del motore ha come ultima voce "Altro (non in elenco)";
+sceglierla mostra il campo libero e un menu anni dall'anno corrente al 1950; salvando con il campo vuoto `engine_code` e' `null`,
+con "1.4 TSI 125cv" e' quel testo; senza scegliere "Altro" il comportamento e' invariato; `npx tsc --noEmit`, `npm run lint`
+e `npm run build` in `web/` passano.
+
+### T2 — Catalogo: correzioni a GLB AMG, Golf GTI, Grandland, BMW Serie 1 e Up!
 Gravita': Minore
-File: `web/app/api/agent/chat/route.ts` (righe 50-67 `toAlternatingMessages`, 245-269)
+File: `web/lib/vehicleData.ts` (righe 866, 1773, 1931-1932, 2423-2427, 2501)
+Problema: la PR #75 ha aggiunto una "GLB45 S AMG 421cv" che non esiste (l'unica GLB AMG e' la GLB 35 da 306cv). Mancano
+la Golf 7.5 GTI 230cv (2017-2020), la Golf 7 GTI Clubsport 265cv (2016-2017) e la Grandland X Hybrid4 300cv (2020-2022).
+La GSe e' proposta dal 2022 ma e' in vendita dal 2023. Sulla Serie 1 la voce "M135i / M140i 3.0 340cv" (dal 2017 a oggi)
+e' sbagliata dopo il 2019. La Up! 1.0 60cv parte dal 2016 ma la vettura e' in vendita dal 2011, e manca la 75cv.
+Correzione richiesta, solo in `ENGINE_DATA`:
+- Mercedes-Benz > GLB: sostituire `"GLB45 S AMG 2.0 Turbo 421cv"` con `{ label: "GLB35 AMG 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null }`.
+- Volkswagen > Golf: aggiungere `{ label: "2.0 TSI GTI 230cv", yearFrom: 2017, yearTo: 2020 }` dopo la "GTI Performance 230cv" e
+  `{ label: "2.0 TSI GTI Clubsport 265cv", yearFrom: 2016, yearTo: 2017 }` prima della "GTI Clubsport 300cv".
+- Opel > Grandland: aggiungere `{ label: "Hybrid4 Plug-in 4x4 300cv", yearFrom: 2020, yearTo: 2022 }` e portare `yearFrom` della
+  "GSe Plug-in Hybrid 4x4 300cv" a 2023.
+- BMW > Serie 1: sostituire `"M135i / M140i 3.0 340cv"` con `{ label: "M140i 3.0 340cv", yearFrom: 2016, yearTo: 2019 }` e
+  `{ label: "M135i 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null }`.
+- Volkswagen > Up!: portare `yearFrom` di `"1.0 60cv"` a 2011 e aggiungere `{ label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 }`.
+Non toccare altri modelli ne' `web/lib/engineExtensions.ts` (non contiene voci per questi modelli).
+Criterio di accettazione: `getEngineVariants("auto", "Mercedes-Benz", "GLB")` non contiene "GLB45" e contiene "GLB35 AMG 2.0 Turbo 306cv";
+la Golf ha 10 voci GTI/R incluse le due nuove; la Grandland contiene la Hybrid4 e la GSe ha `yearFrom: 2023`; la Serie 1 non contiene
+"M135i / M140i"; la Up! ha 4 voci con la 60cv da 2011; `npx tsc --noEmit` e `npm run lint` in `web/` passano.
 
-Problema: (a) le righe `assistant` salvate prima della PR #71 con il testo di riserva (`apiErrors.emptyReply` in
-`web/messages/it.json`, `en.json`, `de.json`, riga 453) vengono ancora mandate al modello come sue risposte;
-(b) una risposta di soli spazi (es. `"\n\n"`) supera `if (reply)`, viene salvata e il client mostra una bolla vuota.
-
-Correzione richiesta: (a) scartare dalla cronologia le righe con ruolo `assistant` il cui contenuto, dopo `trim()`,
-e' uguale al testo `emptyReply` di una qualunque lingua disponibile (riusare i messaggi esistenti, senza ricopiare i
-testi a mano se si possono importare); (b) applicare `trim()` alla risposta del modello (entrambi i rami) prima del
-controllo `if (reply)` e del ripiego `reply || tErr("emptyReply")`.
-
-Criterio di accettazione: una cronologia con una riga `assistant` uguale a "Non sono riuscito a generare una risposta."
-(o alla versione en/de) non la include nei `messages` inviati al modello; una risposta `"  \n"` non viene salvata e il
-client riceve il testo `emptyReply`; `npm run lint` e `npx tsc --noEmit` in `web/` passano.
-
-## T2 — Catalogo: Golf GTI 2013-2017 e Grandland GSe
-Gravita': Minore
-File: `web/lib/vehicleData.ts` (Golf righe 2414-2425, Grandland righe 1926-1930)
-
-Problema: la Golf GTI 245cv parte dal 2013, ma fino al 2017 la GTI aveva 220cv (230cv la Performance), che mancano; la
-Grandland GSe plug-in 4x4 300cv (2022-2024), annunciata dal commit della PR #72, non e' stata aggiunta.
-
-Correzione richiesta: Golf: `"2.0 TSI GTI 245cv"` con `yearFrom: 2017`; aggiungere
-`{ label: "2.0 TSI GTI 220cv", yearFrom: 2013, yearTo: 2017 }` e
-`{ label: "2.0 TSI GTI Performance 230cv", yearFrom: 2013, yearTo: 2017 }`. Grandland: aggiungere
-`{ label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2022, yearTo: 2024 }`. Non toccare altre voci.
-
-Criterio di accettazione: per una Golf del 2014 il selettore offre le GTI 220cv e 230cv e non la 245cv; per una Grandland
-del 2023 compare la GSe 300cv; nessuna voce duplicata con `lib/engineExtensions.ts`; `npx tsc --noEmit` passa.
-
-## Richiede intervento umano (NON assegnare)
-
-- U1 — Limite d'uso condiviso appoggiato a righe rimovibili dall'account: serve una struttura dedicata in `supabase/`.
-- U2 — Pausa del riquadro motorsport in memoria di istanza (`web/lib/motorsport.ts`).
-- U3 — Messaggio in inglese del middleware per le API senza sessione (`web/middleware.ts:44-49`).
-- U4 — Invio della chat idempotente: serve una migrazione.
-- U5 — Risposta vuota del modello principale: tentare o no il modello di riserva (scelta di costo).
-- U6 — Testo di riserva della chat mostrato come bolla o come errore nel client (`web/components/ChatPanel.tsx:71-83`).
+## Richiede intervento umano (non assegnare)
+- U1 — Struttura dedicata in `supabase/` per il limite d'uso condiviso.
+- U2 — Pausa del riquadro motorsport condivisa tra le istanze (`web/lib/motorsport.ts`).
+- U3 — Risposta del middleware per le API senza sessione (`web/middleware.ts:44-49`).
+- U4 — Invio della chat idempotente (migrazione).
+- U5 — Modello di riserva in caso di risposta vuota (scelta di costo).
+- U6 — Come mostrare il testo di riserva nel client (`web/components/ChatPanel.tsx:71-83`).
 
 ## Gia' in PR
-
-- #68 (solo `supabase/`): nessun task la duplica.
+- #73 — cronologia della chat senza testi di riserva e risposte di soli spazi (`web/app/api/agent/chat/route.ts`).
+- #68 — migrazione di rafforzamento della RLS (solo `supabase/`).
