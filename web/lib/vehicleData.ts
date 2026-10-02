@@ -862,6 +862,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "125d 2.0 224cv", yearFrom: 2013, yearTo: null },
         { label: "116i 1.5 109cv", yearFrom: 2019, yearTo: null },
         { label: "118i 1.5 140cv", yearFrom: 2019, yearTo: null },
+        { label: "128ti 2.0 Turbo 265cv", yearFrom: 2020, yearTo: 2024 },
         { label: "M135i / M140i 3.0 340cv", yearFrom: 2017, yearTo: null },
       ],
       "Serie 2": [
@@ -1764,10 +1765,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       GLA: [
         { label: "GLA200 1.3 163cv", yearFrom: 2020, yearTo: null },
         { label: "GLA220d 2.0 190cv", yearFrom: 2020, yearTo: null },
+        { label: "GLA45 S AMG 2.0 Turbo 421cv", yearFrom: 2020, yearTo: null },
       ],
       GLB: [
         { label: "GLB200 1.3 163cv", yearFrom: 2019, yearTo: null },
         { label: "GLB220d 2.0 190cv", yearFrom: 2019, yearTo: null },
+        { label: "GLB45 S AMG 2.0 Turbo 421cv", yearFrom: 2020, yearTo: null },
       ],
       GLC: [
         { label: "GLC200 2.0 197cv", yearFrom: 2019, yearTo: null },
@@ -2496,6 +2499,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "Up!": [
         { label: "1.0 60cv", yearFrom: 2016, yearTo: null },
+        { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
         { label: "Elettrica e-up! 82cv", yearFrom: 2016, yearTo: null },
       ],
       "ID.3": [
