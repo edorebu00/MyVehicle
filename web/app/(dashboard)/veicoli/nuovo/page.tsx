@@ -127,7 +127,7 @@ export default function NewVehiclePage() {
         type,
         make,
         model,
-        engine_code: isCustomEngine ? customEngine.trim() || null : engineCode || null,
+        engine_code: (isCustomEngine ? customEngine : engineCode).trim() || null,
         year: year ? Number(year) : null,
         plate: plate || null,
       })
