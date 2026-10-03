@@ -863,7 +863,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "116i 1.5 109cv", yearFrom: 2019, yearTo: null },
         { label: "118i 1.5 140cv", yearFrom: 2019, yearTo: null },
         { label: "128ti 2.0 Turbo 265cv", yearFrom: 2020, yearTo: 2024 },
-        { label: "M135i / M140i 3.0 340cv", yearFrom: 2017, yearTo: null },
+        { label: "M140i 3.0 340cv", yearFrom: 2016, yearTo: 2019 },
+        { label: "M135i 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null },
       ],
       "Serie 2": [
         { label: "218d 2.0 150cv", yearFrom: 2014, yearTo: null },
@@ -1770,7 +1771,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       GLB: [
         { label: "GLB200 1.3 163cv", yearFrom: 2019, yearTo: null },
         { label: "GLB220d 2.0 190cv", yearFrom: 2019, yearTo: null },
-        { label: "GLB45 S AMG 2.0 Turbo 421cv", yearFrom: 2020, yearTo: null },
+        { label: "GLB35 AMG 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null },
       ],
       GLC: [
         { label: "GLC200 2.0 197cv", yearFrom: 2019, yearTo: null },
@@ -1929,7 +1930,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Grandland: [
         { label: "1.2 Turbo 130cv", yearFrom: 2017, yearTo: null },
         { label: "Hybrid Plug-in 224cv", yearFrom: 2019, yearTo: null },
-        { label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2022, yearTo: 2024 },
+        { label: "Hybrid4 Plug-in 4x4 300cv", yearFrom: 2020, yearTo: 2022 },
+        { label: "GSe Plug-in Hybrid 4x4 300cv", yearFrom: 2023, yearTo: 2024 },
         { label: "Elettrica Dual Motor 325cv", yearFrom: 2025, yearTo: null },
       ],
       Zafira: [{ label: "1.6 CDTI 136cv", yearFrom: 2011, yearTo: 2019 }],
@@ -2277,6 +2279,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 71cv", yearFrom: 2014, yearTo: null },
         { label: "Elettrica EQ 82cv", yearFrom: 2017, yearTo: null },
       ],
+      "#1": [
+        { label: "Pro Elettrica 272cv", yearFrom: 2022, yearTo: null },
+        { label: "Brabus Elettrica 428cv", yearFrom: 2023, yearTo: null },
+      ],
+      "#3": [
+        { label: "Pro Elettrica 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Brabus Elettrica 428cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     Subaru: {
       Impreza: [
@@ -2422,8 +2432,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TDI 150cv", yearFrom: 2012, yearTo: null },
         { label: "2.0 TSI GTI 220cv", yearFrom: 2013, yearTo: 2017 },
         { label: "2.0 TSI GTI Performance 230cv", yearFrom: 2013, yearTo: 2017 },
+        { label: "2.0 TSI GTI 230cv", yearFrom: 2017, yearTo: 2020 },
         { label: "2.0 TSI GTI 245cv", yearFrom: 2017, yearTo: 2024 },
         { label: "2.0 TSI GTI 265cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TSI GTI Clubsport 265cv", yearFrom: 2016, yearTo: 2017 },
         { label: "2.0 TSI GTI Clubsport 300cv", yearFrom: 2021, yearTo: null },
         { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2017 },
         { label: "2.0 TSI R 320cv", yearFrom: 2021, yearTo: 2023 },
@@ -2498,7 +2510,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "eHybrid 218cv", yearFrom: 2021, yearTo: null },
       ],
       "Up!": [
-        { label: "1.0 60cv", yearFrom: 2016, yearTo: null },
+        { label: "1.0 60cv", yearFrom: 2011, yearTo: null },
+        { label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 },
         { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
         { label: "Elettrica e-up! 82cv", yearFrom: 2016, yearTo: null },
       ],
@@ -2586,6 +2599,24 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Quartermaster: [
         { label: "3.0 Turbo 286cv", yearFrom: 2023, yearTo: null },
         { label: "3.0 Diesel 249cv", yearFrom: 2023, yearTo: null },
+      ],
+    },
+    Leapmotor: {
+      T03: [{ label: "Elettrica 95cv", yearFrom: 2024, yearTo: null }],
+      C10: [{ label: "Elettrica 218cv", yearFrom: 2024, yearTo: null }],
+    },
+    Zeekr: {
+      "001": [
+        { label: "Elettrica Single Motor 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Performance Dual Motor 544cv", yearFrom: 2023, yearTo: null },
+      ],
+      X: [
+        { label: "Elettrica Single Motor 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Dual Motor 428cv", yearFrom: 2023, yearTo: null },
+      ],
+      "7X": [
+        { label: "Elettrica RWD 421cv", yearFrom: 2025, yearTo: null },
+        { label: "Performance AWD 639cv", yearFrom: 2025, yearTo: null },
       ],
     },
   },
