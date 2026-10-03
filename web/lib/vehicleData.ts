@@ -2279,6 +2279,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 71cv", yearFrom: 2014, yearTo: null },
         { label: "Elettrica EQ 82cv", yearFrom: 2017, yearTo: null },
       ],
+      "#1": [
+        { label: "Pro Elettrica 272cv", yearFrom: 2022, yearTo: null },
+        { label: "Brabus Elettrica 428cv", yearFrom: 2023, yearTo: null },
+      ],
+      "#3": [
+        { label: "Pro Elettrica 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Brabus Elettrica 428cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     Subaru: {
       Impreza: [
@@ -2591,6 +2599,24 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Quartermaster: [
         { label: "3.0 Turbo 286cv", yearFrom: 2023, yearTo: null },
         { label: "3.0 Diesel 249cv", yearFrom: 2023, yearTo: null },
+      ],
+    },
+    Leapmotor: {
+      T03: [{ label: "Elettrica 95cv", yearFrom: 2024, yearTo: null }],
+      C10: [{ label: "Elettrica 218cv", yearFrom: 2024, yearTo: null }],
+    },
+    Zeekr: {
+      "001": [
+        { label: "Elettrica Single Motor 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Performance Dual Motor 544cv", yearFrom: 2023, yearTo: null },
+      ],
+      X: [
+        { label: "Elettrica Single Motor 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Dual Motor 428cv", yearFrom: 2023, yearTo: null },
+      ],
+      "7X": [
+        { label: "Elettrica RWD 421cv", yearFrom: 2025, yearTo: null },
+        { label: "Performance AWD 639cv", yearFrom: 2025, yearTo: null },
       ],
     },
   },
