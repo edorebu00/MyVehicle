@@ -1,16 +1,14 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-02 01:20 (UTC)
+Data scan: 2026-10-03 (UTC)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri in `main` sono entrate solo modifiche al catalogo (`web/lib/vehicleData.ts`, PR #74 e #75). Nessuna route
-sotto `web/app/api/`, componente o middleware e' cambiato: per quelle parti valgono le conclusioni dello scan precedente.
-La revisione si e' concentrata sulle voci nuove del catalogo e sul modulo che le usa
-(`web/app/(dashboard)/veicoli/nuovo/page.tsx`).
+Da ieri in `main` sono entrate la PR #76 (voce "Altro" nel menu del motore), la PR #77 (correzioni al catalogo) e la
+PR #78 (Smart #1/#3, Leapmotor, Zeekr). Nessuna route sotto `web/app/api/`, middleware o componente della chat e'
+cambiato: per quelle parti valgono le conclusioni degli scan precedenti.
 PR aperte al momento dello scan: #73 (lavoratore 4, `web/app/api/agent/chat/route.ts`), #68 (solo `supabase/`).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
-I rilievi M3 e M4 dello scan precedente (Golf GTI 220/230cv, Grandland GSe) sono stati corretti dalla PR #74.
-M1 e M2 sono coperti dalla PR #73, ancora aperta.
+I1 e M1-M5 dello scan del 02/10 sono stati corretti dalle PR #76 e #77.
 
 ## Bloccante
 
@@ -18,71 +16,54 @@ Nessun problema bloccante trovato.
 
 ## Importante
 
-### I1 — Nuovo veicolo: il menu del motore non ha la voce "Altro", quindi ogni lacuna del catalogo obbliga a una scelta sbagliata
-File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:280-296` (menu), `57-67` (anni), `15-20` (convenzione `OTHER`)
-
-Se un modello ha motorizzazioni in catalogo, il campo motore e' un `<select required>` senza voce "Altro". Gli anni
-proposti seguono poi `yearFrom`/`yearTo` della voce scelta. Chi ha un motore non in elenco non puo' salvare il veicolo
-senza scegliere un'etichetta sbagliata, che limita anche gli anni e finisce in `engine_code` e nella ricerca IA.
-Marca e modello hanno gia' la voce "Altro (non in elenco)" (`OTHER`), e il commento in testa al file spiega proprio
-che bloccare la scelta alle sole voci in elenco esclude dei veicoli: il campo motore non segue questa convenzione.
-Gli scan del 25/09, del 26/09 e del 01/10 hanno corretto il catalogo voce per voce; il difetto di fondo resta.
-
-Proposta: aggiungere la voce `OTHER` al menu del motore; se scelta, mostrare il campo libero gia' usato quando
-il modello non ha motorizzazioni in catalogo, e proporre l'intervallo di anni completo.
+Nessun problema importante nuovo.
 
 ## Minore
 
-### M1 — Catalogo: "GLB45 S AMG 421cv" e' un modello che non esiste
-File: `web/lib/vehicleData.ts:1773` (PR #75)
+### M1 — Catalogo: Smart #1/#3 e Leapmotor C10/T03 compaiono due volte con etichette diverse
+File: `web/lib/vehicleData.ts:2282-2289` e `2604-2607` (PR #78), `web/lib/engineExtensions.ts:811-818` e `838-843`
 
-Mercedes-AMG non ha mai prodotto una GLB 45 S: l'unica GLB AMG e' la GLB 35 4MATIC (2.0 Turbo, 306cv, dal 2019).
-Chi ha una GLB 35 trova solo la voce inesistente da 421cv, che viene salvata e passata alla ricerca IA.
+Le nuove voci di `ENGINE_DATA` ripetono motori gia' presenti in `ENGINE_EXTENSIONS`. `getEngineVariants`
+(`vehicleData.ts:2911-2925`) scarta solo le etichette identiche, quindi per Smart #1 il menu mostra quattro voci per
+due motori ("Pro Elettrica 272cv" e "Elettrica 66 kWh 272cv", "Brabus Elettrica 428cv" e "Brabus 66 kWh 428cv").
+Lo stesso vale per la #3 e per la Leapmotor C10 ("Elettrica 218cv" ed "Elettrica RWD 218cv"). Per la #3 Brabus i due
+duplicati hanno anche anni diversi (2024 contro 2023), quindi l'anno proponibile dipende dall'etichetta cliccata.
+La T03 e' copiata identica e quindi non si vede, ma il dato esiste in due copie.
 
-Proposta: sostituirla con `{ label: "GLB35 AMG 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null }`.
+Proposta: rimuovere i blocchi Smart `#1`/`#3` e Leapmotor da `ENGINE_DATA`; restano le voci di `engineExtensions.ts`.
 
-### M2 — Catalogo: manca la Golf 7.5 GTI da 230cv (2017-2020) e la GTI Clubsport 2016
-File: `web/lib/vehicleData.ts:2423-2427`
+### M2 — Nuovo veicolo: il motore scritto a mano per un modello senza catalogo non viene ripulito dagli spazi
+File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:130`
 
-Dopo la PR #74 l'unica voce da 230cv e' la "GTI Performance 230cv", che finisce nel 2017. La GTI standard del
-restyling 2017-2020 aveva 230cv: chi ha una GTI del 2018 non puo' indicare il suo anno con la potenza giusta. Manca
-anche la Golf 7 GTI Clubsport 265cv (2016-2017): l'unica voce da 265cv e' la Golf 8.5, proposta solo dal 2024.
+`engine_code` viene ripulito con `trim()` solo nel ramo "Altro". Nel campo libero dei modelli senza motorizzazioni
+in catalogo viene salvato `engineCode || null`, cosi' com'e': un valore di soli spazi viene salvato come motore.
+La scheda del veicolo (`components/VehicleCard.tsx:40-41`) mostra "Motore:" vuoto e la ricerca IA
+(`app/api/agent/search/route.ts:408`) aggiunge una motorizzazione vuota al contesto. Marca e modello sono gia'
+ripuliti (righe 44-45).
 
-Proposta: aggiungere `"2.0 TSI GTI 230cv"` (2017-2020) e `"2.0 TSI GTI Clubsport 265cv"` (2016-2017).
+Proposta: salvare `(isCustomEngine ? customEngine : engineCode).trim() || null`.
 
-### M3 — Catalogo: Grandland Hybrid4 300cv 2020-2022 assente, GSe proposta dal 2022
-File: `web/lib/vehicleData.ts:1932`
+### M3 — Catalogo: VW Up! 1.0 60cv ed e-up! proposte fino all'anno corrente
+File: `web/lib/vehicleData.ts:2513`, `2516`
 
-La Grandland X Hybrid4 (stesso sistema plug-in 4x4 da 300cv) e' stata venduta dal 2020 al 2022 e non ha una voce.
-La GSe e' in vendita dal 2023. Chi ha una Hybrid4 del 2020 o 2021 puo' scegliere solo la GSe, che non propone il suo anno.
+La produzione della Up! si e' chiusa nel 2023, ma le voci "1.0 60cv" ed "Elettrica e-up! 82cv" hanno `yearTo: null`
+e propongono come anni validi 2024-2026. Le gemelle Seat Mii (`vehicleData.ts:2180-2181`) sono gia' chiuse.
 
-Proposta: aggiungere `"Hybrid4 Plug-in 4x4 300cv"` (2020-2022) e portare `yearFrom` della GSe a 2023.
+Proposta: `yearTo: 2023` per entrambe.
 
-### M4 — Catalogo: BMW Serie 1 "M135i / M140i 3.0 340cv" sbagliata dopo il 2019
-File: `web/lib/vehicleData.ts:866`
-
-La M140i (F20, 3.0 sei cilindri, 340cv) e' uscita di produzione nel 2019. La M135i F40 (dal 2019) ha un 2.0 quattro
-cilindri da 306cv. Chi ha una M135i del 2021 deve salvare un motore 3.0 340cv, e la ricerca IA cerca il motore sbagliato.
-
-Proposta: dividere la voce in `"M140i 3.0 340cv"` (2016-2019) e `"M135i 2.0 Turbo 306cv"` (dal 2019).
-
-### M5 — Catalogo: Up! 1.0 60cv proposta solo dal 2016, manca la 75cv
-File: `web/lib/vehicleData.ts:2501`
-
-La Up! e' in vendita dal 2011, ma la voce 60cv parte dal 2016. Chi ha una Up! del 2012-2015 non puo' indicare il suo
-anno. Manca anche la versione 1.0 da 75cv, molto diffusa.
-
-Proposta: `yearFrom: 2011` per la 60cv e aggiungere `"1.0 75cv"` (2011-2019).
-
-### M6-M10 — Invariati dallo scan precedente
+### M4-M7 — Invariati dagli scan precedenti
 - Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx:71-83`) = U6.
 - Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts:245-253`) = U5.
 - API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts:44-49`) = U3.
 - Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx:62-88`) = U4.
 
-## Rilievi esaminati e scartati
-- La "GLA45 S AMG 421cv" dal 2020 (PR #75) e' corretta (H247).
-- La "GTI 245cv" 2017-2024 copre sia la Golf 7.5 GTI Performance sia la Golf 8 GTI: e' corretta.
+## Rilievi esaminati e non trasformati in task
+- Con la voce "Altro" il campo libero del motore non e' obbligatorio, quindi il veicolo si salva senza motore. Il campo
+  libero dei modelli senza catalogo e' facoltativo per scelta (commento a `page.tsx:318-320`): rendere obbligatorio
+  quello nuovo e' una scelta di prodotto (U7).
+- Con la voce "Altro" gli anni vanno dal 1950 a oggi anche se le motorizzazioni del modello delimitano il periodo. Il
+  commento a `page.tsx:58-59` dice che il comportamento e' voluto: restringerlo e' una scelta di prodotto (U8).
+- Proposta di estrarre un componente comune "menu + Altro": e' un refactoring, non un difetto.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/` (invariato).
@@ -91,7 +72,9 @@ Proposta: `yearFrom: 2011` per la 60cv e aggiungere `"1.0 75cv"` (2011-2019).
 - U4 — Rendere idempotente l'invio della chat: serve una migrazione.
 - U5 — Decidere se una risposta vuota del modello principale debba tentare il modello di riserva: e' una scelta di costo.
 - U6 — Decidere come mostrare il testo di riserva nel client (bolla o messaggio d'errore).
+- U7 — Decidere se, scelto "Altro", il motore scritto a mano debba essere obbligatorio.
+- U8 — Decidere se, scelto "Altro", gli anni vadano limitati al periodo coperto dalle motorizzazioni del modello.
 
 ## Gia' in PR
-- #73 (lavoratore 4): cronologia della chat senza testi di riserva e risposte di soli spazi (M1 e M2 dello scan precedente).
+- #73 (lavoratore 4): cronologia della chat senza testi di riserva e risposte di soli spazi.
 - #68: migrazione di rafforzamento della RLS (solo `supabase/`).

@@ -1,57 +1,33 @@
-Data (UTC): 2026-10-02
+Data (UTC): 2026-10-03
 
-# Task della cascata notturna
-
-PR aperte dei lavoratori: 1 (#73). Nessun task di rafforzamento questa notte.
-
-### T1 — Nuovo veicolo: voce "Altro" nel menu del motore
-Gravita': Importante
-File: `web/app/(dashboard)/veicoli/nuovo/page.tsx` (righe 15-20 costante `OTHER`, 53-67 `variants`/`selectedVariant`/`yearOptions`, 69-97 handler, 120-123 insert, 280-312 campo motore)
-Problema: se il modello ha motorizzazioni in catalogo, il campo motore e' un `<select required>` senza la voce "Altro"
-e gli anni seguono la voce scelta. Chi ha un motore non in elenco non puo' salvare il veicolo senza un'etichetta
-sbagliata, che limita gli anni e finisce in `engine_code` e nella ricerca IA. Marca e modello hanno gia' la voce
-`OTHER` ("Altro (non in elenco)"), il motore no, contro quanto dice il commento sulla costante `OTHER`.
-Correzione richiesta: nel ramo `variants` aggiungere in fondo al menu `<option value={OTHER}>{t("otherOption")}</option>`,
-seguendo lo schema gia' usato per il modello (righe 255-268). Con la voce `OTHER` scelta: mostrare sotto il menu un
-`<input>` di testo libero (non obbligatorio, placeholder `t("enginePlaceholderFree")`, `aria-label` uguale)
-legato a uno stato separato (es. `customEngine`); `selectedVariant` resta `null`, quindi gli anni coprono l'intervallo
-completo; all'inserimento `engine_code` vale il testo libero ripulito con `trim()`, oppure `null` se vuoto (mai la stringa
-`__altro__`). Il cambio di tipo, marca, modello o motore azzera anche il testo libero. Non modificare i file `messages/*.json`:
-le chiavi `otherOption` ed `enginePlaceholderFree` esistono gia'.
-Criterio di accettazione: per Volkswagen > Golf il menu del motore ha come ultima voce "Altro (non in elenco)";
-sceglierla mostra il campo libero e un menu anni dall'anno corrente al 1950; salvando con il campo vuoto `engine_code` e' `null`,
-con "1.4 TSI 125cv" e' quel testo; senza scegliere "Altro" il comportamento e' invariato; `npx tsc --noEmit`, `npm run lint`
-e `npm run build` in `web/` passano.
-
-### T2 — Catalogo: correzioni a GLB AMG, Golf GTI, Grandland, BMW Serie 1 e Up!
+## T1 — Catalogo: elimina i doppioni Smart #1/#3 e Leapmotor e chiudi gli anni della VW Up!
 Gravita': Minore
-File: `web/lib/vehicleData.ts` (righe 866, 1773, 1931-1932, 2423-2427, 2501)
-Problema: la PR #75 ha aggiunto una "GLB45 S AMG 421cv" che non esiste (l'unica GLB AMG e' la GLB 35 da 306cv). Mancano
-la Golf 7.5 GTI 230cv (2017-2020), la Golf 7 GTI Clubsport 265cv (2016-2017) e la Grandland X Hybrid4 300cv (2020-2022).
-La GSe e' proposta dal 2022 ma e' in vendita dal 2023. Sulla Serie 1 la voce "M135i / M140i 3.0 340cv" (dal 2017 a oggi)
-e' sbagliata dopo il 2019. La Up! 1.0 60cv parte dal 2016 ma la vettura e' in vendita dal 2011, e manca la 75cv.
-Correzione richiesta, solo in `ENGINE_DATA`:
-- Mercedes-Benz > GLB: sostituire `"GLB45 S AMG 2.0 Turbo 421cv"` con `{ label: "GLB35 AMG 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null }`.
-- Volkswagen > Golf: aggiungere `{ label: "2.0 TSI GTI 230cv", yearFrom: 2017, yearTo: 2020 }` dopo la "GTI Performance 230cv" e
-  `{ label: "2.0 TSI GTI Clubsport 265cv", yearFrom: 2016, yearTo: 2017 }` prima della "GTI Clubsport 300cv".
-- Opel > Grandland: aggiungere `{ label: "Hybrid4 Plug-in 4x4 300cv", yearFrom: 2020, yearTo: 2022 }` e portare `yearFrom` della
-  "GSe Plug-in Hybrid 4x4 300cv" a 2023.
-- BMW > Serie 1: sostituire `"M135i / M140i 3.0 340cv"` con `{ label: "M140i 3.0 340cv", yearFrom: 2016, yearTo: 2019 }` e
-  `{ label: "M135i 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null }`.
-- Volkswagen > Up!: portare `yearFrom` di `"1.0 60cv"` a 2011 e aggiungere `{ label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 }`.
-Non toccare altri modelli ne' `web/lib/engineExtensions.ts` (non contiene voci per questi modelli).
-Criterio di accettazione: `getEngineVariants("auto", "Mercedes-Benz", "GLB")` non contiene "GLB45" e contiene "GLB35 AMG 2.0 Turbo 306cv";
-la Golf ha 10 voci GTI/R incluse le due nuove; la Grandland contiene la Hybrid4 e la GSe ha `yearFrom: 2023`; la Serie 1 non contiene
-"M135i / M140i"; la Up! ha 4 voci con la 60cv da 2011; `npx tsc --noEmit` e `npm run lint` in `web/` passano.
+File: `web/lib/vehicleData.ts:2282-2289` (Smart `#1`/`#3` in `ENGINE_DATA`), `2604-2607` (Leapmotor in `ENGINE_DATA`), `2513` e `2516` (VW Up!)
+Problema: le voci aggiunte dalla PR #78 ripetono, con etichette diverse, motori gia' presenti in `web/lib/engineExtensions.ts:811-818` e `838-843`.
+`getEngineVariants` scarta solo le etichette identiche, quindi il menu di Smart #1, Smart #3 e Leapmotor C10 elenca lo stesso motore due volte.
+Per la #3 Brabus i doppioni hanno anche anni diversi (2024 contro 2023). Le voci della Up! "1.0 60cv" ed "Elettrica e-up! 82cv"
+hanno `yearTo: null`, ma la produzione si e' chiusa nel 2023.
+Correzione: rimuovere da `ENGINE_DATA` i modelli `"#1"` e `"#3"` sotto Smart (senza toccare le altre voci Smart) e l'intero blocco `Leapmotor`.
+Restano le voci di `engineExtensions.ts`, che non va modificato. Mettere `yearTo: 2023` alle due voci Up! indicate. Non toccare gli elenchi dei modelli.
+Accettazione: `getEngineVariants("auto","Smart","#1")` e `("auto","Smart","#3")` restituiscono 2 voci ciascuno, con la #3 Brabus dal 2023.
+`("auto","Leapmotor","C10")` restituisce 2 voci (RWD 218cv, AWD 598cv) e `("auto","Leapmotor","T03")` 1 voce.
+Le due voci Up! hanno `yearTo: 2023`. `npx tsc --noEmit` e `npm run lint` in `web/` passano.
+
+## T2 — Nuovo veicolo: ripulisci dagli spazi anche il motore scritto nel campo libero
+Gravita': Minore
+File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:130`
+Problema: `engine_code` viene ripulito con `trim()` solo quando si sceglie "Altro". Per i modelli senza motorizzazioni in catalogo
+si salva `engineCode || null` cosi' com'e', e un valore di soli spazi finisce nella scheda del veicolo e nel contesto della ricerca IA.
+Marca e modello sono gia' ripuliti (righe 44-45).
+Correzione: salvare `(isCustomEngine ? customEngine : engineCode).trim() || null`, per esempio con una costante `engine` derivata accanto a `make` e `model`.
+Accettazione: con un motore scritto a mano come "  " viene salvato `null`, e con " 1.6 TDI " viene salvato "1.6 TDI", in entrambi i rami.
+Le motorizzazioni scelte dal menu vengono salvate invariate. `npx tsc --noEmit` e `npm run lint` in `web/` passano.
 
 ## Richiede intervento umano (non assegnare)
-- U1 — Struttura dedicata in `supabase/` per il limite d'uso condiviso.
-- U2 — Pausa del riquadro motorsport condivisa tra le istanze (`web/lib/motorsport.ts`).
-- U3 — Risposta del middleware per le API senza sessione (`web/middleware.ts:44-49`).
-- U4 — Invio della chat idempotente (migrazione).
-- U5 — Modello di riserva in caso di risposta vuota (scelta di costo).
-- U6 — Come mostrare il testo di riserva nel client (`web/components/ChatPanel.tsx:71-83`).
+- U1-U6: invariati, vedi `BUG_SCAN.md`.
+- U7: decidere se, scelta la voce "Altro" del motore, il campo libero debba essere obbligatorio.
+- U8: decidere se, scelta la voce "Altro" del motore, gli anni vadano limitati al periodo delle motorizzazioni del modello.
 
 ## Gia' in PR
-- #73 — cronologia della chat senza testi di riserva e risposte di soli spazi (`web/app/api/agent/chat/route.ts`).
-- #68 — migrazione di rafforzamento della RLS (solo `supabase/`).
+- #73: cronologia della chat (`web/app/api/agent/chat/route.ts`).
+- #68: rafforzamento RLS (`supabase/`).
