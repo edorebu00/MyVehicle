@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>A1 — Garage a griglia con gerarchia (bento leggero) · MyVehicle</title>
+<style>
+:root{--g50:#0a0908;--g100:#141210;--g200:#211e1a;--g300:#332e27;--g400:#5c5347;--g500:#8a8072;--g600:#a89e8f;--g700:#c4bcae;--g800:#e0dad0;--g900:#f6f2ea;--b50:#2b2415;--b100:#3c3119;--b200:#5e4c22;--b400:#b6913f;--b500:#cca558;--b600:#d9b671;--b700:#e6cb95;--gold50:#241708;--gold300:#804a17;--gold600:#d99a4f;--ease:cubic-bezier(.16,1,.3,1);--display:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--g50);color:var(--g900);font-family:var(--sans);-webkit-font-smoothing:antialiased;background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.doc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--g200);margin-bottom:24px}
+.doc-head h1{font-size:1.05rem;font-family:var(--sans);letter-spacing:0;font-weight:600}
+.doc-head p{font-size:.8rem;color:var(--g600);margin-top:2px}
+.toggle{display:inline-flex;padding:4px;border-radius:999px;border:1px solid var(--g300);background:var(--g100)}
+.toggle label{min-height:44px;min-width:88px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+#v-prima:checked~.wrap label[for=v-prima],#v-dopo:checked~.wrap label[for=v-dopo]{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+#v-prima:focus-visible~.wrap label[for=v-prima],#v-dopo:focus-visible~.wrap label[for=v-dopo]{outline:2px solid var(--b400);outline-offset:2px}
+.dopo{display:none}
+#v-dopo:checked~.wrap .prima{display:none}
+#v-dopo:checked~.wrap .dopo{display:block}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--b500)}
+.eyebrow::before{content:"";width:1.25rem;height:2px;background:currentColor;border-radius:999px}
+.card{border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:.5rem;border:0;background:linear-gradient(to bottom,var(--b500),var(--b400));padding:8px 16px;font:600 .875rem var(--sans);color:var(--g50);text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 16px;font:600 .875rem var(--sans);color:var(--g800);text-decoration:none}
+.metric-chip{border-radius:.5rem;border:1px solid var(--g200);background:var(--g50);padding:8px 12px;display:flex;align-items:center;gap:10px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600)}
+.icon-badge svg{width:18px;height:18px}
+.note{margin-top:28px;border-left:2px solid var(--b400);padding:10px 14px;background:var(--g100);border-radius:0 .5rem .5rem 0;font-size:.85rem;color:var(--g700);line-height:1.5}
+.note strong{color:var(--g900)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rise>*{animation:rise .5s var(--ease) both}
+.rise>*:nth-child(2){animation-delay:.06s}.rise>*:nth-child(3){animation-delay:.12s}.rise>*:nth-child(4){animation-delay:.18s}.rise>*:nth-child(5){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+.hero{padding:32px 24px;margin-bottom:32px}
+.hero-row{position:relative;display:flex;flex-direction:column;gap:16px}
+.hero h2{font-size:1.875rem;font-weight:700;margin-top:8px}
+.hero .sub{margin-top:4px;font-size:.875rem;color:var(--g500)}
+.hero-side{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.chips{display:flex;gap:8px}
+.chips .num{font-family:var(--display);font-size:1.25rem;font-weight:700;line-height:1}
+.chips .lbl{margin-top:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g500)}
+@media(min-width:640px){.hero{padding:32px}.hero-row{flex-direction:row;align-items:center;justify-content:space-between}.hero-side{align-items:flex-end}}
+/* PRIMA: griglia uniforme come VehicleCard.tsx */
+.grid-old{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.grid-old{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.grid-old{grid-template-columns:repeat(3,1fr)}}
+.vc{display:block;overflow:hidden;border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .3s var(--ease),border-color .3s var(--ease)}
+.vc:hover{transform:translateY(-6px);border-color:rgba(182,145,63,.6)}
+.vc:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.vc-top{position:relative;height:128px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--b50),var(--g100))}
+.vc-top .emoji{font-size:3rem;filter:grayscale(.3)}
+.pill{position:absolute;top:12px;border-radius:999px;background:rgba(10,9,8,.9);padding:2px 8px;font-size:.75rem;font-weight:500}
+.pill.l{left:12px;color:var(--b600)}.pill.r{right:12px;color:var(--g600)}
+.vc-body{padding:16px}
+.vc-body h3{font-size:1.125rem;font-weight:600}
+.vc-body .m{margin-top:4px;font-size:.875rem;color:var(--g500)}
+.vc-body .p{margin-top:4px;font-size:.875rem;color:var(--g400)}
+.vc-body .open{margin-top:16px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--b600)}
+/* DOPO: bento */
+.bento{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.bento{grid-template-columns:repeat(2,1fr)}.t-feature{grid-column:1/-1}.t-todo{grid-column:1/-1}}
+@media(min-width:1024px){.bento{grid-template-columns:repeat(6,1fr)}.t-feature{grid-column:span 4;grid-row:span 2}.t-todo{grid-column:span 2;grid-row:span 2}.t-std{grid-column:span 2}}
+.tile{position:relative;border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55);text-decoration:none;display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+a.tile:hover{transform:translateY(-4px);border-color:rgba(182,145,63,.6)}
+a.tile:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.t-feature{overflow:hidden;background:radial-gradient(110% 120% at 85% 0%,rgba(204,165,88,.16),var(--g100) 58%);border-color:rgba(140,112,48,.55)}
+.feat-in{padding:24px;display:flex;flex-direction:column;gap:20px;height:100%}
+.feat-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--b200);background:var(--b50);padding:4px 10px;font-size:.75rem;font-weight:600;color:var(--b700)}
+.tag .dot{width:6px;height:6px;border-radius:999px;background:var(--b500)}
+.t-feature h3{font-size:1.75rem;font-weight:700;line-height:1.15}
+.t-feature .meta{margin-top:6px;font-size:.9rem;color:var(--g600)}
+.silh{color:var(--b500);opacity:.9;width:100%;max-width:340px;align-self:center}
+.bento>*{min-width:0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:420px){.stat{padding:8px}.stat .v{font-size:.9rem}.t-feature h3{font-size:1.5rem}.feat-in{padding:18px}}
+.stat{border-radius:.5rem;border:1px solid var(--g200);background:rgba(10,9,8,.6);padding:10px 12px}
+.stat .k{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--g500)}
+.stat .v{margin-top:4px;font-family:var(--display);font-size:1.05rem;font-weight:700}
+.stat .v.ok{color:#6ee7b7}
+.feat-cta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.feat-cta .open{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--b600)}
+.t-todo{padding:20px;gap:14px}
+.t-todo h3{font-size:1.15rem;font-weight:600}
+.t-todo .h{display:flex;align-items:center;gap:10px}
+.t-todo .lead{font-size:.85rem;color:var(--g600);line-height:1.45}
+.todo-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.todo-list a{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 12px;border-radius:.6rem;border:1px solid var(--g200);background:var(--g50);text-decoration:none;transition:border-color .2s var(--ease)}
+.todo-list a:hover{border-color:var(--gold300)}
+.todo-list a:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.todo-list .who{font-weight:600;font-size:.9rem}
+.todo-list .what{font-size:.78rem;color:var(--gold600);margin-top:2px}
+.todo-list .arr{margin-left:auto;color:var(--g500)}
+.t-std{padding:16px;gap:12px}
+.std-head{display:flex;gap:12px;align-items:center}
+.std-ico{display:grid;place-items:center;width:44px;height:44px;border-radius:.6rem;background:linear-gradient(135deg,var(--b50),var(--g100));color:var(--b600);flex-shrink:0}
+.std-ico svg{width:26px;height:26px}
+.t-std h3{font-size:1.05rem;font-weight:600}
+.t-std .meta{font-size:.82rem;color:var(--g500);margin-top:2px}
+.mini{display:flex;flex-wrap:wrap;gap:6px}
+.mini span{border-radius:999px;border:1px solid var(--g300);padding:3px 9px;font-size:.72rem;font-weight:500;color:var(--g700)}
+.mini span.warn{border-color:rgba(128,74,23,.8);color:var(--gold600)}
+.mini span.ok{border-color:rgba(16,185,129,.35);color:#6ee7b7}
+.legend{margin-top:16px;font-size:.78rem;color:var(--g500)}
+</style>
+</head>
+<body>
+<input class="sr" type="radio" name="vista" id="v-prima" checked>
+<input class="sr" type="radio" name="vista" id="v-dopo">
+<div class="wrap">
+  <header class="doc-head">
+    <div><h1>A1 · Garage a griglia con gerarchia</h1><p>Dashboard (<code>/dashboard</code>) · 4 veicoli in garage</p></div>
+    <div class="toggle" role="group" aria-label="Versione"><label for="v-prima">Prima</label><label for="v-dopo">Dopo</label></div>
+  </header>
+
+  <section class="hero-panel hero" aria-label="Intestazione garage">
+    <div class="hero-row">
+      <div><p class="eyebrow">La tua collezione</p><h2>Il mio garage</h2><p class="sub">4 veicoli in collezione.</p></div>
+      <div class="hero-side">
+        <div class="chips">
+          <div class="metric-chip"><span class="icon-badge" aria-hidden="true">🚗</span><span><p class="num">4</p><p class="lbl">in garage</p></span></div>
+          <div class="metric-chip"><span class="icon-badge" aria-hidden="true">⚡</span><span><p class="num" style="color:var(--b600)">24/7</p><p class="lbl">pronto</p></span></div>
+        </div>
+        <a href="#" class="btn-primary">+ Aggiungi veicolo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRIMA ===================== -->
+  <div class="prima">
+    <div class="grid-old rise">
+      <a class="vc" href="#" aria-label="Apri la scheda di Alfa Romeo Giulia"><div class="vc-top"><span class="emoji" aria-hidden="true">🚗</span><span class="pill l">Auto</span><span class="pill r">2019</span></div><div class="vc-body"><h3>Alfa Romeo Giulia</h3><p class="m">Motore: 2.2 JTD 160cv</p><p class="p">Targa: FX 482 KM</p><p class="open">Apri scheda →</p></div></a>
+      <a class="vc" href="#" aria-label="Apri la scheda di Yamaha MT-07"><div class="vc-top"><span class="emoji" aria-hidden="true">🏍️</span><span class="pill l">Moto</span><span class="pill r">2021</span></div><div class="vc-body"><h3>Yamaha MT-07</h3><p class="m">Motore: 689cc CP2 73cv</p><p class="p">Targa: EC 71935</p><p class="open">Apri scheda →</p></div></a>
+      <a class="vc" href="#" aria-label="Apri la scheda di Fiat Panda"><div class="vc-top"><span class="emoji" aria-hidden="true">🚗</span><span class="pill l">Auto</span><span class="pill r">2015</span></div><div class="vc-body"><h3>Fiat Panda</h3><p class="m">Motore: 1.2 69cv</p><p class="p">Targa: ES 210 TV</p><p class="open">Apri scheda →</p></div></a>
+      <a class="vc" href="#" aria-label="Apri la scheda di Volkswagen Golf"><div class="vc-top"><span class="emoji" aria-hidden="true">🚗</span><span class="pill l">Auto</span><span class="pill r">2017</span></div><div class="vc-body"><h3>Volkswagen Golf</h3><p class="m">Motore: 1.6 TDI 115cv</p><p class="p">Targa: FM 663 ZD</p><p class="open">Apri scheda →</p></div></a>
+    </div>
+    <p class="note"><strong>Oggi:</strong> tutte le card hanno lo stesso peso. Nulla dice quale veicolo ha bisogno di attenzione (nessun documento caricato, ricerca IA mai fatta). La riga "Targa" usa <code>text-graphite-400</code> (#5c5347 su #141210 ≈ 2,5:1): sotto la soglia WCAG AA.</p>
+  </div>
+
+  <!-- ===================== DOPO ===================== -->
+  <div class="dopo">
+    <div class="bento rise">
+      <a class="tile t-feature" href="#" aria-label="Apri la scheda di Alfa Romeo Giulia, aggiunta di recente">
+        <div class="feat-in">
+          <div class="feat-top">
+            <div>
+              <span class="tag"><span class="dot" aria-hidden="true"></span>Aggiunta di recente</span>
+              <h3 style="margin-top:12px">Alfa Romeo Giulia</h3>
+              <p class="meta">Auto · 2019 · 2.2 JTD 160cv · FX 482 KM</p>
+            </div>
+          </div>
+          <svg class="silh" viewBox="0 0 340 90" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 66h22M84 66h150M282 66h40c4 0 6-3 6-6v-10c0-6-4-10-10-12l-40-8-44-20c-6-3-12-4-18-4h-70c-8 0-14 2-20 6l-30 20-34 4c-6 1-10 6-10 12v6c0 7 3 12 8 12"/><circle cx="60" cy="66" r="18"/><circle cx="258" cy="66" r="18"/><path d="M110 18l-26 22h120l-36-22"/></svg>
+          <div class="stats">
+            <div class="stat"><p class="k">Ricerca IA</p><p class="v ok">Completata</p></div>
+            <div class="stat"><p class="k">Documenti</p><p class="v">3</p></div>
+            <div class="stat"><p class="k">Bollo stimato</p><p class="v">≈ 254 €</p></div>
+          </div>
+          <div class="feat-cta"><span class="open">Apri scheda →</span></div>
+        </div>
+      </a>
+
+      <section class="tile t-todo" aria-labelledby="todo-t">
+        <div class="h"><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></span><h3 id="todo-t">Da completare</h3></div>
+        <p class="lead">Due veicoli non sfruttano ancora tutto il garage. Un tocco e riprendi da dove manca.</p>
+        <ul class="todo-list">
+          <li><a href="#"><span><p class="who">Fiat Panda</p><p class="what">Nessun documento caricato</p></span><span class="arr" aria-hidden="true">→</span></a></li>
+          <li><a href="#"><span><p class="who">Yamaha MT-07</p><p class="what">Ricerca IA mai avviata</p></span><span class="arr" aria-hidden="true">→</span></a></li>
+        </ul>
+      </section>
+
+      <a class="tile t-std" href="#" aria-label="Apri la scheda di Volkswagen Golf">
+        <div class="std-head"><span class="std-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v-3l2-1 2-4h9l3 4 2 1v3h-2M7 15h8"/><circle cx="7" cy="16" r="2"/><circle cx="17" cy="16" r="2"/></svg></span><div><h3>Volkswagen Golf</h3><p class="meta">2017 · 1.6 TDI 115cv</p></div></div>
+        <div class="mini"><span class="ok">Ricerca IA ✓</span><span>2 documenti</span></div>
+      </a>
+      <a class="tile t-std" href="#" aria-label="Apri la scheda di Yamaha MT-07">
+        <div class="std-head"><span class="std-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M5 16l4-6h5l2 3h3M12 10l-1-3h-2M14 10l3-3h2"/></svg></span><div><h3>Yamaha MT-07</h3><p class="meta">2021 · 689cc CP2 73cv</p></div></div>
+        <div class="mini"><span class="warn">Ricerca IA da avviare</span><span>1 documento</span></div>
+      </a>
+      <a class="tile t-std" href="#" aria-label="Apri la scheda di Fiat Panda">
+        <div class="std-head"><span class="std-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v-3l2-1 2-4h9l3 4 2 1v3h-2M7 15h8"/><circle cx="7" cy="16" r="2"/><circle cx="17" cy="16" r="2"/></svg></span><div><h3>Fiat Panda</h3><p class="meta">2015 · 1.2 69cv</p></div></div>
+        <div class="mini"><span class="ok">Ricerca IA ✓</span><span class="warn">0 documenti</span></div>
+      </a>
+    </div>
+    <p class="legend">Ordine su mobile (colonna singola): veicolo più recente → "Da completare" → gli altri dal più recente. Con 1 solo veicolo si mostra solo la tile grande; il riquadro "Da completare" sparisce quando non c'è nulla da fare.</p>
+    <p class="note"><strong>Cosa cambia:</strong> il veicolo più recente diventa la tile grande con tre segnali già presenti nei dati (ricerca IA salvata in <code>search_results</code>, numero di <code>documents</code>, <code>bollo_stimato</code>). Il riquadro "Da completare" porta in primo piano i veicoli a cui manca qualcosa, senza introdurre nuovi campi nel database.</p>
+  </div>
+</div>
+</body>
+</html>

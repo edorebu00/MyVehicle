@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>A3 — Micro-interazioni e glow su login/registrazione · MyVehicle</title>
+<style>
+:root{--g50:#0a0908;--g100:#141210;--g200:#211e1a;--g300:#332e27;--g400:#5c5347;--g500:#8a8072;--g600:#a89e8f;--g700:#c4bcae;--g800:#e0dad0;--g900:#f6f2ea;--b50:#2b2415;--b100:#3c3119;--b200:#5e4c22;--b400:#b6913f;--b500:#cca558;--b600:#d9b671;--b700:#e6cb95;--gold50:#241708;--gold300:#804a17;--gold600:#d99a4f;--ease:cubic-bezier(.16,1,.3,1);--display:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--g50);color:var(--g900);font-family:var(--sans);-webkit-font-smoothing:antialiased;background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.doc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--g200);margin-bottom:24px}
+.doc-head h1{font-size:1.05rem;font-family:var(--sans);letter-spacing:0;font-weight:600}
+.doc-head p{font-size:.8rem;color:var(--g600);margin-top:2px}
+.toggle{display:inline-flex;padding:4px;border-radius:999px;border:1px solid var(--g300);background:var(--g100)}
+.toggle label{min-height:44px;min-width:88px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+#v-prima:checked~.wrap label[for=v-prima],#v-dopo:checked~.wrap label[for=v-dopo]{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+#v-prima:focus-visible~.wrap label[for=v-prima],#v-dopo:focus-visible~.wrap label[for=v-dopo]{outline:2px solid var(--b400);outline-offset:2px}
+.dopo{display:none}
+#v-dopo:checked~.wrap .prima{display:none}
+#v-dopo:checked~.wrap .dopo{display:block}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--b500)}
+.eyebrow::before{content:"";width:1.25rem;height:2px;background:currentColor;border-radius:999px}
+.card{border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:.5rem;border:0;background:linear-gradient(to bottom,var(--b500),var(--b400));padding:8px 16px;font:600 .875rem var(--sans);color:var(--g50);text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 16px;font:600 .875rem var(--sans);color:var(--g800);text-decoration:none}
+.metric-chip{border-radius:.5rem;border:1px solid var(--g200);background:var(--g50);padding:8px 12px;display:flex;align-items:center;gap:10px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600)}
+.icon-badge svg{width:18px;height:18px}
+.note{margin-top:28px;border-left:2px solid var(--b400);padding:10px 14px;background:var(--g100);border-radius:0 .5rem .5rem 0;font-size:.85rem;color:var(--g700);line-height:1.5}
+.note strong{color:var(--g900)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rise>*{animation:rise .5s var(--ease) both}
+.rise>*:nth-child(2){animation-delay:.06s}.rise>*:nth-child(3){animation-delay:.12s}.rise>*:nth-child(4){animation-delay:.18s}.rise>*:nth-child(5){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+.stage{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:var(--g50);min-height:640px;display:flex;align-items:center;justify-content:center;padding:40px 16px}
+.glow{pointer-events:none;position:absolute;left:50%;top:0;width:36rem;max-width:140%;height:20rem;transform:translate(-50%,-33%);border-radius:999px;background:rgba(204,165,88,.15);filter:blur(64px);animation:drift 10s ease-in-out infinite}
+@keyframes drift{0%,100%{scale:1;opacity:.7}50%{scale:1.1;opacity:1}}
+.box{position:relative;z-index:1;width:100%;max-width:24rem}
+.brand{text-align:center;margin-bottom:32px}
+.brand .eyebrow{justify-content:center}
+.brand h2{margin-top:12px;font-size:1.875rem;font-weight:700}
+.brand h2 span{color:var(--b600)}
+.brand .tag{margin-top:8px;font-size:.875rem;color:var(--g500)}
+.glass{border-radius:1rem;border:1px solid rgba(33,30,26,.8);background:rgba(20,18,16,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:24px;box-shadow:inset 0 1px 0 rgba(246,242,234,.05),0 1px 2px rgba(0,0,0,.3),0 32px 64px -28px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:16px}
+.label{display:block;margin-bottom:4px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g500)}
+.input{width:100%;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 12px;font:400 .875rem var(--sans);color:var(--g900);min-height:40px}
+.input:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+.err-old{font-size:.875rem;color:#f87171}
+.foot{margin-top:20px;text-align:center;font-size:.875rem;color:var(--g500)}
+.foot a{color:var(--b600);font-weight:500;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+.foot a:hover{text-decoration:underline}
+.btn-primary.big{width:100%;padding:12px;font-size:1rem;min-height:48px}
+/* DOPO */
+.glass-d{position:relative}
+.glass-d::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(160deg,rgba(204,165,88,.45),rgba(204,165,88,0) 40%,rgba(204,165,88,0) 70%,rgba(204,165,88,.18));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.field{position:relative}
+.input-d{width:100%;min-height:48px;border-radius:.6rem;border:1px solid var(--g300);background:var(--g100);padding:10px 44px 10px 14px;font:400 1rem var(--sans);color:var(--g900);transition:border-color .2s var(--ease),box-shadow .25s var(--ease),background .2s var(--ease)}
+.input-d::placeholder{color:var(--g500)}
+.input-d:hover{border-color:var(--g400)}
+.input-d:focus{outline:none;border-color:var(--b500);background:#17140f;box-shadow:0 0 0 3px rgba(204,165,88,.22),0 0 24px -4px rgba(204,165,88,.35)}
+.input-d.is-focus{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.22),0 0 24px -4px rgba(248,113,113,.35)}
+.input-d[aria-invalid=true]{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.18)}
+.f-ico{position:absolute;right:4px;top:28px;width:40px;height:40px;display:grid;place-items:center;color:var(--g500)}
+.f-ico svg{width:18px;height:18px}
+.eye{background:none;border:0;cursor:pointer;color:var(--g600);border-radius:.5rem;min-width:44px;min-height:44px;right:2px;top:26px}
+.eye:focus-visible{outline:2px solid var(--b400)}
+.f-help{margin-top:6px;font-size:.78rem;color:var(--g600);display:flex;align-items:center;gap:6px}
+.meter{display:flex;gap:4px;margin-top:8px}
+.meter i{flex:1;height:4px;border-radius:999px;background:var(--g300)}
+.meter i.on{background:var(--b500)}
+.alert{display:flex;gap:10px;align-items:flex-start;border-radius:.6rem;border:1px solid rgba(248,113,113,.45);background:rgba(127,29,29,.28);padding:10px 12px;color:#fecaca;font-size:.875rem;line-height:1.4;animation:nudge .4s var(--ease) both}
+.alert svg{flex-shrink:0;width:18px;height:18px;margin-top:1px;color:#f87171}
+.alert strong{color:#fee2e2;display:block}
+@keyframes nudge{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}100%{transform:none}}
+.btn-glow{position:relative;overflow:hidden}
+.btn-glow::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
+.btn-glow:hover::after,.btn-glow:focus-visible::after{transform:translateX(120%)}
+.btn-glow:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 4px rgba(0,0,0,.4),0 14px 28px -8px rgba(204,165,88,.6)}
+.btn-loading{opacity:.85;cursor:progress}
+.spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:999px;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.states{display:grid;gap:24px;grid-template-columns:1fr}
+@media(min-width:900px){.states{grid-template-columns:1fr 1fr}}
+.state-cap{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--g600);margin:0 0 8px}
+.ok-badge{display:grid;place-items:center;width:56px;height:56px;margin:0 auto;border-radius:999px;background:rgba(16,185,129,.15);color:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.35);animation:ring 1.4s var(--ease) .1s 1 both}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(52,211,153,.45)}100%{box-shadow:0 0 0 18px rgba(52,211,153,0)}}
+.ok-badge svg{width:28px;height:28px}
+.progress{height:3px;border-radius:999px;background:var(--g300);overflow:hidden;margin-top:14px}
+.progress i{display:block;height:100%;width:60%;background:linear-gradient(90deg,var(--b400),var(--b600));animation:fill .6s linear both}
+@keyframes fill{from{width:0}to{width:100%}}
+@media (prefers-reduced-motion:reduce){.glow{animation:none}.btn-glow::after{display:none}.spinner{animation:none;border-right-color:currentColor;opacity:.6}}
+</style>
+</head>
+<body>
+<input class="sr" type="radio" name="vista" id="v-prima" checked>
+<input class="sr" type="radio" name="vista" id="v-dopo">
+<div class="wrap">
+  <header class="doc-head">
+    <div><h1>A3 · Micro-interazioni e glow su login/registrazione</h1><p><code>/login</code> e <code>/registrati</code> · stato con errore e stati di invio</p></div>
+    <div class="toggle" role="group" aria-label="Versione"><label for="v-prima">Prima</label><label for="v-dopo">Dopo</label></div>
+  </header>
+
+  <!-- ===================== PRIMA ===================== -->
+  <div class="prima">
+    <div class="states">
+      <div>
+        <p class="state-cap">Login · credenziali errate</p>
+        <div class="stage" style="min-height:560px">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="box">
+            <div class="brand"><p class="eyebrow">Garage digitale</p><h2>My<span>Vehicle</span></h2><p class="tag">Il tuo parco auto e moto, sempre sotto controllo.</p></div>
+            <form class="glass" onsubmit="return false">
+              <div><label class="label" for="p-email">Email</label><input class="input" id="p-email" type="email" value="giulia.rossi@email.it"></div>
+              <div><label class="label" for="p-pw">Password</label><input class="input" id="p-pw" type="password" value="password12"></div>
+              <p class="err-old">Email o password non corretti.</p>
+              <button class="btn-primary big" type="submit">Accedi</button>
+            </form>
+            <p class="foot">Non hai un account? <a href="#">Registrati</a></p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="state-cap">Registrazione · password non coincidenti</p>
+        <div class="stage" style="min-height:560px">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="box">
+            <div class="brand"><p class="eyebrow">Garage digitale</p><h2>My<span>Vehicle</span></h2><p class="tag">Crea il tuo account e inizia a curare la tua collezione.</p></div>
+            <form class="glass" onsubmit="return false">
+              <div><label class="label" for="r-email">Email</label><input class="input" id="r-email" type="email" value="marco.bianchi@email.it"></div>
+              <div><label class="label" for="r-pw">Password</label><input class="input" id="r-pw" type="password" value="moto2021"><p style="margin-top:4px;font-size:.75rem;color:var(--g400)">Almeno 6 caratteri.</p></div>
+              <div><label class="label" for="r-pw2">Conferma password</label><input class="input" id="r-pw2" type="password" value="moto2012"></div>
+              <p class="err-old">Le password non coincidono.</p>
+              <button class="btn-primary big" type="submit">Registrati</button>
+            </form>
+            <p class="foot">Hai già un account? <a href="#">Accedi</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note"><strong>Oggi:</strong> l'errore è una riga di testo rosso staccata dal campo, non annunciata ai lettori di schermo e senza icona; input alti 40px (sotto i 44px su mobile); suggerimento "Almeno 6 caratteri." in <code>graphite-400</code> (≈ 2,5:1, sotto AA); il bottone mostra solo "Accesso in corso…" senza segnale visivo.</p>
+  </div>
+
+  <!-- ===================== DOPO ===================== -->
+  <div class="dopo">
+    <div class="states">
+      <div>
+        <p class="state-cap">Login · credenziali errate</p>
+        <div class="stage">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="box rise">
+            <div class="brand"><p class="eyebrow">Garage digitale</p><h2>My<span>Vehicle</span></h2><p class="tag">Il tuo parco auto e moto, sempre sotto controllo.</p></div>
+            <form class="glass glass-d" onsubmit="return false" novalidate>
+              <div role="alert" class="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></svg><span><strong>Email o password non corretti.</strong>Controlla di aver scritto bene l'indirizzo e riprova.</span></div>
+              <div class="field"><label class="label" for="d-email">Email</label><input class="input-d" id="d-email" type="email" autocomplete="email" value="giulia.rossi@email.it" aria-invalid="true" aria-describedby="d-err"><span class="f-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span></div>
+              <div class="field"><label class="label" for="d-pw">Password</label><input class="input-d" id="d-pw" type="password" autocomplete="current-password" value="password12" aria-invalid="true" aria-describedby="d-err"><button type="button" class="f-ico eye" aria-label="Mostra password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><span id="d-err" class="sr">Email o password non corretti.</span></div>
+              <button class="btn-primary big btn-glow" type="submit">Accedi</button>
+            </form>
+            <p class="foot">Non hai un account? <a href="#">Registrati</a></p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="state-cap">Registrazione · password non coincidenti (campo focalizzato)</p>
+        <div class="stage">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="box">
+            <div class="brand"><p class="eyebrow">Garage digitale</p><h2>My<span>Vehicle</span></h2><p class="tag">Crea il tuo account e inizia a curare la tua collezione.</p></div>
+            <form class="glass glass-d" onsubmit="return false" novalidate>
+              <div class="field"><label class="label" for="e-email">Email</label><input class="input-d" id="e-email" type="email" autocomplete="email" value="marco.bianchi@email.it"></div>
+              <div class="field"><label class="label" for="e-pw">Password</label><input class="input-d" id="e-pw" type="password" autocomplete="new-password" value="moto2021" aria-describedby="e-help"><div class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div><p class="f-help" id="e-help">Almeno 6 caratteri · discreta</p></div>
+              <div class="field"><label class="label" for="e-pw2">Conferma password</label><input class="input-d is-focus" id="e-pw2" type="password" autocomplete="new-password" value="moto2012" aria-invalid="true" aria-describedby="e-err"><p class="f-help" id="e-err" style="color:#fca5a5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Le password non coincidono.</p></div>
+              <button class="btn-primary big btn-glow btn-loading" type="submit" aria-busy="true"><span class="spinner" aria-hidden="true"></span>Creazione account…</button>
+            </form>
+            <p class="foot">Hai già un account? <a href="#">Accedi</a></p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="state-cap">Login · accesso riuscito</p>
+        <div class="stage" style="min-height:300px">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="box"><div class="glass glass-d" style="text-align:center;align-items:center" role="status">
+            <span class="ok-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></span>
+            <p style="font-size:.9rem;font-weight:500;color:var(--g700)">Accesso effettuato, ti portiamo al garage…</p>
+            <div class="progress" style="width:100%" aria-hidden="true"><i></i></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <p class="note"><strong>Cosa cambia:</strong> bordo-luce champagne sul pannello vetro e bagliore sul campo attivo (alone esterno, il contrasto del testo resta quello di oggi); errori in un riquadro con icona e <code>role="alert"</code> collegati ai campi via <code>aria-invalid</code>/<code>aria-describedby</code>, con un piccolo scuotimento; campi alti 48px con testo a 16px (niente zoom automatico su iOS); "mostra password"; misuratore di robustezza; spinner nel bottone; barra di avanzamento di 600 ms nello stato di successo, la stessa attesa del redirect attuale. Con "riduci movimento" glow, scuotimento e riflesso sono spenti.</p>
+  </div>
+</div>
+</body>
+</html>
