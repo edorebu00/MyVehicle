@@ -1,14 +1,17 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-03 (UTC)
+Data scan: 2026-10-04 (UTC)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri in `main` sono entrate la PR #76 (voce "Altro" nel menu del motore), la PR #77 (correzioni al catalogo) e la
-PR #78 (Smart #1/#3, Leapmotor, Zeekr). Nessuna route sotto `web/app/api/`, middleware o componente della chat e'
-cambiato: per quelle parti valgono le conclusioni degli scan precedenti.
+Da ieri in `main` sono entrate la PR #79 (motore scritto a mano ripulito dagli spazi), la PR #80 (doppioni Smart/Leapmotor
+rimossi e anni della VW Up! chiusi) e la PR #81 (Jaecoo 5/8, Omoda 7/9, Leapmotor B10, Abarth 600e, Opel Mokka GSE).
+Nessuna route sotto `web/app/api/`, middleware o componente della chat e' cambiato: per quelle parti valgono le
+conclusioni degli scan precedenti.
 PR aperte al momento dello scan: #73 (lavoratore 4, `web/app/api/agent/chat/route.ts`), #68 (solo `supabase/`).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
-I1 e M1-M5 dello scan del 02/10 sono stati corretti dalle PR #76 e #77.
+M1, M2 e M3 dello scan del 03/10 sono stati corretti dalle PR #79 e #80. Il merge della PR #81 non ha creato marche
+doppie in `ENGINE_DATA` e non ha reintrodotto doppioni: Leapmotor B10 esiste solo in `vehicleData.ts`, C10/T03 solo in
+`engineExtensions.ts`.
 
 ## Bloccante
 
@@ -20,50 +23,33 @@ Nessun problema importante nuovo.
 
 ## Minore
 
-### M1 — Catalogo: Smart #1/#3 e Leapmotor C10/T03 compaiono due volte con etichette diverse
-File: `web/lib/vehicleData.ts:2282-2289` e `2604-2607` (PR #78), `web/lib/engineExtensions.ts:811-818` e `838-843`
+### M1 — Catalogo: per l'Opel Mokka elettrica esiste solo la versione da 136cv, proposta fino all'anno corrente
+File: `web/lib/vehicleData.ts:1939`
 
-Le nuove voci di `ENGINE_DATA` ripetono motori gia' presenti in `ENGINE_EXTENSIONS`. `getEngineVariants`
-(`vehicleData.ts:2911-2925`) scarta solo le etichette identiche, quindi per Smart #1 il menu mostra quattro voci per
-due motori ("Pro Elettrica 272cv" e "Elettrica 66 kWh 272cv", "Brabus Elettrica 428cv" e "Brabus 66 kWh 428cv").
-Lo stesso vale per la #3 e per la Leapmotor C10 ("Elettrica 218cv" ed "Elettrica RWD 218cv"). Per la #3 Brabus i due
-duplicati hanno anche anni diversi (2024 contro 2023), quindi l'anno proponibile dipende dall'etichetta cliccata.
-La T03 e' copiata identica e quindi non si vede, ma il dato esiste in due copie.
+La voce "Elettrica 136cv" ha `yearTo: null`. Dal 2023 la Mokka elettrica e' venduta con batteria da 54 kWh e 156cv, ma
+quella versione non e' nel catalogo. Chi ha una Mokka elettrica 2023-2026 puo' scegliere solo la 136cv: viene salvato il
+motore sbagliato, che poi arriva anche al contesto della ricerca IA (`app/api/agent/search/route.ts:408`).
 
-Proposta: rimuovere i blocchi Smart `#1`/`#3` e Leapmotor da `ENGINE_DATA`; restano le voci di `engineExtensions.ts`.
+Proposta: `yearTo: 2023` per "Elettrica 136cv" e nuova voce "Elettrica 54 kWh 156cv" (`yearFrom: 2023`, `yearTo: null`).
 
-### M2 — Nuovo veicolo: il motore scritto a mano per un modello senza catalogo non viene ripulito dagli spazi
-File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:130`
-
-`engine_code` viene ripulito con `trim()` solo nel ramo "Altro". Nel campo libero dei modelli senza motorizzazioni
-in catalogo viene salvato `engineCode || null`, cosi' com'e': un valore di soli spazi viene salvato come motore.
-La scheda del veicolo (`components/VehicleCard.tsx:40-41`) mostra "Motore:" vuoto e la ricerca IA
-(`app/api/agent/search/route.ts:408`) aggiunge una motorizzazione vuota al contesto. Marca e modello sono gia'
-ripuliti (righe 44-45).
-
-Proposta: salvare `(isCustomEngine ? customEngine : engineCode).trim() || null`.
-
-### M3 — Catalogo: VW Up! 1.0 60cv ed e-up! proposte fino all'anno corrente
-File: `web/lib/vehicleData.ts:2513`, `2516`
-
-La produzione della Up! si e' chiusa nel 2023, ma le voci "1.0 60cv" ed "Elettrica e-up! 82cv" hanno `yearTo: null`
-e propongono come anni validi 2024-2026. Le gemelle Seat Mii (`vehicleData.ts:2180-2181`) sono gia' chiuse.
-
-Proposta: `yearTo: 2023` per entrambe.
-
-### M4-M7 — Invariati dagli scan precedenti
+### M2-M5 — Invariati dagli scan precedenti
 - Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx:71-83`) = U6.
 - Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts:245-253`) = U5.
 - API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts:44-49`) = U3.
 - Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx:62-88`) = U4.
 
 ## Rilievi esaminati e non trasformati in task
-- Con la voce "Altro" il campo libero del motore non e' obbligatorio, quindi il veicolo si salva senza motore. Il campo
-  libero dei modelli senza catalogo e' facoltativo per scelta (commento a `page.tsx:318-320`): rendere obbligatorio
-  quello nuovo e' una scelta di prodotto (U7).
-- Con la voce "Altro" gli anni vanno dal 1950 a oggi anche se le motorizzazioni del modello delimitano il periodo. Il
-  commento a `page.tsx:58-59` dice che il comportamento e' voluto: restringerlo e' una scelta di prodotto (U8).
-- Proposta di estrarre un componente comune "menu + Altro": e' un refactoring, non un difetto.
+- Opel Mokka GSE (`vehicleData.ts:1940`) e Omoda 7 (`vehicleData.ts:440`) partono dal 2026. Secondo fonti generali i
+  primi esemplari sono arrivati nel 2025; con quelle motorizzazioni l'anno 2025 non si puo' scegliere. La data e' stata
+  scritta dal proprietario nella PR #81 e non si puo' verificare dal codice: va confermata (U9).
+- Il commento in testa a `lib/catalogueSweep.ts:3-8` dice che quei modelli non hanno motorizzazioni, ma Jaecoo 5/8,
+  Omoda 7/9, Leapmotor B10 e Abarth 600e ora le hanno in `ENGINE_DATA`. Il comportamento e' corretto (`getEngineVariants`
+  non dipende dalla lista di provenienza), solo il commento e' impreciso: non e' un difetto funzionale.
+- Le motorizzazioni Leapmotor sono di nuovo divise in due file (B10 in `vehicleData.ts`, C10/T03 in `engineExtensions.ts`).
+  Oggi non ci sono doppioni: spostare B10 sarebbe solo riorganizzazione.
+- `CURRENT_YEAR` e' calcolato all'avvio del modulo (`veicoli/nuovo/page.tsx`). Ha effetti solo a cavallo di capodanno o
+  con l'orologio del dispositivo indietro, quindi e' un caso marginale.
+- Con la voce "Altro" il motore non e' obbligatorio e gli anni coprono l'intero intervallo: sono scelte di prodotto (U7, U8).
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/` (invariato).
@@ -74,6 +60,7 @@ Proposta: `yearTo: 2023` per entrambe.
 - U6 — Decidere come mostrare il testo di riserva nel client (bolla o messaggio d'errore).
 - U7 — Decidere se, scelto "Altro", il motore scritto a mano debba essere obbligatorio.
 - U8 — Decidere se, scelto "Altro", gli anni vadano limitati al periodo coperto dalle motorizzazioni del modello.
+- U9 — Confermare l'anno di inizio di Opel Mokka GSE e Omoda 7 (2025 o 2026).
 
 ## Gia' in PR
 - #73 (lavoratore 4): cronologia della chat senza testi di riserva e risposte di soli spazi.
