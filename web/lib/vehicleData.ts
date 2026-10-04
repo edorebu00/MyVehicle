@@ -420,6 +420,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.6 Turbo 145cv", yearFrom: 2024, yearTo: null },
         { label: "Plug-in Hybrid halcyon 306cv", yearFrom: 2024, yearTo: null },
       ],
+      "Jaecoo 5": [
+        { label: "1.6 TGDi 147cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 211cv", yearFrom: 2025, yearTo: null },
+        { label: "Super Hybrid System 224cv", yearFrom: 2026, yearTo: null },
+      ],
+      "Jaecoo 8": [{ label: "Super Hybrid System Plug-in 428cv", yearFrom: 2026, yearTo: null }],
     },
     Maxus: {
       T90: [{ label: "2.0 Diesel 163cv", yearFrom: 2021, yearTo: null }],
@@ -430,6 +436,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Omoda 5": [
         { label: "1.6 Turbo 145cv", yearFrom: 2023, yearTo: null },
         { label: "Elettrica 204cv", yearFrom: 2023, yearTo: null },
+      ],
+      "Omoda 7": [{ label: "Super Hybrid System Plug-in 279cv", yearFrom: 2026, yearTo: null }],
+      "Omoda 9": [{ label: "Super Hybrid System i-AWD 537cv", yearFrom: 2025, yearTo: null }],
+    },
+    Leapmotor: {
+      B10: [
+        { label: "Life Elettrica 56.2 kWh 218cv", yearFrom: 2025, yearTo: null },
+        { label: "Design Elettrica 67.1 kWh 218cv", yearFrom: 2025, yearTo: null },
       ],
     },
     RAM: {
@@ -624,7 +638,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "600e": [
         { label: "Turismo Elettrica 240cv", yearFrom: 2024, yearTo: null },
-        { label: "Scorpionissima Elettrica 280cv", yearFrom: 2024, yearTo: null },
+        { label: "Scorpionissima Elettrica 280cv", yearFrom: 2024, yearTo: 2025 },
+        { label: "Competizione Elettrica 280cv", yearFrom: 2025, yearTo: null },
       ],
     },
     "Alfa Romeo": {
@@ -1922,6 +1937,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Mokka: [
         { label: "1.2 Turbo 130cv", yearFrom: 2020, yearTo: null },
         { label: "Elettrica 136cv", yearFrom: 2020, yearTo: null },
+        { label: "GSE Elettrica 281cv", yearFrom: 2026, yearTo: null },
       ],
       Crossland: [
         { label: "1.2 Turbo 110cv", yearFrom: 2017, yearTo: null },
