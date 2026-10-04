@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>B2 — Fonte nei risultati IA · MyVehicle</title>
+<style>
+:root{--g50:#0a0908;--g100:#141210;--g200:#211e1a;--g300:#332e27;--g400:#5c5347;--g500:#8a8072;--g600:#a89e8f;--g700:#c4bcae;--g800:#e0dad0;--g900:#f6f2ea;--b50:#2b2415;--b100:#3c3119;--b200:#5e4c22;--b300:#8c7030;--b400:#b6913f;--b500:#cca558;--b600:#d9b671;--b700:#e6cb95;--gold50:#241708;--gold300:#804a17;--gold600:#d99a4f;--ease:cubic-bezier(.16,1,.3,1);--display:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--g50);color:var(--g900);font-family:var(--sans);-webkit-font-smoothing:antialiased;background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.doc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--g200);margin-bottom:24px}
+.doc-head h1{font-size:1.05rem;font-family:var(--sans);letter-spacing:0;font-weight:600}
+.doc-head p{font-size:.8rem;color:var(--g600);margin-top:2px}
+.toggle{display:inline-flex;padding:4px;border-radius:999px;border:1px solid var(--g300);background:var(--g100)}
+.toggle label{min-height:44px;min-width:88px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+#v-prima:checked~.wrap label[for=v-prima],#v-dopo:checked~.wrap label[for=v-dopo]{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+#v-prima:focus-visible~.wrap label[for=v-prima],#v-dopo:focus-visible~.wrap label[for=v-dopo]{outline:2px solid var(--b400);outline-offset:2px}
+.dopo{display:none}
+#v-dopo:checked~.wrap .prima{display:none}
+#v-dopo:checked~.wrap .dopo{display:block}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--b500)}
+.eyebrow::before{content:"";width:1.25rem;height:2px;background:currentColor;border-radius:999px}
+.card{border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:.5rem;border:0;background:linear-gradient(to bottom,var(--b500),var(--b400));padding:8px 16px;font:600 .875rem var(--sans);color:var(--g50);text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 16px;font:600 .875rem var(--sans);color:var(--g800);text-decoration:none}
+.metric-chip{border-radius:.5rem;border:1px solid var(--g200);background:var(--g50);padding:8px 12px;display:flex;align-items:center;gap:10px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600)}
+.icon-badge svg{width:18px;height:18px}
+.note{margin-top:28px;border-left:2px solid var(--b400);padding:10px 14px;background:var(--g100);border-radius:0 .5rem .5rem 0;font-size:.85rem;color:var(--g700);line-height:1.5}
+.note strong{color:var(--g900)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rise>*{animation:rise .5s var(--ease) both}
+.rise>*:nth-child(2){animation-delay:.06s}.rise>*:nth-child(3){animation-delay:.12s}.rise>*:nth-child(4){animation-delay:.18s}.rise>*:nth-child(5){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px;border-radius:999px;border:1px solid var(--g200);background:var(--g100);margin-bottom:16px;width:max-content;max-width:100%}
+.tab{min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);white-space:nowrap}
+.tab.on{background:var(--g200);color:var(--g900)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.old{display:flex;gap:12px;align-items:flex-start}
+.old .em{font-size:1.25rem;margin-top:2px}
+.old a{font-weight:500;color:var(--b600);text-decoration:none}
+.old p{margin-top:4px;font-size:.875rem;color:var(--g500);line-height:1.5}
+.sec{margin:24px 0 10px;display:flex;align-items:baseline;gap:10px}
+.sec h2{font-size:1.15rem}
+.sec span{font-size:.8rem;color:var(--g600)}
+/* ---------- DOPO ---------- */
+.res{position:relative;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;transition:border-color .2s var(--ease),transform .2s var(--ease)}
+.res:hover,.res:focus-within{border-color:var(--b400)}
+.res:hover{transform:translateY(-1px)}
+.res a.cover{position:absolute;inset:0;border-radius:inherit;z-index:1}
+.res a.cover:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.mono{display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600);font:700 1rem var(--display)}
+.body{min-width:0;flex:1}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.75rem}
+.host{display:inline-flex;align-items:center;gap:5px;max-width:100%;border-radius:999px;border:1px solid var(--g300);background:var(--g50);padding:2px 8px;color:var(--g800);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.host svg{width:12px;height:12px;flex-shrink:0;color:var(--g600)}
+.kind{border-radius:999px;padding:2px 8px;background:var(--g200);color:var(--g700)}
+.kind.pdf{background:var(--gold50);color:var(--gold600);border:1px solid rgba(128,74,23,.6)}
+.res h3{margin-top:6px;font-family:var(--sans);font-size:.95rem;font-weight:600;letter-spacing:0;line-height:1.35;color:var(--b600)}
+.res p.d{margin-top:4px;font-size:.875rem;line-height:1.5;color:var(--g600)}
+.ext{width:18px;height:18px;flex-shrink:0;margin-top:2px;color:var(--g600)}
+.res:hover .ext{color:var(--b600)}
+.ico{width:18px;height:18px}
+.icon-badge.k{width:40px;height:40px}
+
+</style>
+</head>
+<body>
+<input class="sr" type="radio" name="vista" id="v-prima" checked>
+<input class="sr" type="radio" name="vista" id="v-dopo">
+<div class="wrap">
+
+  <header class="doc-head">
+    <div><h1>B2 · Fonte verificabile nei risultati IA</h1><p>Componente ResourceCategoryView · usato da scheda veicolo e ricerca globale</p></div>
+    <div class="toggle" role="group" aria-label="Versione"><label for="v-prima">Prima</label><label for="v-dopo">Dopo</label></div>
+  </header>
+
+
+  <!-- ===================== PRIMA ===================== -->
+  <div class="prima">
+    <div class="sec"><h2>Volkswagen Golf 2.0 TDI 150cv · 2021</h2><span>5 risorse trovate</span></div>
+    <ul class="list">
+      <li class="card old"><span class="em" aria-hidden="true">📕</span><span><a href="#">Libretto di uso e manutenzione Golf 8 (2020–2024)</a><p>Manuale ufficiale in italiano: spie del cruscotto, capacità dei liquidi, intervalli di manutenzione.</p></span></li>
+      <li class="card old"><span class="em" aria-hidden="true">🗺️</span><span><a href="#">Schema fusibili vano motore e abitacolo — Golf VIII</a><p>Tabella con posizione e amperaggio dei fusibili, ricavata dal manuale d'officina.</p></span></li>
+      <li class="card old"><span class="em" aria-hidden="true">💬</span><span><a href="#">2.0 TDI 150cv: consumo olio dopo i 60.000 km, è normale?</a><p>Discussione con esperienze di proprietari e risposta di un tecnico VW sui rabbocchi tra un tagliando e l'altro.</p></span></li>
+      <li class="card old"><span class="em" aria-hidden="true">🎬</span><span><a href="#">Cambio filtro abitacolo Golf 8 in 5 minuti</a><p>Tutorial passo-passo, senza attrezzi speciali; filtro compatibile indicato in descrizione.</p></span></li>
+      <li class="card old"><span class="em" aria-hidden="true">🔧</span><span><a href="#">Kit pastiglie freno anteriori — Golf VIII 2.0 TDI</a><p>Codici OE compatibili e marche equivalenti; verificare il diametro del disco (312 o 340 mm).</p></span></li>
+    </ul>
+    <p class="note"><strong>Oggi:</strong> solo emoji, titolo e descrizione. Non si capisce dove porta il link (sito ufficiale? forum? negozio?) finché non lo si apre, e niente dice che si esce dall'app. Il bersaglio cliccabile è solo il titolo, una riga di testo alta circa 24px.</p>
+  </div>
+
+  <!-- ===================== DOPO ===================== -->
+  <div class="dopo">
+    <div class="sec"><h2>Volkswagen Golf 2.0 TDI 150cv · 2021</h2><span>5 risorse da 5 siti</span></div>
+    <ul class="list">
+      <li class="card res">
+        <span class="icon-badge k" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h4"/></svg></span>
+        <div class="body">
+          <p class="top"><span class="host"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>volkswagen.it</span><span class="kind pdf">Manuale PDF</span></p>
+          <h3>Libretto di uso e manutenzione Golf 8 (2020–2024)</h3>
+          <p class="d">Manuale ufficiale in italiano: spie del cruscotto, capacità dei liquidi, intervalli di manutenzione.</p>
+        </div>
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        <a class="cover" href="#" aria-label="Libretto di uso e manutenzione Golf 8 (2020–2024) — volkswagen.it (si apre in una nuova scheda)"></a>
+      </li>
+      <li class="card res">
+        <span class="icon-badge k" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h6v5H4zM14 13h6v5h-6zM10 8.5h3a1 1 0 0 1 1 1V13"/></svg></span>
+        <div class="body">
+          <p class="top"><span class="host"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>golfclubitalia.it</span><span class="kind">Schema tecnico</span></p>
+          <h3>Schema fusibili vano motore e abitacolo — Golf VIII</h3>
+          <p class="d">Tabella con posizione e amperaggio dei fusibili, ricavata dal manuale d'officina.</p>
+        </div>
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        <a class="cover" href="#" aria-label="Schema fusibili vano motore e abitacolo — Golf VIII — golfclubitalia.it (si apre in una nuova scheda)"></a>
+      </li>
+      <li class="card res">
+        <span class="icon-badge k" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12v8H9l-5 4z"/><path d="M16 9h4v8l-3-2h-5v-2"/></svg></span>
+        <div class="body">
+          <p class="top"><span class="host"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>forum.quattroruote.it</span><span class="kind">Forum</span></p>
+          <h3>2.0 TDI 150cv: consumo olio dopo i 60.000 km, è normale?</h3>
+          <p class="d">Discussione con esperienze di proprietari e risposta di un tecnico VW sui rabbocchi tra un tagliando e l'altro.</p>
+        </div>
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        <a class="cover" href="#" aria-label="2.0 TDI 150cv: consumo olio dopo i 60.000 km, è normale? — forum.quattroruote.it (si apre in una nuova scheda)"></a>
+      </li>
+      <li class="card res">
+        <span class="icon-badge k" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></span>
+        <div class="body">
+          <p class="top"><span class="host"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>youtube.com</span><span class="kind">Video</span></p>
+          <h3>Cambio filtro abitacolo Golf 8 in 5 minuti</h3>
+          <p class="d">Tutorial passo-passo, senza attrezzi speciali; filtro compatibile indicato in descrizione.</p>
+        </div>
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        <a class="cover" href="#" aria-label="Cambio filtro abitacolo Golf 8 in 5 minuti — youtube.com (si apre in una nuova scheda)"></a>
+      </li>
+      <li class="card res">
+        <span class="icon-badge k" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span>
+        <div class="body">
+          <p class="top"><span class="host"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>autodoc.it</span><span class="kind">Ricambio</span></p>
+          <h3>Kit pastiglie freno anteriori — Golf VIII 2.0 TDI</h3>
+          <p class="d">Codici OE compatibili e marche equivalenti; verificare il diametro del disco (312 o 340 mm).</p>
+        </div>
+        <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        <a class="cover" href="#" aria-label="Kit pastiglie freno anteriori — Golf VIII 2.0 TDI — autodoc.it (si apre in una nuova scheda)"></a>
+      </li>
+    </ul>
+    <p class="note"><strong>Cosa cambia:</strong> in alto a ogni risultato il <strong>dominio</strong> della fonte (ricavato dall'URL già validato da <code>safeExternalUrl</code>, senza “www.”) e il <strong>tipo</strong> di risorsa, con il PDF evidenziato in rame. Tutta la card è cliccabile (≥ 72px), l'icona ↗ e l'etichetta accessibile dicono che si apre un sito esterno. Icone SVG al posto delle emoji, ognuna in un <code>.icon-badge</code>. Contrasti: dominio <code>graphite-800</code> su <code>graphite-50</code> ≈ 14:1, descrizione <code>graphite-600</code> su <code>graphite-100</code> ≈ 7:1.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>B3 — Nuovo veicolo a passi · MyVehicle</title>
+<style>
+:root{--g50:#0a0908;--g100:#141210;--g200:#211e1a;--g300:#332e27;--g400:#5c5347;--g500:#8a8072;--g600:#a89e8f;--g700:#c4bcae;--g800:#e0dad0;--g900:#f6f2ea;--b50:#2b2415;--b100:#3c3119;--b200:#5e4c22;--b300:#8c7030;--b400:#b6913f;--b500:#cca558;--b600:#d9b671;--b700:#e6cb95;--gold50:#241708;--gold300:#804a17;--gold600:#d99a4f;--ease:cubic-bezier(.16,1,.3,1);--display:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--g50);color:var(--g900);font-family:var(--sans);-webkit-font-smoothing:antialiased;background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.doc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--g200);margin-bottom:24px}
+.doc-head h1{font-size:1.05rem;font-family:var(--sans);letter-spacing:0;font-weight:600}
+.doc-head p{font-size:.8rem;color:var(--g600);margin-top:2px}
+.toggle{display:inline-flex;padding:4px;border-radius:999px;border:1px solid var(--g300);background:var(--g100)}
+.toggle label{min-height:44px;min-width:88px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+#v-prima:checked~.wrap label[for=v-prima],#v-dopo:checked~.wrap label[for=v-dopo]{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+#v-prima:focus-visible~.wrap label[for=v-prima],#v-dopo:focus-visible~.wrap label[for=v-dopo]{outline:2px solid var(--b400);outline-offset:2px}
+.dopo{display:none}
+#v-dopo:checked~.wrap .prima{display:none}
+#v-dopo:checked~.wrap .dopo{display:block}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--b500)}
+.eyebrow::before{content:"";width:1.25rem;height:2px;background:currentColor;border-radius:999px}
+.card{border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:.5rem;border:0;background:linear-gradient(to bottom,var(--b500),var(--b400));padding:8px 16px;font:600 .875rem var(--sans);color:var(--g50);text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 16px;font:600 .875rem var(--sans);color:var(--g800);text-decoration:none}
+.metric-chip{border-radius:.5rem;border:1px solid var(--g200);background:var(--g50);padding:8px 12px;display:flex;align-items:center;gap:10px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600)}
+.icon-badge svg{width:18px;height:18px}
+.note{margin-top:28px;border-left:2px solid var(--b400);padding:10px 14px;background:var(--g100);border-radius:0 .5rem .5rem 0;font-size:.85rem;color:var(--g700);line-height:1.5}
+.note strong{color:var(--g900)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rise>*{animation:rise .5s var(--ease) both}
+.rise>*:nth-child(2){animation-delay:.06s}.rise>*:nth-child(3){animation-delay:.12s}.rise>*:nth-child(4){animation-delay:.18s}.rise>*:nth-child(5){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+.page{max-width:32rem;margin:0 auto}
+.title{text-align:center;margin-bottom:24px}
+.title .eyebrow{justify-content:center}
+.title h2{margin-top:8px;font-size:1.875rem;font-weight:700}
+.title p.s{margin-top:4px;font-size:.875rem;color:var(--g500)}
+.label{display:block;margin-bottom:4px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g500)}
+.input{width:100%;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 12px;font:.875rem var(--sans);color:var(--g900);appearance:none}
+.input:disabled{opacity:.55}
+.input:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+.f{display:flex;flex-direction:column;gap:16px}
+.g2{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.g2{grid-template-columns:1fr 1fr}}
+.g2b{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+.types{display:flex;gap:12px}
+.types span{flex:1;text-align:center;border-radius:.5rem;border:1px solid var(--g300);padding:12px 16px;font-size:.875rem;font-weight:600;color:var(--g600)}
+.types span.on{border-color:var(--b500);background:var(--b50);color:var(--b700);transform:scale(1.02)}
+.hint{margin-top:4px;font-size:.75rem;color:var(--g500)}
+.sel{position:relative}
+.sel::after{content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;border-right:2px solid var(--g600);border-bottom:2px solid var(--g600);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+/* ---------- DOPO ---------- */
+.dopo .input{min-height:48px;font-size:1rem;padding:10px 14px}
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.progress .bar{flex:1;height:6px;border-radius:999px;background:var(--g200);overflow:hidden}
+.progress .bar i{display:block;height:100%;width:62%;border-radius:inherit;background:linear-gradient(to right,var(--b400),var(--b500));transition:width .5s var(--ease)}
+.progress span{font-size:.8rem;font-weight:600;color:var(--g700);white-space:nowrap}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.done{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 14px}
+.done .ok{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;border-radius:999px;background:var(--b500);color:var(--g50)}
+.done .ok svg{width:16px;height:16px}
+.done .txt{min-width:0;flex:1}
+.done .k{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--g600)}
+.done .v{font-size:.95rem;font-weight:600;color:var(--g900);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.edit{min-height:44px;min-width:44px;padding:0 12px;border-radius:.5rem;border:0;background:transparent;color:var(--b600);font:600 .8125rem var(--sans);cursor:pointer}
+.edit:hover{background:var(--g200)}
+.edit:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.cur{border-color:var(--b300);background:radial-gradient(120% 90% at 0% 0%,rgba(204,165,88,.08),var(--g100) 55%);animation:rise .45s var(--ease) both}
+.cur legend{padding:0;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.cur .num{display:grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1.5px solid var(--b500);color:var(--b600);font:700 .8rem var(--sans)}
+.cur h3{font-size:1.35rem;font-weight:700}
+.cur .lead{font-size:.875rem;color:var(--g600);margin-bottom:16px;line-height:1.5}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.range{display:inline-flex;align-items:center;gap:6px;margin-top:8px;border-radius:999px;border:1px solid var(--g300);background:var(--g50);padding:4px 10px;font-size:.78rem;color:var(--g700)}
+.range svg{width:14px;height:14px;color:var(--b600)}
+.other{margin-top:4px;display:inline-flex;align-items:center;min-height:44px;font-size:.875rem;font-weight:600;color:var(--b600);text-decoration:underline;text-underline-offset:3px}
+.next{opacity:.85}
+.next .num2{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;border-radius:999px;border:1.5px solid var(--g400);color:var(--g600);font:700 .8rem var(--sans)}
+.next .k{font-size:.95rem;font-weight:600;color:var(--g700)}
+.next .s2{font-size:.78rem;color:var(--g600)}
+.nav{position:sticky;bottom:0;margin-top:16px;display:flex;gap:10px;padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--g50) 70%,rgba(10,9,8,0))}
+.nav .btn-secondary{flex:0 0 auto;min-height:48px}
+.nav .btn-primary{flex:1;min-height:48px;font-size:1rem}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+</style>
+</head>
+<body>
+<input class="sr" type="radio" name="vista" id="v-prima" checked>
+<input class="sr" type="radio" name="vista" id="v-dopo">
+<div class="wrap">
+
+  <header class="doc-head">
+    <div><h1>B3 · “Nuovo veicolo” a passi</h1><p>/veicoli/nuovo · progressive disclosure</p></div>
+    <div class="toggle" role="group" aria-label="Versione"><label for="v-prima">Prima</label><label for="v-dopo">Dopo</label></div>
+  </header>
+
+  <!-- ===================== PRIMA ===================== -->
+  <div class="prima">
+    <div class="page">
+      <div class="title"><p class="eyebrow">Nuovo arrivo</p><h2>🏁 Aggiungi veicolo</h2><p class="s">Scegli marca, modello e anno dai menu: al resto pensa l'agente IA.</p></div>
+      <form class="card f" action="#">
+        <div><span class="label">Tipologia</span><div class="types"><span class="on">🚗 Auto</span><span>🏍️ Moto</span></div></div>
+        <div class="g2">
+          <div><label class="label" for="p-make">Marca</label><div class="sel"><select id="p-make" class="input"><option>Volkswagen</option></select></div></div>
+          <div><label class="label" for="p-model">Modello</label><div class="sel"><select id="p-model" class="input"><option>Golf</option></select></div></div>
+        </div>
+        <div class="g2b">
+          <div><label class="label" for="p-eng">Motorizzazione</label><div class="sel"><select id="p-eng" class="input"><option>Seleziona motorizzazione…</option></select></div></div>
+          <div><label class="label" for="p-year">Anno</label><div class="sel"><select id="p-year" class="input"><option>Seleziona anno…</option></select></div></div>
+        </div>
+        <div><label class="label" for="p-plate">Targa (opzionale)</label><input id="p-plate" class="input"></div>
+        <button type="submit" class="btn-primary" style="width:100%;padding:12px;font-size:1rem">🏁 Salva veicolo</button>
+      </form>
+    </div>
+    <p class="note"><strong>Oggi:</strong> sei campi visibili insieme, quattro dipendenti l'uno dall'altro. Su mobile “Motorizzazione” e “Anno” restano affiancati in due colonne strette, dove le voci lunghe (es. “2.0 TSI GTI Clubsport 300cv”) vengono tagliate. L'anno si sceglie da un elenco che si accorcia dopo il motore senza spiegare perché, e “Altro (non in elenco)” è nascosto in fondo a ogni menu. I campi sono alti ~36px.</p>
+  </div>
+
+  <!-- ===================== DOPO ===================== -->
+  <div class="dopo">
+    <div class="page">
+      <div class="title"><p class="eyebrow">Nuovo arrivo</p><h2>Aggiungi veicolo</h2></div>
+
+      <div class="progress" aria-hidden="true"><div class="bar"><i></i></div><span>Passo 3 di 4</span></div>
+      <p class="sr" aria-live="polite">Passo 3 di 4: Motore e anno</p>
+
+      <ol class="steps">
+        <li class="card done"><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg></span><div class="txt"><p class="k">1 · Tipologia</p><p class="v">Auto</p></div><button type="button" class="edit" aria-label="Modifica tipologia">Modifica</button></li>
+        <li class="card done"><span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg></span><div class="txt"><p class="k">2 · Marca e modello</p><p class="v">Volkswagen Golf</p></div><button type="button" class="edit" aria-label="Modifica marca e modello">Modifica</button></li>
+        <li>
+          <form class="card cur" action="#">
+            <fieldset aria-describedby="cur-lead">
+              <legend><span class="num" aria-hidden="true">3</span><h3>Motore e anno</h3></legend>
+              <p class="lead" id="cur-lead">Ci servono per la scheda tecnica e per far cercare all'IA i ricambi giusti.</p>
+              <div class="f">
+                <div>
+                  <label class="label" for="d-eng">Motorizzazione</label>
+                  <div class="sel"><select id="d-eng" class="input" required><option>1.0 TSI 110cv</option><option>1.5 TSI 130cv</option><option>1.6 TDI 105cv</option><option selected>2.0 TDI 150cv</option><option>2.0 TSI GTI 245cv</option><option>2.0 TSI GTI 265cv</option><option>2.0 TSI R 333cv</option></select></div>
+                  <p class="range"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>In produzione dal 2012 a oggi</p>
+                  <div><a class="other" href="#">Non è in elenco? Scrivila a mano</a></div>
+                </div>
+                <div>
+                  <label class="label" for="d-year">Anno</label>
+                  <div class="sel"><select id="d-year" class="input" required aria-describedby="d-year-h"><option value="" selected>Seleziona anno…</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option></select></div>
+                  <p class="hint" id="d-year-h">Solo gli anni in cui il 2.0 TDI 150cv è stato prodotto.</p>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </li>
+        <li class="card next done"><span class="num2" aria-hidden="true">4</span><div class="txt"><p class="k" style="letter-spacing:0;text-transform:none">Targa e conferma</p><p class="s2">Targa facoltativa, poi riepilogo e salvataggio</p></div></li>
+      </ol>
+
+      <div class="nav">
+        <button type="button" class="btn-secondary">Indietro</button>
+        <button type="submit" class="btn-primary">Continua <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+    <p class="note"><strong>Cosa cambia:</strong> un passo alla volta (Tipologia → Marca e modello → Motore e anno → Targa e conferma) con barra di avanzamento. I passi fatti diventano righe di riepilogo con “Modifica” (44px), quello attivo è l'unico aperto, il successivo si vede già ma è spento. Il periodo di produzione del motore spiega perché gli anni si accorciano. “Altro” diventa un link visibile sotto il menu e mantiene il valore riservato <code>__altro__</code>. Campi da 48px a 16px, quindi niente zoom su iOS. “Indietro / Continua” restano in fondo allo schermo su mobile. La logica (<code>getMakes</code>, <code>getModels</code>, <code>getEngineVariants</code>, reset a cascata) non cambia.</p>
+  </div>
+
+</div>
+</body>
+</html>

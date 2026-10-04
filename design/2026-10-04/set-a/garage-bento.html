@@ -99,6 +99,7 @@ a.tile:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
 .todo-list a{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 12px;border-radius:.6rem;border:1px solid var(--g200);background:var(--g50);text-decoration:none;transition:border-color .2s var(--ease)}
 .todo-list a:hover{border-color:var(--gold300)}
 .todo-list a:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.todo-list .who,.todo-list .what{display:block}
 .todo-list .who{font-weight:600;font-size:.9rem}
 .todo-list .what{font-size:.78rem;color:var(--gold600);margin-top:2px}
 .todo-list .arr{margin-left:auto;color:var(--g500)}
@@ -174,8 +175,8 @@ a.tile:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
         <div class="h"><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></span><h3 id="todo-t">Da completare</h3></div>
         <p class="lead">Due veicoli non sfruttano ancora tutto il garage. Un tocco e riprendi da dove manca.</p>
         <ul class="todo-list">
-          <li><a href="#"><span><p class="who">Fiat Panda</p><p class="what">Nessun documento caricato</p></span><span class="arr" aria-hidden="true">→</span></a></li>
-          <li><a href="#"><span><p class="who">Yamaha MT-07</p><p class="what">Ricerca IA mai avviata</p></span><span class="arr" aria-hidden="true">→</span></a></li>
+          <li><a href="#"><span><span class="who">Fiat Panda</span><span class="what">Nessun documento caricato</span></span><span class="arr" aria-hidden="true">→</span></a></li>
+          <li><a href="#"><span><span class="who">Yamaha MT-07</span><span class="what">Ricerca IA mai avviata</span></span><span class="arr" aria-hidden="true">→</span></a></li>
         </ul>
       </section>
 

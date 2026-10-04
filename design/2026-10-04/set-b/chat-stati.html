@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>B1 — Stati della chat IA · MyVehicle</title>
+<style>
+:root{--g50:#0a0908;--g100:#141210;--g200:#211e1a;--g300:#332e27;--g400:#5c5347;--g500:#8a8072;--g600:#a89e8f;--g700:#c4bcae;--g800:#e0dad0;--g900:#f6f2ea;--b50:#2b2415;--b100:#3c3119;--b200:#5e4c22;--b300:#8c7030;--b400:#b6913f;--b500:#cca558;--b600:#d9b671;--b700:#e6cb95;--gold50:#241708;--gold300:#804a17;--gold600:#d99a4f;--ease:cubic-bezier(.16,1,.3,1);--display:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--g50);color:var(--g900);font-family:var(--sans);-webkit-font-smoothing:antialiased;background-image:radial-gradient(1px 1px at 20px 30px,rgba(246,242,234,.025) 1px,transparent 0),radial-gradient(1px 1px at 70px 90px,rgba(246,242,234,.02) 1px,transparent 0);background-size:90px 90px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;margin:0}
+p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.doc-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--g200);margin-bottom:24px}
+.doc-head h1{font-size:1.05rem;font-family:var(--sans);letter-spacing:0;font-weight:600}
+.doc-head p{font-size:.8rem;color:var(--g600);margin-top:2px}
+.toggle{display:inline-flex;padding:4px;border-radius:999px;border:1px solid var(--g300);background:var(--g100)}
+.toggle label{min-height:44px;min-width:88px;display:inline-flex;align-items:center;justify-content:center;padding:0 18px;border-radius:999px;font-size:.875rem;font-weight:600;color:var(--g600);cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+#v-prima:checked~.wrap label[for=v-prima],#v-dopo:checked~.wrap label[for=v-dopo]{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+#v-prima:focus-visible~.wrap label[for=v-prima],#v-dopo:focus-visible~.wrap label[for=v-dopo]{outline:2px solid var(--b400);outline-offset:2px}
+.dopo{display:none}
+#v-dopo:checked~.wrap .prima{display:none}
+#v-dopo:checked~.wrap .dopo{display:block}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--b500)}
+.eyebrow::before{content:"";width:1.25rem;height:2px;background:currentColor;border-radius:999px}
+.card{border-radius:.75rem;border:1px solid var(--g200);background:var(--g100);padding:20px;box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 1px 2px rgba(0,0,0,.3),0 12px 24px -14px rgba(0,0,0,.55)}
+.hero-panel{position:relative;overflow:hidden;border-radius:1.25rem;border:1px solid var(--g200);background:radial-gradient(120% 140% at 15% 0%,rgba(204,165,88,.1),var(--g100) 60%);box-shadow:inset 0 1px 0 rgba(246,242,234,.04),0 20px 40px -24px rgba(0,0,0,.6)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:.5rem;border:0;background:linear-gradient(to bottom,var(--b500),var(--b400));padding:8px 16px;font:600 .875rem var(--sans);color:var(--g50);text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4),0 10px 20px -8px rgba(204,165,88,.45);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 16px;font:600 .875rem var(--sans);color:var(--g800);text-decoration:none}
+.metric-chip{border-radius:.5rem;border:1px solid var(--g200);background:var(--g50);padding:8px 12px;display:flex;align-items:center;gap:10px}
+.icon-badge{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:.5rem;background:var(--b50);color:var(--b600)}
+.icon-badge svg{width:18px;height:18px}
+.note{margin-top:28px;border-left:2px solid var(--b400);padding:10px 14px;background:var(--g100);border-radius:0 .5rem .5rem 0;font-size:.85rem;color:var(--g700);line-height:1.5}
+.note strong{color:var(--g900)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rise>*{animation:rise .5s var(--ease) both}
+.rise>*:nth-child(2){animation-delay:.06s}.rise>*:nth-child(3){animation-delay:.12s}.rise>*:nth-child(4){animation-delay:.18s}.rise>*:nth-child(5){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+.layout{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:900px){.layout{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}}
+.side h2{font-size:1.25rem}
+.side .doc{display:flex;align-items:center;gap:10px;min-height:44px;border-bottom:1px solid var(--g200);font-size:.875rem;color:var(--g800)}
+.side .doc:last-child{border-bottom:0}
+.side .doc small{margin-left:auto;color:var(--g600);font-size:.75rem}
+.chat{display:flex;flex-direction:column;height:560px}
+.msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-right:4px}
+.row{display:flex}
+.row.u{justify-content:flex-end}
+.bub{max-width:82%;white-space:pre-wrap;border-radius:.5rem;padding:8px 12px;font-size:.875rem;line-height:1.5}
+.bub.user{background:linear-gradient(to bottom,var(--b500),var(--b400));color:var(--g50)}
+.bub.ai{border:1px solid var(--g200);background:var(--g50);color:var(--g800)}
+.thinking{display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--g500)}
+.spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:999px;animation:spin .7s linear infinite;vertical-align:-.2em}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-old{margin-top:8px;font-size:.875rem;color:#dc2626}
+.form{margin-top:12px;display:flex;gap:8px;border-top:1px solid var(--g200);padding-top:12px}
+.input{width:100%;border-radius:.5rem;border:1px solid var(--g300);background:var(--g100);padding:8px 12px;font:.875rem var(--sans);color:var(--g900)}
+.input::placeholder{color:var(--g500)}
+.input:focus{outline:none;border-color:var(--b400);box-shadow:0 0 0 2px rgba(182,145,63,.25)}
+/* ---------- DOPO ---------- */
+.dopo .input{min-height:44px;font-size:1rem}
+@media(min-width:640px){.dopo .input{font-size:.875rem}}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px;font-size:.75rem;color:var(--g600)}
+.row.u .meta{justify-content:flex-end}
+.col{display:flex;flex-direction:column;max-width:82%}
+.row.u .col{align-items:flex-end}
+.col .bub{max-width:100%}
+.ico{width:14px;height:14px;flex-shrink:0}
+.src{display:inline-flex;align-items:center;gap:4px;border-radius:999px;border:1px solid var(--g300);padding:2px 8px;color:var(--g700)}
+/* messaggio dell'utente in attesa di conferma: stesso colore, ma "a metà" */
+.bub.user.pending{background:var(--b50);color:var(--b700);border:1px dashed var(--b400)}
+.meta .wait{color:var(--b600)}
+/* risposta di riserva: non è una risposta dell'assistente, ma un avviso dentro il flusso */
+.bub.fallback{white-space:normal;border:1px dashed var(--gold300);background:var(--gold50);color:var(--g800)}
+.fb-head{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--gold600)}
+.fb-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 14px;border-radius:.5rem;border:1px solid var(--gold300);background:transparent;color:var(--gold600);font:600 .8125rem var(--sans);cursor:pointer}
+.btn-ghost:focus-visible{outline:2px solid var(--b400);outline-offset:2px}
+.alert{margin-top:10px;display:flex;gap:10px;align-items:flex-start;border-radius:.5rem;border:1px solid #7f1d1d;background:#2a0f0f;padding:10px 12px;font-size:.875rem;color:#fecaca}
+.alert strong{color:#fee2e2}
+.alert svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;color:#f87171}
+.send{min-width:88px}
+.dot{width:8px;height:8px;border-radius:999px;background:var(--b500);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+/* Nel mockup la chat si allunga per mostrare tutti gli stati insieme; nell'app resta h-[520px] con scroll. */
+.chat{height:auto;min-height:520px}
+.msgs{overflow:visible}
+.legend{margin-top:20px;display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:720px){.legend{grid-template-columns:repeat(3,1fr)}}
+.legend .card{padding:14px;font-size:.82rem;line-height:1.5;color:var(--g700)}
+.legend h3{font-family:var(--sans);font-size:.875rem;font-weight:600;letter-spacing:0;color:var(--g900);margin-bottom:4px}
+
+</style>
+</head>
+<body>
+<input class="sr" type="radio" name="vista" id="v-prima" checked>
+<input class="sr" type="radio" name="vista" id="v-dopo">
+<div class="wrap">
+
+  <header class="doc-head">
+    <div><h1>B1 · Stati della chat IA</h1><p>Documenti + chat · /veicoli/[id]/documenti</p></div>
+    <div class="toggle" role="group" aria-label="Versione"><label for="v-prima">Prima</label><label for="v-dopo">Dopo</label></div>
+  </header>
+
+  <!-- ===================== PRIMA ===================== -->
+  <div class="prima">
+    <div class="layout">
+      
+<aside class="card side" aria-label="Documenti caricati">
+  <p class="eyebrow">Documenti</p>
+  <h2 style="margin:6px 0 10px">Volkswagen Golf 2.0 TDI</h2>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>libretto_uso_golf8.pdf<small>4,2 MB</small></div>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>tagliando_2025_officina.pdf<small>310 kB</small></div>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>fattura_pneumatici.jpg<small>1,1 MB</small></div>
+</aside>
+      <section class="card chat" aria-label="Chat">
+        <p class="eyebrow" style="margin-bottom:12px">🤖 Assistente IA</p>
+        <div class="msgs">
+          <div class="row u"><div class="bub user">Ogni quanti km va cambiato l'olio?</div></div>
+          <div class="row"><div class="bub ai">Secondo il libretto di uso e manutenzione, con il servizio LongLife il cambio olio è previsto fino a 30.000 km o 2 anni, a seconda di cosa arriva prima. Con il servizio a scadenza fissa: ogni 15.000 km o 1 anno.</div></div>
+          <div class="row u"><div class="bub user">E la cinghia di distribuzione?</div></div>
+          <div class="row"><div class="bub ai">Non è stato possibile ottenere una risposta. Riprova tra poco.</div></div>
+          <div class="row u"><div class="bub user">Che pressione per le gomme da 17"?</div></div>
+          <p class="thinking"><span class="spinner" style="color:var(--b600)" aria-hidden="true"></span>L'assistente sta scrivendo…</p>
+        </div>
+        <p class="err-old">Errore durante la risposta dell'assistente.</p>
+        <form class="form" action="#">
+          <input class="input" placeholder="Scrivi una domanda…" aria-label="Scrivi una domanda">
+          <button type="submit" class="btn-primary" disabled style="opacity:.5">Invia</button>
+        </form>
+      </section>
+    </div>
+    <p class="note"><strong>Oggi:</strong> la quarta bolla è il testo di riserva del server (risposta vuota del modello) ma ha lo stesso aspetto di una risposta vera, e sparisce al ricaricamento (U6). L'ultima domanda, se l'invio finisce con un 502, resta in pagina senza dire se è stata salvata (U4). L'errore in <code>text-red-600</code> su fondo scuro ha contrasto ≈ 3,9:1 (sotto AA), non è annunciato e non è legato al messaggio. Campo e bottone sono alti ~36px.</p>
+  </div>
+
+  <!-- ===================== DOPO ===================== -->
+  <div class="dopo">
+    <div class="layout">
+      
+<aside class="card side" aria-label="Documenti caricati">
+  <p class="eyebrow">Documenti</p>
+  <h2 style="margin:6px 0 10px">Volkswagen Golf 2.0 TDI</h2>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>libretto_uso_golf8.pdf<small>4,2 MB</small></div>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>tagliando_2025_officina.pdf<small>310 kB</small></div>
+  <div class="doc"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>fattura_pneumatici.jpg<small>1,1 MB</small></div>
+</aside>
+      <section class="card chat" aria-labelledby="chat-t">
+        <p class="eyebrow" id="chat-t" style="margin-bottom:12px">Assistente IA</p>
+        <div class="msgs" role="log" aria-live="polite" aria-relevant="additions">
+          <div class="row u"><div class="col"><div class="bub user">Ogni quanti km va cambiato l'olio?</div>
+            <p class="meta"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span>Salvato</span></p></div></div>
+          <div class="row"><div class="col"><div class="bub ai">Secondo il libretto di uso e manutenzione, con il servizio LongLife il cambio olio è previsto fino a 30.000 km o 2 anni, a seconda di cosa arriva prima. Con il servizio a scadenza fissa: ogni 15.000 km o 1 anno.</div>
+            <p class="meta"><span>Basata su</span><span class="src"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>libretto_uso_golf8.pdf</span></p></div></div>
+
+          <div class="row u"><div class="col"><div class="bub user">E la cinghia di distribuzione?</div>
+            <p class="meta"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span>Salvato</span></p></div></div>
+          <div class="row"><div class="col">
+            <div class="bub fallback" role="note" aria-label="Risposta non disponibile">
+              <p class="fb-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 2.5 20h19z"/><path d="M12 10v4M12 17.5v.01"/></svg>Nessuna risposta</p>
+              <p>L'assistente non ha prodotto una risposta questa volta. Questo avviso non viene salvato nella cronologia.</p>
+              <div class="fb-actions"><button type="button" class="btn-ghost">↻ Chiedi di nuovo</button></div>
+            </div></div></div>
+
+          <div class="row u"><div class="col"><div class="bub user pending">Che pressione per le gomme da 17"?</div>
+            <p class="meta wait"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>In attesa di conferma…</span></p></div></div>
+          <p class="thinking"><span class="dot" aria-hidden="true"></span>L'assistente sta scrivendo…</p>
+        </div>
+
+        <div class="alert" role="alert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/></svg>
+          <p><strong>Risposta non ricevuta.</strong> La domanda potrebbe essere già stata salvata: ricarica la pagina prima di inviarla di nuovo, così non compare due volte.</p>
+        </div>
+
+        <form class="form" action="#">
+          <label class="sr" for="q">Domanda per l'assistente</label>
+          <input id="q" class="input" placeholder="Scrivi una domanda…" enterkeyhint="send">
+          <button type="submit" class="btn-primary send" aria-busy="true">Invia</button>
+        </form>
+      </section>
+    </div>
+
+    <div class="legend">
+      <div class="card"><h3>Salvato / In attesa</h3>La domanda appena inviata ha un bordo tratteggiato e la riga “In attesa di conferma…”. Diventa piena con “Salvato” quando il server risponde. Se la risposta non arriva (502/504), resta tratteggiata e compare l'avviso: è il caso “esito incerto” di U4.</div>
+      <div class="card"><h3>Nessuna risposta</h3>Il testo di riserva (U6) non sembra più una risposta: bordo rame tratteggiato, titolo “Nessuna risposta”, frase che dice che non resta in cronologia, e un bottone da 44px che ripropone la domanda nel campo.</div>
+      <div class="card"><h3>Fonte della risposta</h3>Sotto le risposte vere, i nomi dei documenti usati: la route li restituisce già in <code>documentsUsed</code>, oggi ignorato dal client. Errore in riquadro con <code>role="alert"</code>, testo ≈ 12:1.</div>
+    </div>
+    <p class="note"><strong>Cosa cambia:</strong> tre stati in più per la bolla (in attesa, salvato, riserva), la fonte sotto le risposte e un avviso d'errore leggibile e annunciato. Il colore della bolla dell'utente resta quello di oggi; cambia solo quando il salvataggio non è confermato. Il puntino pulsante si ferma con <em>riduci movimento</em>.</p>
+  </div>
+
+</div>
+</body>
+</html>
