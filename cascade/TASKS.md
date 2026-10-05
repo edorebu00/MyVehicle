@@ -1,21 +1,44 @@
-Data (UTC): 2026-10-04
+Data (UTC): 2026-10-05
 
-## T1 — Catalogo: aggiunge la Opel Mokka elettrica 156cv e chiude la 136cv
-- Gravita': Minore
-- File: `web/lib/vehicleData.ts:1937-1941` (blocco `Opel` → `Mokka` in `ENGINE_DATA`)
-- Problema: "Elettrica 136cv" ha `yearTo: null`. Dal 2023 la Mokka elettrica e' venduta con batteria da 54 kWh e 156cv,
-  ma quella versione non c'e': per una Mokka elettrica 2023-2026 si puo' salvare solo il motore sbagliato.
-- Correzione: impostare `yearTo: 2023` su "Elettrica 136cv" e aggiungere subito dopo
-  `{ label: "Elettrica 54 kWh 156cv", yearFrom: 2023, yearTo: null }`. Non toccare le altre voci (la "GSE Elettrica 281cv"
-  resta com'e'). Non aggiungere la stessa voce in `lib/engineExtensions.ts`.
-- Criterio di accettazione: `getEngineVariants("auto", "Opel", "Mokka")` restituisce, in quest'ordine, "1.2 Turbo 130cv",
-  "Elettrica 136cv" (2020-2023), "Elettrica 54 kWh 156cv" (2023-null), "GSE Elettrica 281cv"; `grep -n "156cv" web/lib/engineExtensions.ts`
-  non contiene voci Mokka; `npx tsc --noEmit` in `web/` non riporta nuovi errori.
+PR aperte dei lavoratori (`claude/worker-`): 1 (#73). Tutti i task toccano solo `web/`.
 
-## Richiede intervento umano (non assegnati)
-- U1-U8 invariati: vedi `BUG_SCAN.md`.
-- U9 — Confermare l'anno di inizio di Opel Mokka GSE (`vehicleData.ts:1940`) e Omoda 7 (`vehicleData.ts:440`), oggi 2026.
+## T1 — Nuovo veicolo: ripulisce dagli spazi anche la targa
+Gravita': Minore
+File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:132`
+Problema: marca, modello e motore sono salvati con `trim()`, la targa no (`plate: plate || null`): una targa di soli
+spazi viene salvata come stringa vuota invece di `null`, e gli spazi ai lati restano nel valore salvato.
+Correzione: `plate: plate.trim() || null`.
+Accettazione: nel file l'insert usa `plate.trim() || null`; `npx tsc --noEmit` e `npm run lint` passano.
+
+## T2 — Catalogo VW: e-up! dal 2013 e Golf R 2018-2020 selezionabile
+Gravita': Minore
+File: `web/lib/vehicleData.ts:2525` (Up!) e `web/lib/vehicleData.ts:2449-2450` (Golf)
+Problema: "Elettrica e-up! 82cv" parte dal 2016 ma l'auto e' in vendita dalla fine del 2013; per la Golf nessuna
+motorizzazione R copre il 2018-2020 ("R 300cv" finisce nel 2017, "R 320cv" parte dal 2021).
+Correzione: e-up! `yearFrom: 2013`; Golf "2.0 TSI R 300cv" `yearTo: 2020` e nuova voce
+`{ label: "2.0 TSI R 310cv", yearFrom: 2017, yearTo: 2018 }` subito dopo.
+Accettazione: per Up! la e-up! accetta gli anni 2013-2023; per Golf ogni anno dal 2014 a oggi ha almeno una voce
+"R"; nessuna etichetta duplicata nel modello; `npx tsc --noEmit`, `npm run lint` e, se presente, `npm run check:cache` passano.
+
+## T3 — Catalogo: prima BMW M135i e nuova Lancia Ypsilon
+Gravita': Minore
+File: `web/lib/vehicleData.ts:881-882` (BMW Serie 1) e `web/lib/vehicleData.ts:1599-1604` (Lancia Ypsilon)
+Problema: manca la M135i F20 a sei cilindri (2012-2016): l'unica M135i parte dal 2019. Per la Ypsilon di nuova
+generazione (2024) c'e' solo la HF, mentre "1.2 69cv" e "1.0 Hybrid 70cv" della generazione precedente restano
+aperte fino all'anno corrente.
+Correzione: in Serie 1 aggiungere `{ label: "M135i 3.0 320cv", yearFrom: 2012, yearTo: 2016 }` prima di "M140i";
+in Ypsilon impostare `yearTo: 2024` su "1.2 69cv" e "1.0 Hybrid 70cv" e aggiungere
+`{ label: "1.2 Hybrid 100cv", yearFrom: 2024, yearTo: null }` e `{ label: "Elettrica 156cv", yearFrom: 2024, yearTo: null }`.
+Accettazione: le voci sono presenti con quegli anni; nessuna etichetta duplicata nei due modelli; nessuna altra voce
+toccata; `npx tsc --noEmit`, `npm run lint` e, se presente, `npm run check:cache` passano.
+
+Nota per la divisione: T2 e T3 modificano zone diverse dello stesso file; T1 un file diverso.
+
+## Richiede intervento umano (non assegnare)
+U1-U9 come in `BUG_SCAN.md` (struttura in `supabase/` per il limite d'uso condiviso, pausa motorsport, middleware,
+invio idempotente della chat, modello di riserva, testo di riserva nel client, motore e anni con "Altro" o sempre
+completi, anno di inizio Mokka GSE / Omoda 7).
 
 ## Gia' in PR
-- #73 (lavoratore 4): cronologia della chat senza testi di riserva e risposte di soli spazi.
-- #68: migrazione di rafforzamento della RLS (solo `supabase/`).
+- #73: cronologia chat senza testi di riserva e risposte di soli spazi.
+- #68: rafforzamento RLS (solo `supabase/`).
