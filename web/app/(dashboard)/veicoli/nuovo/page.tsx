@@ -129,7 +129,7 @@ export default function NewVehiclePage() {
         model,
         engine_code: (isCustomEngine ? customEngine : engineCode).trim() || null,
         year: year ? Number(year) : null,
-        plate: plate || null,
+        plate: plate.trim() || null,
       })
       .select()
       .single();
