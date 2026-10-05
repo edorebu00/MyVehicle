@@ -1936,7 +1936,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       Mokka: [
         { label: "1.2 Turbo 130cv", yearFrom: 2020, yearTo: null },
-        { label: "Elettrica 136cv", yearFrom: 2020, yearTo: null },
+        { label: "Elettrica 136cv", yearFrom: 2020, yearTo: 2023 },
+        { label: "Elettrica 54 kWh 156cv", yearFrom: 2023, yearTo: null },
         { label: "GSE Elettrica 281cv", yearFrom: 2026, yearTo: null },
       ],
       Crossland: [
