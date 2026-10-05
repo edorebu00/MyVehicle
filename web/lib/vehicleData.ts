@@ -878,6 +878,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "116i 1.5 109cv", yearFrom: 2019, yearTo: null },
         { label: "118i 1.5 140cv", yearFrom: 2019, yearTo: null },
         { label: "128ti 2.0 Turbo 265cv", yearFrom: 2020, yearTo: 2024 },
+        { label: "M135i 3.0 320cv", yearFrom: 2012, yearTo: 2016 },
         { label: "M140i 3.0 340cv", yearFrom: 2016, yearTo: 2019 },
         { label: "M135i 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null },
       ],
@@ -1597,9 +1598,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     },
     Lancia: {
       Ypsilon: [
-        { label: "1.2 69cv", yearFrom: 2011, yearTo: null },
+        { label: "1.2 69cv", yearFrom: 2011, yearTo: 2024 },
         { label: "0.9 TwinAir 85cv", yearFrom: 2011, yearTo: 2021 },
-        { label: "1.0 Hybrid 70cv", yearFrom: 2021, yearTo: null },
+        { label: "1.0 Hybrid 70cv", yearFrom: 2021, yearTo: 2024 },
+        { label: "1.2 Hybrid 100cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 156cv", yearFrom: 2024, yearTo: null },
         { label: "HF Elettrica 280cv", yearFrom: 2025, yearTo: null },
       ],
       Delta: [
@@ -2446,7 +2449,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TSI GTI 265cv", yearFrom: 2024, yearTo: null },
         { label: "2.0 TSI GTI Clubsport 265cv", yearFrom: 2016, yearTo: 2017 },
         { label: "2.0 TSI GTI Clubsport 300cv", yearFrom: 2021, yearTo: null },
-        { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2017 },
+        { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2020 },
+        { label: "2.0 TSI R 310cv", yearFrom: 2017, yearTo: 2018 },
         { label: "2.0 TSI R 320cv", yearFrom: 2021, yearTo: 2023 },
         { label: "2.0 TSI R 333cv", yearFrom: 2024, yearTo: null },
       ],
@@ -2522,7 +2526,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 60cv", yearFrom: 2011, yearTo: 2023 },
         { label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 },
         { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
-        { label: "Elettrica e-up! 82cv", yearFrom: 2016, yearTo: 2023 },
+        { label: "Elettrica e-up! 82cv", yearFrom: 2013, yearTo: 2023 },
       ],
       "ID.3": [
         { label: "Elettrica Pro 150cv", yearFrom: 2020, yearTo: null },
