@@ -26,6 +26,8 @@ const ANTHROPIC_SEARCH_TIMEOUT_NO_FALLBACK_MS = ANTHROPIC_SEARCH_TIMEOUT_MS + OP
 
 /** La query finisce nel prompt: un tetto evita richieste enormi (e costose) verso i modelli. */
 const MAX_QUERY_CHARS = 200;
+/** Marca, modello e motore del veicolo finiscono nel prompt: stesso principio della query. */
+const MAX_VEHICLE_FIELD_CHARS = 80;
 /** Ogni ricerca costa piu' chiamate al modello con web search: massimo 10 ogni 5 minuti per utente. */
 const RATE_LIMIT = 10;
 const RATE_WINDOW_MS = 5 * 60 * 1000;
@@ -403,9 +405,14 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (vehicle) {
-      vehicleContext = `Veicolo di riferimento: ${vehicle.type === "moto" ? "moto" : "auto"} ${vehicle.make} ${vehicle.model}${
-        vehicle.year ? ` (${vehicle.year})` : ""
-      }${vehicle.engine_code ? `, motorizzazione ${vehicle.engine_code}` : ""}.`;
+      const make = clampText(vehicle.make, MAX_VEHICLE_FIELD_CHARS);
+      const model = clampText(vehicle.model, MAX_VEHICLE_FIELD_CHARS);
+      const engine = clampText(vehicle.engine_code, MAX_VEHICLE_FIELD_CHARS);
+      if (make || model) {
+        vehicleContext = `Veicolo di riferimento: ${vehicle.type === "moto" ? "moto" : "auto"} ${[make, model]
+          .filter(Boolean)
+          .join(" ")}${vehicle.year ? ` (${vehicle.year})` : ""}${engine ? `, motorizzazione ${engine}` : ""}.`;
+      }
     }
   }
 
