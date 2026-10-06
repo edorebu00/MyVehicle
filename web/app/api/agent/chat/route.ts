@@ -8,6 +8,9 @@ import { checkRateLimit, checkSharedRateLimit, rateWindowStart } from "@/lib/rat
 import { historyWindow } from "@/lib/chatHistory";
 import { buildChatSystemBlocks, flattenSystemBlocks } from "@/lib/chatPrompt";
 import { clampText, isUuid } from "@/lib/validation";
+import itMessages from "@/messages/it.json";
+import enMessages from "@/messages/en.json";
+import deMessages from "@/messages/de.json";
 
 export const maxDuration = 90;
 
@@ -40,6 +43,15 @@ const RATE_WINDOW_MS = 5 * 60 * 1000;
 type ChatHistoryItem = { role: "user" | "assistant"; content: string };
 
 /**
+ * Testi di riserva ("nessuna risposta") in tutte le lingue. Prima che smettessimo di salvarli,
+ * finivano in cronologia come risposte dell'assistente: qui servono a riconoscerli e scartarli,
+ * cosi' non vengono rimandati al modello come se fossero sue risposte.
+ */
+const EMPTY_REPLY_TEXTS = new Set(
+  [itMessages, enMessages, deMessages].map((m) => m.apiErrors.emptyReply.trim())
+);
+
+/**
  * L'API Messages di Anthropic pretende messaggi non vuoti, che iniziano con "user" e con i ruoli
  * alternati. La cronologia salvata non lo garantisce: se una chiamata al modello fallisce dopo che
  * il messaggio dell'utente e' gia' stato scritto a DB, resta un "user" spaiato e da quel momento
@@ -53,6 +65,7 @@ function toAlternatingMessages(items: ChatHistoryItem[]): ChatHistoryItem[] {
   for (const item of items) {
     const content = (item.content || "").trim();
     if (!content) continue;
+    if (item.role === "assistant" && EMPTY_REPLY_TEXTS.has(content)) continue;
     if (out.length === 0 && item.role !== "user") continue;
 
     const last = out[out.length - 1];
@@ -251,6 +264,8 @@ export async function POST(request: Request) {
       console.error("Anthropic non disponibile per la chat, uso il fallback OpenAI:", primaryErr);
       reply = await chatWithOpenAI(systemPrompt, messages);
     }
+    // Una risposta di soli spazi va trattata come vuota: salvata, il client mostrerebbe una bolla vuota.
+    reply = reply.trim();
 
     // Il testo di riserva va solo al client: salvato in cronologia verrebbe rimandato al modello
     // come se fosse una sua risposta.
