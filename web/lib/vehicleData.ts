@@ -2543,7 +2543,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 60cv", yearFrom: 2011, yearTo: 2023 },
         { label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 },
         { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
-        { label: "Elettrica e-up! 82cv", yearFrom: 2013, yearTo: 2023 },
+        { label: "Elettrica 18,7 kWh 82cv", yearFrom: 2013, yearTo: 2019 },
+        { label: "Elettrica 32,3 kWh 83cv", yearFrom: 2019, yearTo: 2023 },
       ],
       "ID.3": [
         { label: "Elettrica Pro 150cv", yearFrom: 2020, yearTo: null },
