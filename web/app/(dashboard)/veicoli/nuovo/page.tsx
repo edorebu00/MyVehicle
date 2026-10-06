@@ -107,6 +107,10 @@ export default function NewVehiclePage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!make || !model) {
+      setError(t("emptyMakeModelError"));
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -221,6 +225,7 @@ export default function NewVehiclePage() {
                 className="input mt-2"
                 required
                 value={customMake}
+                maxLength={80}
                 onChange={(e) => setCustomMake(e.target.value)}
                 placeholder={t("customMakePlaceholder")}
                 autoComplete="organization"
@@ -240,6 +245,7 @@ export default function NewVehiclePage() {
                 className="input"
                 required
                 value={customModel}
+                maxLength={80}
                 onChange={(e) => setCustomModel(e.target.value)}
                 placeholder={t("customModelPlaceholder")}
                 autoComplete="off"
@@ -269,6 +275,7 @@ export default function NewVehiclePage() {
                     className="input mt-2"
                     required
                     value={customModel}
+                    maxLength={80}
                     onChange={(e) => setCustomModel(e.target.value)}
                     placeholder={t("customModelPlaceholder")}
                     autoComplete="off"
@@ -308,6 +315,7 @@ export default function NewVehiclePage() {
                   <input
                     className="input mt-2"
                     value={customEngine}
+                    maxLength={80}
                     onChange={(e) => setCustomEngine(e.target.value)}
                     placeholder={t("enginePlaceholderFree")}
                     autoComplete="off"
@@ -325,6 +333,7 @@ export default function NewVehiclePage() {
                   className="input"
                   placeholder={t("enginePlaceholderFree")}
                   value={engineCode}
+                  maxLength={80}
                   onChange={(e) => setEngineCode(e.target.value)}
                   disabled={!model}
                 />
@@ -362,7 +371,13 @@ export default function NewVehiclePage() {
           <label className="label" htmlFor="plate">
             {t("plateLabel")}
           </label>
-          <input id="plate" className="input" value={plate} onChange={(e) => setPlate(e.target.value)} />
+          <input
+            id="plate"
+            className="input"
+            value={plate}
+            maxLength={20}
+            onChange={(e) => setPlate(e.target.value)}
+          />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
