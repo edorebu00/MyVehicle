@@ -138,7 +138,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Alpine: ["A106", "A108", "A310", "A610", "GTA"],
     "Alfa Romeo": ["6", "8C Competizione", "33 Stradale", "90", "1900", "2600", "Alfasud", "Alfetta", "Arna", "Montreal", "RZ", "Sprint", "SZ"],
     "Aston Martin": ["DB4", "DB5", "DB6", "DB7", "DB9", "DB12", "DBR1", "Lagonda", "One-77", "Valhalla", "Valkyrie", "Vantage", "Virage"],
-    Audi: ["50", "100", "200", "A4 allroad", "A6 allroad", "A6 e-tron", "Coupé", "Q6 e-tron", "Quattro", "RS e-tron GT", "S1", "S3", "S4", "S5", "S6", "S7", "S8", "SQ2", "SQ5", "SQ6 e-tron", "SQ7", "SQ8", "TT Roadster", "V8"],
+    Audi: ["50", "100", "200", "A4 allroad", "A6 allroad", "A6 e-tron", "Coupé", "Q6 e-tron", "Quattro", "RS e-tron GT", "S1", "S3", "S4", "S5", "S6", "S6 e-tron", "S7", "S8", "SQ2", "SQ5", "SQ6 e-tron", "SQ7", "SQ8", "TT Roadster", "V8"],
     BAIC: ["Beijing X35", "Beijing X55", "BJ40", "BJ60"],
     Bentley: ["Arnage", "Azure", "Blower", "Brooklands", "Eight", "R-Type", "Turbo R"],
     BMW: ["1500", "2002", "3.0 CSL", "507", "Isetta", "Serie 2 Active Tourer", "Serie 2 Gran Coupé", "Serie 4 Gran Coupé", "Serie 5 Touring", "Serie 6 Gran Turismo", "Serie 8 Gran Coupé", "i5", "i7", "iX2", "M1", "X7", "XM", "Z8"],
@@ -868,6 +868,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.5 TFSI 400cv", yearFrom: 2016, yearTo: 2023 },
         { label: "2.5 TFSI 401cv", yearFrom: 2019, yearTo: 2023 },
       ],
+      "Q6 e-tron": [{ label: "Elettrica quattro 387cv", yearFrom: 2024, yearTo: null }],
+      "SQ6 e-tron": [{ label: "Elettrica quattro 517cv", yearFrom: 2024, yearTo: null }],
+      "A6 e-tron": [
+        { label: "Elettrica performance 367cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica quattro 462cv", yearFrom: 2025, yearTo: null },
+      ],
+      "S6 e-tron": [{ label: "Elettrica quattro 551cv", yearFrom: 2025, yearTo: null }],
     },
     BMW: {
       "Serie 1": [
@@ -878,6 +885,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "116i 1.5 109cv", yearFrom: 2019, yearTo: null },
         { label: "118i 1.5 140cv", yearFrom: 2019, yearTo: null },
         { label: "128ti 2.0 Turbo 265cv", yearFrom: 2020, yearTo: 2024 },
+        { label: "M135i 3.0 320cv", yearFrom: 2012, yearTo: 2016 },
         { label: "M140i 3.0 340cv", yearFrom: 2016, yearTo: 2019 },
         { label: "M135i 2.0 Turbo 306cv", yearFrom: 2019, yearTo: null },
       ],
@@ -984,7 +992,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       X2: [
         { label: "18d 2.0 150cv", yearFrom: 2018, yearTo: null },
-        { label: "M35i 2.0 306cv", yearFrom: 2019, yearTo: null },
+        { label: "M35i 2.0 306cv", yearFrom: 2019, yearTo: 2023 },
+        { label: "M35i 2.0 300cv", yearFrom: 2024, yearTo: null },
       ],
       X3: [
         { label: "20d 2.0 190cv", yearFrom: 2017, yearTo: null },
@@ -1448,6 +1457,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 229cv", yearFrom: 2022, yearTo: null },
         { label: "N Elettrica 650cv", yearFrom: 2025, yearTo: null },
       ],
+      "Ioniq 9": [
+        { label: "Elettrica RWD 218cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica AWD 313cv", yearFrom: 2025, yearTo: null },
+        { label: "Performance AWD 435cv", yearFrom: 2025, yearTo: null },
+      ],
       i40: [{ label: "1.7 CRDi 136cv", yearFrom: 2011, yearTo: 2019 }],
       Atos: [{ label: "1.0 55cv", yearFrom: 1998, yearTo: 2008 }],
       Coupe: [{ label: "2.0 16v 143cv", yearFrom: 1996, yearTo: 2009 }],
@@ -1597,9 +1611,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     },
     Lancia: {
       Ypsilon: [
-        { label: "1.2 69cv", yearFrom: 2011, yearTo: null },
+        { label: "1.2 69cv", yearFrom: 2011, yearTo: 2024 },
         { label: "0.9 TwinAir 85cv", yearFrom: 2011, yearTo: 2021 },
-        { label: "1.0 Hybrid 70cv", yearFrom: 2021, yearTo: null },
+        { label: "1.0 Hybrid 70cv", yearFrom: 2021, yearTo: 2024 },
+        { label: "1.2 Hybrid 100cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 156cv", yearFrom: 2024, yearTo: null },
         { label: "HF Elettrica 280cv", yearFrom: 2025, yearTo: null },
       ],
       Delta: [
@@ -2058,6 +2074,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "408": [
         { label: "1.2 PureTech 130cv", yearFrom: 2022, yearTo: null },
         { label: "Hybrid 225cv", yearFrom: 2022, yearTo: null },
+        { label: "Elettrica E-408 210cv", yearFrom: 2024, yearTo: null },
       ],
       "508": [
         { label: "1.6 VTi 120cv", yearFrom: 2010, yearTo: 2014 },
@@ -2361,7 +2378,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Aygo: [{ label: "1.0 VVT-i 72cv", yearFrom: 2014, yearTo: 2022 }],
       iQ: [{ label: "1.0 VVT-i 68cv", yearFrom: 2009, yearTo: 2015 }],
       "Yaris Cross": [{ label: "1.5 Hybrid 116cv", yearFrom: 2021, yearTo: null }],
-      "Corolla Cross": [{ label: "1.8 Hybrid 140cv", yearFrom: 2022, yearTo: null }],
+      "Corolla Cross": [
+        { label: "1.8 Hybrid 140cv", yearFrom: 2022, yearTo: null },
+        { label: "2.0 Hybrid 197cv", yearFrom: 2022, yearTo: null },
+      ],
       "Urban Cruiser": [
         { label: "1.33 Dual VVT-i 101cv", yearFrom: 2009, yearTo: 2014 },
         { label: "1.4 D-4D 90cv", yearFrom: 2009, yearTo: 2014 },
@@ -2446,7 +2466,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TSI GTI 265cv", yearFrom: 2024, yearTo: null },
         { label: "2.0 TSI GTI Clubsport 265cv", yearFrom: 2016, yearTo: 2017 },
         { label: "2.0 TSI GTI Clubsport 300cv", yearFrom: 2021, yearTo: null },
-        { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2017 },
+        { label: "2.0 TSI R 300cv", yearFrom: 2014, yearTo: 2020 },
+        { label: "2.0 TSI R 310cv", yearFrom: 2017, yearTo: 2018 },
         { label: "2.0 TSI R 320cv", yearFrom: 2021, yearTo: 2023 },
         { label: "2.0 TSI R 333cv", yearFrom: 2024, yearTo: null },
       ],
@@ -2522,7 +2543,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 60cv", yearFrom: 2011, yearTo: 2023 },
         { label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 },
         { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
-        { label: "Elettrica e-up! 82cv", yearFrom: 2016, yearTo: 2023 },
+        { label: "Elettrica e-up! 82cv", yearFrom: 2013, yearTo: 2023 },
       ],
       "ID.3": [
         { label: "Elettrica Pro 150cv", yearFrom: 2020, yearTo: null },
