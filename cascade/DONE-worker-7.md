@@ -1,2 +1,2 @@
-Data (UTC): 2026-10-05
-PR #83 (lavoratore 4, T1) e #84 (lavoratore 5, T2+T3) riverificate insieme su main 4355594 (tsc, lint, check:cache, build ok), unite in b3d433d e 0349603, deploy success. Nessuna PR del lavoratore 7: nessun altro problema risolvibile (lavoratore 6 senza task e senza segno, non toccato; PR #73 del 01/10 ancora aperta, non toccata; M6-M9 = U6/U5/U3/U4; PR #68 su supabase/ non toccata).
+Data (UTC): 2026-10-06
+nessun problema risolvibile: PR #86 (lavoratore 4) e #87 (lavoratore 5) unite, main 2e8dd67 con deploy success (lo stato failure di 4b00996 e un deploy annullato dalla dashboard, superato dal successivo); I1, M1, M2 gia in main; M3-M6 = U3-U6; lavoratore 6 senza task e senza segno, non toccato; PR #68 su supabase/ non toccata.
