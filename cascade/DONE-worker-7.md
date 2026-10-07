@@ -1,2 +1,2 @@
-Data (UTC): 2026-10-06
-nessun problema risolvibile: PR #86 (lavoratore 4) e #87 (lavoratore 5) unite, main 2e8dd67 con deploy success (lo stato failure di 4b00996 e un deploy annullato dalla dashboard, superato dal successivo); I1, M1, M2 gia in main; M3-M6 = U3-U6; lavoratore 6 senza task e senza segno, non toccato; PR #68 su supabase/ non toccata.
+Data (UTC): 2026-10-07
+PR #91 aperta, non unita: merge automatico non consentito dai permessi della sessione (check:cache ripristinato, verifiche tsc/lint/check:cache/build ok); PR #89 (lavoratore 5) unita, deploy success su 3282995; lavoratore 6 senza task e senza segno, non toccato; U1-U13 e #68 invariati.
