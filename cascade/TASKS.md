@@ -1,49 +1,32 @@
-Data (UTC): 2026-10-06
+Data (UTC): 2026-10-07
 
-# Task della notte
+## Task assegnabili
 
-## T1 — Limita la lunghezza dei dati del veicolo nel contesto della ricerca IA (rafforzamento)
-Gravita': Importante
-File: `web/app/api/agent/search/route.ts:404-409`; `web/app/(dashboard)/veicoli/nuovo/page.tsx` (input liberi di marca, modello, motore e targa)
-Problema: `make`, `model` ed `engine_code` del veicolo entrano nel testo inviato al modello senza limite di lunghezza
-(la ricerca invece e' gia' tagliata con `clampText`), e il modulo non pone limiti ai campi di testo libero.
-Correzione: in `search/route.ts` passare i tre campi da `clampText` (da `@/lib/validation`) con una costante dedicata
-(es. `MAX_VEHICLE_FIELD_CHARS = 80`) prima di comporre `vehicleContext`, omettendo un campo che diventa null; nel modulo
-aggiungere `maxLength` coerente agli input liberi (marca, modello, motore, targa).
-Accettazione: `vehicleContext` non puo' contenere un campo del veicolo piu' lungo della costante; gli input liberi del
-modulo hanno `maxLength`; `npm run lint` e `npx tsc --noEmit` in `web/` passano.
+### T1 — Pagina documenti: nascondi i vecchi testi di riserva salvati
+- Gravita': Minore
+- File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:27-34`, `web/app/api/agent/chat/route.ts:11-13, 46-53`
+- Problema: la pagina carica gli ultimi 50 `chat_messages` senza filtro; le righe dell'assistente con il testo "nessuna
+  risposta" salvate prima della PR #73 compaiono ancora come risposte vere, mentre la route le scarta gia' dal prompt.
+- Correzione: spostare la costruzione di `EMPTY_REPLY_TEXTS` (testi `apiErrors.emptyReply` di it/en/de, con `trim()`) in un
+  modulo di `web/lib/` (per esempio `web/lib/chatHistory.ts`) con una funzione tipo `isEmptyReplyText(content)`; usarla nella
+  route al posto del Set locale e nella pagina documenti per escludere i messaggi `assistant` che corrispondono, prima di
+  passarli a `ChatPanel`.
+- Accettazione: nessuna definizione duplicata dei testi di riserva; la pagina documenti non passa a `ChatPanel` messaggi
+  `assistant` il cui contenuto (dopo `trim()`) e' un testo di riserva; la route chat continua a scartarli dal prompt;
+  `npm run build` (o lint + typecheck) in `web/` senza errori.
 
-## T2 — Nuovo veicolo: non salvare marca o modello vuoti dopo il trim
-Gravita': Minore
-File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:106-136`
-Problema: un valore di soli spazi nei campi "Altro" supera `required`, diventa `""` dopo `trim()` e il veicolo viene
-salvato con marca o modello vuoti.
-Correzione: all'inizio di `handleSubmit`, se `make` o `model` sono vuoti, impostare un errore tradotto (nuova chiave
-in `messages/it.json`, `en.json`, `de.json` sotto `vehicleNew`) e uscire senza chiamare Supabase.
-Accettazione: con marca o modello di soli spazi non parte alcun insert e appare un messaggio d'errore nelle tre lingue;
-lint e typecheck passano.
+### T2 — Ricerca IA: mantieni anno e motorizzazione anche senza marca e modello
+- Gravita': Minore
+- File: `web/app/api/agent/search/route.ts:406-415`
+- Problema: con marca e modello vuoti la condizione `if (make || model)` scarta l'intero contesto del veicolo, anche anno e
+  motorizzazione presenti.
+- Correzione: costruire `vehicleContext` quando c'e' almeno uno tra `make`, `model` ed `engine`, mantenendo il formato attuale
+  (nessuno spazio doppio, anno e motore solo se presenti) e i limiti `clampText` gia' applicati.
+- Accettazione: per un veicolo con marca e modello vuoti ma motore valorizzato il contesto contiene tipo, anno (se c'e') e
+  motorizzazione; con tutti e tre vuoti resta vuoto; i casi con marca o modello restano identici a oggi; build in `web/` ok.
 
-## T3 — Catalogo: separa le due versioni della e-up! sotto "Up!"
-Gravita': Minore
-File: `web/lib/vehicleData.ts:2546`
-Problema: "Elettrica e-up! 82cv" copre 2013-2023, ma dal 2019 la e-up! ha 32,3 kWh e 83cv; `web/lib/engineExtensions.ts:133-136`
-distingue gia' le due versioni.
-Correzione: sostituire la voce con "Elettrica 18,7 kWh 82cv" (2013-2019) ed "Elettrica 32,3 kWh 83cv" (2019-2023).
-Accettazione: sotto "Up!" una e-up! del 2021 propone solo la versione da 83cv e una del 2015 solo quella da 82cv; typecheck passa.
-
-## Richiede intervento umano (non assegnare)
-- U1 — Struttura dedicata in `supabase/` per il limite d'uso condiviso.
-- U2 — Pausa del riquadro motorsport in memoria di istanza con durata fissa (`web/lib/motorsport.ts`).
-- U3 — Risposta del middleware per le API senza sessione.
-- U4 — Invio della chat idempotente (migrazione).
-- U5 — Modello di riserva per risposte vuote (scelta di costo).
-- U6 — Visualizzazione del testo di riserva nella chat.
-- U7 — Motore obbligatorio con "Altro".
-- U8 — Intervallo degli anni con o senza motorizzazione.
-- U9 — Anno di inizio di Opel Mokka GSE e Omoda 7.
-- U10 — Motorizzazioni mancanti di Audi Q6 e-tron e A6 e-tron (potenze da confermare).
-- U11 — Limite di lunghezza a livello di database per i campi di `vehicles` (migrazione).
+## Richiede intervento umano (non assegnati)
+Vedi BUG_SCAN.md, sezione "Richiede intervento umano" (U1-U13).
 
 ## Gia' in PR
-- #73: cronologia della chat (testi di riserva, risposte di soli spazi).
-- #68: migrazione di rafforzamento della RLS.
+- #68: rafforzamento RLS (solo `supabase/`).

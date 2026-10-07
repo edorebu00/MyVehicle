@@ -1,11 +1,12 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-06 01:21 (UTC)
+Data scan: 2026-10-07 01:24 (UTC)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri in `main` sono entrate le PR #83 (targa ripulita dagli spazi), #84 (catalogo: e-up!, Golf R, M135i, Ypsilon)
-e #85 (aggiornamento del catalogo del 06/10). Le route sotto `web/app/api/agent/*` non sono cambiate: autenticazione
-e limite d'uso condiviso (conteggio delle righe salvate per utente) restano come negli scan precedenti.
-PR aperte al momento dello scan: #73 (lavoratore 4, `web/app/api/agent/chat/route.ts`), #68 (solo `supabase/`).
+Da ieri in `main` sono entrate le PR #73 (cronologia della chat senza testi di riserva), #86 (limiti di lunghezza dei campi
+liberi e marca/modello vuoti), #87 (e-up! sotto Up!) e #88 (aggiornamento del catalogo del 07/10). I1, M1 e M2 dello scan
+precedente risultano risolti in `main`. Le route sotto `web/app/api/agent/*` mantengono autenticazione e limite d'uso
+condiviso (conteggio delle righe salvate per utente).
+PR aperte al momento dello scan: #68 (solo `supabase/`).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -15,42 +16,43 @@ Nessun problema bloccante trovato.
 
 ## Importante
 
-### I1 — Rafforza il limite di lunghezza dei dati del veicolo usati nella ricerca IA
-File: `web/app/api/agent/search/route.ts:406-408`, `web/app/(dashboard)/veicoli/nuovo/page.tsx` (campi di testo libero di marca, modello, motore e targa)
-Marca, modello e motorizzazione del veicolo vengono inseriti cosi' come sono nel testo inviato al modello, senza limite
-di lunghezza, mentre la ricerca stessa e' gia' limitata a 200 caratteri con `clampText`. Le colonne sono `text` senza
-limiti e i campi del modulo non hanno `maxLength`: un valore molto lungo fa crescere il costo di ogni ricerca su quel veicolo.
-Proposta: passare i tre campi da `clampText(..., limite)` prima di comporre `vehicleContext` e aggiungere `maxLength` agli input liberi del modulo.
+Nessun problema importante nuovo trovato.
 
 ## Minore
 
-### M1 — Nuovo veicolo: marca o modello di soli spazi vengono salvati vuoti
-File: `web/app/(dashboard)/veicoli/nuovo/page.tsx:44-45, 106-136`
-I campi "Altro" sono `required`, ma un valore di soli spazi supera il controllo del browser; dopo `trim()` diventa `""`
-e `handleSubmit` inserisce comunque il veicolo (le colonne sono `not null`, ma la stringa vuota e' accettata): la scheda
-mostra un nome vuoto e la ricerca IA riceve "auto  .".
-Proposta: in `handleSubmit`, se `make` o `model` sono vuoti dopo il `trim()`, mostrare un errore e non inserire.
+### M1 — Pagina documenti: i vecchi testi di riserva salvati appaiono ancora come risposte
+File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:27-34`, `web/app/api/agent/chat/route.ts:46-53`
+Dalla PR #73 il testo "nessuna risposta" non viene piu' salvato e le righe gia' salvate vengono scartate solo quando si
+compone il prompt (`EMPTY_REPLY_TEXTS`). La pagina documenti carica gli ultimi 50 `chat_messages` senza filtro, quindi le
+righe salvate prima della PR #73 continuano a comparire come bolle dell'assistente, mentre quelle nuove spariscono al
+ricaricamento: la cronologia mostrata non e' coerente.
+Proposta: spostare `EMPTY_REPLY_TEXTS` in un modulo condiviso di `web/lib/` e filtrare con lo stesso insieme i messaggi dell'assistente caricati dalla pagina.
 
-### M2 — Catalogo: la e-up! sotto "Up!" ha una sola motorizzazione per due generazioni di batteria
-File: `web/lib/vehicleData.ts:2546` (in contrasto con `web/lib/engineExtensions.ts:133-136`)
-"Elettrica e-up! 82cv" copre 2013-2023, ma dal 2019 la e-up! ha la batteria da 32,3 kWh e 83cv; lo stesso catalogo, sotto
-"e-Up!", distingue gia' le due versioni. Chi sceglie "Up!" per una e-up! 2020-2023 salva una motorizzazione errata.
-Proposta: sostituire la voce con "Elettrica 18,7 kWh 82cv" 2013-2019 ed "Elettrica 32,3 kWh 83cv" 2019-2023, come in `engineExtensions.ts`.
+### M2 — Ricerca IA: senza marca e modello si perde anche anno e motorizzazione
+File: `web/app/api/agent/search/route.ts:411`
+La condizione `if (make || model)` introdotta con il limite di lunghezza scarta l'intero contesto del veicolo quando marca e
+modello sono vuoti (possibile per i veicoli creati prima del controllo aggiunto con la PR #86), anche se anno e motore ci
+sono: prima venivano comunque inviati al modello.
+Proposta: costruire il contesto se c'e' almeno uno tra marca, modello e motorizzazione.
 
-### M3-M6 — Invariati dagli scan precedenti (decisioni del proprietario, vedi U3-U6)
-- Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx:71-83`) = U6.
-- Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts:245-253`) = U5.
-- API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts:44-49`) = U3.
-- Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx:62-88`) = U4.
+### M3-M6 — Invariati (decisioni del proprietario, vedi U3-U6)
+- Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx`) = U6.
+- Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts`) = U5.
+- API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts`) = U3.
+- Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx`) = U4.
 
 ## Rilievi esaminati e non trasformati in task
-- Golf R "300cv" 2014-2020 sovrapposta a "310cv" 2017-2018 (`vehicleData.ts:2469-2470`): e' corretto, la 7.5 R dopo il
-  WLTP (2018-2020) e' tornata a 300cv; nel 2017-2018 le due versioni coesistono davvero.
-- `handleSubmit` senza try/finally (`veicoli/nuovo/page.tsx:106`): i client Supabase restituiscono gli errori di rete come
-  `{ error }` invece di lanciarli, quindi il pulsante bloccato non e' stato riprodotto: nessun task.
-- Targa non normalizzata (maiuscole, trattini): e' una scelta di formato, non un difetto.
-- Hyundai Ioniq 9 "Performance AWD 435cv" (`vehicleData.ts`): la potenza pubblicata varia tra le fonti; non verificabile con certezza.
-- Audi Q6 e-tron e A6 e-tron: mancano le versioni a trazione posteriore o base; la potenza esatta va confermata (U10).
+- Ricerca automatica con campi liberi molto lunghi (`veicoli/[id]/page.tsx:76`): marca+modello+motore possono superare i 200
+  caratteri della ricerca e la coda viene tagliata. Serve testo libero di quasi 80 caratteri in tutti e tre i campi; il taglio
+  e' deterministico, quindi il riuso delle ricerche salvate continua a funzionare: nessun task.
+- `reply.trim()` nella chat (`chat/route.ts:268`): toglie anche l'eventuale rientro della prima riga; la chat mostra testo
+  semplice, l'effetto e' trascurabile.
+- `clampText` taglia per unita' UTF-16 e puo' spezzare un emoji: servirebbe un valore di oltre 80 caratteri inserito fuori dal
+  modulo; non riprodotto.
+- `EMPTY_REPLY_TEXTS` elenca a mano le tre lingue: le righe di riserva non vengono piu' salvate, quindi una lingua futura non
+  avrebbe righe vecchie da scartare.
+- Limite 80 ripetuto nel modulo e nella route, e-up! descritta sia in `vehicleData.ts` sia in `engineExtensions.ts`:
+  duplicazioni, non difetti osservati.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/` (invariato).
@@ -63,8 +65,11 @@ Proposta: sostituire la voce con "Elettrica 18,7 kWh 82cv" 2013-2019 ed "Elettri
 - U8 — Decidere se gli anni vadano limitati al periodo della motorizzazione (anche con "Altro") o offerti sempre per intero.
 - U9 — Confermare l'anno di inizio di Opel Mokka GSE e Omoda 7 (2025 o 2026).
 - U10 — Confermare e aggiungere le motorizzazioni mancanti di Audi Q6 e-tron (trazione posteriore) e A6 e-tron (versione base).
-- U11 — Valutare un limite di lunghezza anche a livello di database per i campi di testo di `vehicles` (migrazione in `supabase/`).
+- U11 — Portare anche a livello di database i limiti di lunghezza e il controllo di marca/modello non vuoti dei campi di
+  `vehicles` (oggi solo nel modulo): migrazione in `supabase/`.
+- U12 — Civic Type R (`web/lib/vehicleData.ts:1399-1400`): dopo la PR #88 nessuna motorizzazione copre il 2022 (320cv fino al
+  2021, 329cv dal 2023). Confermare se l'anno 2022 vada coperto (ultime immatricolazioni FK8 o prime FL5).
+- U13 — Valutare una pulizia una tantum delle righe di riserva gia' salvate in `chat_messages` (operazione sui dati).
 
 ## Gia' in PR
-- #73 (lavoratore 4): cronologia della chat senza testi di riserva e risposte di soli spazi.
 - #68: migrazione di rafforzamento della RLS (solo `supabase/`).
