@@ -769,7 +769,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 TFSI 116cv", yearFrom: 2016, yearTo: null },
         { label: "1.5 TFSI 150cv", yearFrom: 2016, yearTo: null },
         { label: "2.0 TDI 150cv", yearFrom: 2012, yearTo: null },
-        { label: "2.0 TFSI S3 310cv", yearFrom: 2013, yearTo: null },
+        { label: "2.0 TFSI S3 300cv", yearFrom: 2013, yearTo: 2016 },
+        { label: "2.0 TFSI S3 310cv", yearFrom: 2016, yearTo: 2024 },
+        { label: "2.0 TFSI S3 333cv", yearFrom: 2024, yearTo: null },
       ],
       A4: [
         { label: "2.0 TDI 150cv", yearFrom: 2015, yearTo: null },
@@ -1036,6 +1038,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "xDrive40 326cv", yearFrom: 2021, yearTo: null },
         { label: "xDrive50 523cv", yearFrom: 2021, yearTo: null },
         { label: "M60 619cv", yearFrom: 2023, yearTo: null },
+      ],
+      iX2: [
+        { label: "eDrive20 204cv", yearFrom: 2024, yearTo: null },
+        { label: "xDrive30 313cv", yearFrom: 2024, yearTo: null },
       ],
     },
     Citroën: {
@@ -1390,7 +1396,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 VTEC Turbo 126cv", yearFrom: 2017, yearTo: 2022 },
         { label: "1.5 VTEC Turbo 182cv", yearFrom: 2017, yearTo: 2022 },
         { label: "e:HEV 2.0 Hybrid 184cv", yearFrom: 2022, yearTo: null },
-        { label: "Type R 2.0 Turbo 329cv", yearFrom: 2017, yearTo: null },
+        { label: "Type R 2.0 Turbo 320cv", yearFrom: 2017, yearTo: 2021 },
+        { label: "Type R 2.0 Turbo 329cv", yearFrom: 2023, yearTo: 2026 },
       ],
       Jazz: [
         { label: "1.3 i-VTEC 102cv", yearFrom: 2015, yearTo: 2020 },
@@ -1755,6 +1762,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Classe G": [
         { label: "G350d 3.0 286cv", yearFrom: 2018, yearTo: null },
         { label: "AMG G63 4.0 V8 585cv", yearFrom: 2018, yearTo: null },
+        { label: "G 580 con tecnologia EQ Elettrica 587cv", yearFrom: 2024, yearTo: null },
       ],
       CLK: [
         { label: "CLK 200 2.0 163cv", yearFrom: 1997, yearTo: 2010 },
@@ -1945,6 +1953,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 Turbo 110cv", yearFrom: 2021, yearTo: null },
         { label: "1.5 Diesel 122cv", yearFrom: 2021, yearTo: null },
         { label: "GSe Plug-in Hybrid 225cv", yearFrom: 2023, yearTo: null },
+        { label: "OPC 2.0 Turbo 280cv", yearFrom: 2012, yearTo: 2015 },
       ],
       Insignia: [
         { label: "1.5 Turbo 165cv", yearFrom: 2017, yearTo: null },
@@ -2313,6 +2322,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 71cv", yearFrom: 2014, yearTo: null },
         { label: "Elettrica EQ 82cv", yearFrom: 2017, yearTo: null },
       ],
+      "#5": [
+        { label: "Elettrica 76 kWh 340cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 100 kWh 363cv", yearFrom: 2025, yearTo: null },
+        { label: "Brabus Elettrica 100 kWh 646cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     Subaru: {
       Impreza: [
@@ -2543,7 +2557,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 60cv", yearFrom: 2011, yearTo: 2023 },
         { label: "1.0 75cv", yearFrom: 2011, yearTo: 2019 },
         { label: "GTI 1.0 TSI 115cv", yearFrom: 2018, yearTo: 2023 },
-        { label: "Elettrica e-up! 82cv", yearFrom: 2013, yearTo: 2023 },
+        { label: "Elettrica 18,7 kWh 82cv", yearFrom: 2013, yearTo: 2019 },
+        { label: "Elettrica 32,3 kWh 83cv", yearFrom: 2019, yearTo: 2023 },
       ],
       "ID.3": [
         { label: "Elettrica Pro 150cv", yearFrom: 2020, yearTo: null },

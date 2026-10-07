@@ -312,7 +312,8 @@
     "submitLoading": "Wird gespeichert…",
     "sessionExpired": "Sitzung abgelaufen, bitte erneut anmelden.",
     "genericError": "Fehler beim Erstellen des Fahrzeugs.",
-    "incompleteVehicleError": "Das Fahrzeug wurde nur teilweise angelegt und konnte nicht entfernt werden: Du findest es ohne Bereiche in der Liste, lösche es auf seiner Seite, bevor du es erneut versuchst."
+    "incompleteVehicleError": "Das Fahrzeug wurde nur teilweise angelegt und konnte nicht entfernt werden: Du findest es ohne Bereiche in der Liste, lösche es auf seiner Seite, bevor du es erneut versuchst.",
+    "emptyMakeModelError": "Gib Marke und Modell des Fahrzeugs ein."
   },
   "vehicleAdded": {
     "text": "Fahrzeug hinzugefügt! Wir suchen bereits erste Infos online…"
