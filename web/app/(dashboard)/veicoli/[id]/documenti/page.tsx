@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import FileUploader from "@/components/FileUploader";
 import DocumentList from "@/components/DocumentList";
 import ChatPanel from "@/components/ChatPanel";
+import { isEmptyReplyText } from "@/lib/chatHistory";
 import type { ChatMessage, DocumentRow, Vehicle } from "@/lib/types";
 
 export default async function VehicleDocumentsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -23,7 +24,8 @@ export default async function VehicleDocumentsPage({ params }: { params: Promise
 
   // Si legge dal piu' recente perche' il `limit` taglia in coda: con l'ordine crescente resterebbero
   // i 50 messaggi piu' vecchi. L'elenco viene poi rovesciato, cosi' a schermo l'ordine e' sempre dal
-  // meno recente al piu' recente.
+  // meno recente al piu' recente. I testi di riserva salvati in passato come risposte
+  // dell'assistente vengono scartati, come gia' avviene nel prompt della chat.
   const { data: messages } = await supabase
     .from("chat_messages")
     .select("*")
@@ -31,7 +33,9 @@ export default async function VehicleDocumentsPage({ params }: { params: Promise
     .order("created_at", { ascending: false })
     .limit(50);
 
-  const chatMessages = ((messages || []) as ChatMessage[]).reverse();
+  const chatMessages = ((messages || []) as ChatMessage[])
+    .filter((m) => !(m.role === "assistant" && isEmptyReplyText(m.content)))
+    .reverse();
 
   const v = vehicle as Vehicle;
 
