@@ -870,9 +870,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.5 TFSI 400cv", yearFrom: 2016, yearTo: 2023 },
         { label: "2.5 TFSI 401cv", yearFrom: 2019, yearTo: 2023 },
       ],
-      "Q6 e-tron": [{ label: "Elettrica quattro 387cv", yearFrom: 2024, yearTo: null }],
+      "Q6 e-tron": [
+        { label: "Elettrica 292cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica performance 326cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica quattro 387cv", yearFrom: 2024, yearTo: null },
+      ],
       "SQ6 e-tron": [{ label: "Elettrica quattro 517cv", yearFrom: 2024, yearTo: null }],
       "A6 e-tron": [
+        { label: "Elettrica 326cv", yearFrom: 2025, yearTo: null },
         { label: "Elettrica performance 367cv", yearFrom: 2025, yearTo: null },
         { label: "Elettrica quattro 462cv", yearFrom: 2025, yearTo: null },
       ],
@@ -1963,7 +1968,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 Turbo 130cv", yearFrom: 2020, yearTo: null },
         { label: "Elettrica 136cv", yearFrom: 2020, yearTo: 2023 },
         { label: "Elettrica 54 kWh 156cv", yearFrom: 2023, yearTo: null },
-        { label: "GSE Elettrica 281cv", yearFrom: 2026, yearTo: null },
+        { label: "GSE Elettrica 281cv", yearFrom: 2025, yearTo: null },
       ],
       Crossland: [
         { label: "1.2 Turbo 110cv", yearFrom: 2017, yearTo: null },
@@ -2051,6 +2056,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica e-208 136cv", yearFrom: 2019, yearTo: null },
         { label: "GTi 1.6 THP 200cv", yearFrom: 2012, yearTo: 2015 },
         { label: "GTi by Peugeot Sport 1.6 THP 208cv", yearFrom: 2015, yearTo: 2019 },
+        { label: "GTi Elettrica 281cv", yearFrom: 2026, yearTo: null },
       ],
       "308": [
         { label: "1.2 PureTech 130cv", yearFrom: 2021, yearTo: null },
