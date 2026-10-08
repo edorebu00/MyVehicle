@@ -408,10 +408,11 @@ export async function POST(request: Request) {
       const make = clampText(vehicle.make, MAX_VEHICLE_FIELD_CHARS);
       const model = clampText(vehicle.model, MAX_VEHICLE_FIELD_CHARS);
       const engine = clampText(vehicle.engine_code, MAX_VEHICLE_FIELD_CHARS);
-      if (make || model) {
-        vehicleContext = `Veicolo di riferimento: ${vehicle.type === "moto" ? "moto" : "auto"} ${[make, model]
-          .filter(Boolean)
-          .join(" ")}${vehicle.year ? ` (${vehicle.year})` : ""}${engine ? `, motorizzazione ${engine}` : ""}.`;
+      if (make || model || engine) {
+        const name = [make, model].filter(Boolean).join(" ");
+        vehicleContext = `Veicolo di riferimento: ${vehicle.type === "moto" ? "moto" : "auto"}${name ? ` ${name}` : ""}${
+          vehicle.year ? ` (${vehicle.year})` : ""
+        }${engine ? `, motorizzazione ${engine}` : ""}.`;
       }
     }
   }
