@@ -1,12 +1,13 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-07 01:24 (UTC)
+Data scan: 2026-10-08 01:20 (UTC)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri in `main` sono entrate le PR #73 (cronologia della chat senza testi di riserva), #86 (limiti di lunghezza dei campi
-liberi e marca/modello vuoti), #87 (e-up! sotto Up!) e #88 (aggiornamento del catalogo del 07/10). I1, M1 e M2 dello scan
-precedente risultano risolti in `main`. Le route sotto `web/app/api/agent/*` mantengono autenticazione e limite d'uso
-condiviso (conteggio delle righe salvate per utente).
-PR aperte al momento dello scan: #68 (solo `supabase/`).
+Da ieri in `main` sono entrate le PR #89 (contesto della ricerca IA anche senza marca/modello), #90 (la pagina documenti
+nasconde i vecchi testi di riserva) e #92 (aggiornamento del catalogo dell'08/10). M1 e M2 dello scan precedente risultano
+risolti in `main`. Le route sotto `web/app/api/agent/*` restano invariate su autenticazione, validazione dell'input e limite
+d'uso condiviso.
+PR aperte al momento dello scan: #91 (`claude/worker-7-2026-10-07`, modulo dedicato per i testi di riserva e ripristino di
+`check:cache`), #68 (solo `supabase/`).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -20,39 +21,40 @@ Nessun problema importante nuovo trovato.
 
 ## Minore
 
-### M1 — Pagina documenti: i vecchi testi di riserva salvati appaiono ancora come risposte
-File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:27-34`, `web/app/api/agent/chat/route.ts:46-53`
-Dalla PR #73 il testo "nessuna risposta" non viene piu' salvato e le righe gia' salvate vengono scartate solo quando si
-compone il prompt (`EMPTY_REPLY_TEXTS`). La pagina documenti carica gli ultimi 50 `chat_messages` senza filtro, quindi le
-righe salvate prima della PR #73 continuano a comparire come bolle dell'assistente, mentre quelle nuove spariscono al
-ricaricamento: la cronologia mostrata non e' coerente.
-Proposta: spostare `EMPTY_REPLY_TEXTS` in un modulo condiviso di `web/lib/` e filtrare con lo stesso insieme i messaggi dell'assistente caricati dalla pagina.
+### M1 — `npm run check:cache` non parte piu' (gia' in PR #91)
+File: `web/lib/chatHistory.ts:1-3`, `web/scripts/check-prompt-cache.mts:16`
+Con la PR #90 `chatHistory.ts` importa i cataloghi delle lingue tramite l'alias `@/`; lo script dei controlli sulla cache
+lo carica direttamente con node, che non risolve l'alias: lo script si ferma prima di eseguire qualsiasi controllo.
+Proposta: spostare `isEmptyReplyText` in un modulo a parte (e' esattamente cio' che fa la PR #91).
 
-### M2 — Ricerca IA: senza marca e modello si perde anche anno e motorizzazione
-File: `web/app/api/agent/search/route.ts:411`
-La condizione `if (make || model)` introdotta con il limite di lunghezza scarta l'intero contesto del veicolo quando marca e
-modello sono vuoti (possibile per i veicoli creati prima del controllo aggiunto con la PR #86), anche se anno e motore ci
-sono: prima venivano comunque inviati al modello.
-Proposta: costruire il contesto se c'e' almeno uno tra marca, modello e motorizzazione.
+### M2 — Pagina documenti: ordinamento della cronologia senza criterio di parita' (stesso file della PR #91)
+File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:29-33`
+La pagina ordina i `chat_messages` solo per `created_at`, mentre la route della chat aggiunge `id` come secondo criterio
+(`chat/route.ts:156-157`, `186-187`). Con due righe dallo stesso istante l'ordine mostrato, e la riga esclusa dal taglio a 50,
+possono cambiare da un caricamento all'altro. Nella pratica e' raro: i due inserimenti avvengono in istruzioni separate.
+Proposta: aggiungere `.order("id", { ascending: false })` dopo l'ordinamento per data.
 
-### M3-M6 — Invariati (decisioni del proprietario, vedi U3-U6)
+### M3 — Pagina documenti: il filtro dei testi di riserva e' applicato dopo il limite e mostra righe di soli spazi (stesso file della PR #91)
+File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:33-38`
+Il filtro viene applicato dopo `.limit(50)`, quindi ogni vecchia riga di riserva riduce i messaggi mostrati invece di far
+posto a uno piu' vecchio. Inoltre, a differenza di `toAlternatingMessages` nella route, non scarta le vecchie risposte
+dell'assistente vuote o di soli spazi (salvate prima dell'introduzione di `reply.trim()`), che restano bolle vuote.
+Proposta: scartare anche il contenuto vuoto dopo `trim()`; per il conteggio leggere qualche riga in piu' e tagliare a 50
+dopo il filtro.
+
+### M4-M7 — Invariati (decisioni del proprietario, vedi U3-U6)
 - Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx`) = U6.
 - Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts`) = U5.
 - API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts`) = U3.
 - Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx`) = U4.
 
 ## Rilievi esaminati e non trasformati in task
-- Ricerca automatica con campi liberi molto lunghi (`veicoli/[id]/page.tsx:76`): marca+modello+motore possono superare i 200
-  caratteri della ricerca e la coda viene tagliata. Serve testo libero di quasi 80 caratteri in tutti e tre i campi; il taglio
-  e' deterministico, quindi il riuso delle ricerche salvate continua a funzionare: nessun task.
-- `reply.trim()` nella chat (`chat/route.ts:268`): toglie anche l'eventuale rientro della prima riga; la chat mostra testo
-  semplice, l'effetto e' trascurabile.
-- `clampText` taglia per unita' UTF-16 e puo' spezzare un emoji: servirebbe un valore di oltre 80 caratteri inserito fuori dal
-  modulo; non riprodotto.
-- `EMPTY_REPLY_TEXTS` elenca a mano le tre lingue: le righe di riserva non vengono piu' salvate, quindi una lingua futura non
-  avrebbe righe vecchie da scartare.
-- Limite 80 ripetuto nel modulo e nella route, e-up! descritta sia in `vehicleData.ts` sia in `engineExtensions.ts`:
-  duplicazioni, non difetti osservati.
+- M2 e M3 toccano lo stesso file della PR #91 ancora aperta: per la regola anti-duplicati vengono rimandati a dopo la sua unione.
+- Potenze del catalogo (`web/lib/vehicleData.ts:874-880`, `:2059`): la revisione automatica dubita delle nuove varianti
+  Audi Q6/A6 e-tron (292/326cv) e della Peugeot E-208 GTi (281cv contro 280cv delle gemelle Stellantis, mentre Opel Mokka GSE e'
+  gia' 281cv). Sono dati, non difetti verificabili leggendo il codice: vedi U14.
+- `process-document` ha solo il limite in memoria, ma non chiama modelli e non rielabora i documenti gia' elaborati: invariato
+  rispetto agli scan precedenti.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/` (invariato).
@@ -63,13 +65,13 @@ Proposta: costruire il contesto se c'e' almeno uno tra marca, modello e motorizz
 - U6 — Decidere come mostrare il testo di riserva nel client (bolla o messaggio d'errore).
 - U7 — Decidere se, scelto "Altro", il motore scritto a mano debba essere obbligatorio.
 - U8 — Decidere se gli anni vadano limitati al periodo della motorizzazione (anche con "Altro") o offerti sempre per intero.
-- U9 — Confermare l'anno di inizio di Opel Mokka GSE e Omoda 7 (2025 o 2026).
-- U10 — Confermare e aggiungere le motorizzazioni mancanti di Audi Q6 e-tron (trazione posteriore) e A6 e-tron (versione base).
-- U11 — Portare anche a livello di database i limiti di lunghezza e il controllo di marca/modello non vuoti dei campi di
-  `vehicles` (oggi solo nel modulo): migrazione in `supabase/`.
-- U12 — Civic Type R (`web/lib/vehicleData.ts:1399-1400`): dopo la PR #88 nessuna motorizzazione copre il 2022 (320cv fino al
-  2021, 329cv dal 2023). Confermare se l'anno 2022 vada coperto (ultime immatricolazioni FK8 o prime FL5).
-- U13 — Valutare una pulizia una tantum delle righe di riserva gia' salvate in `chat_messages` (operazione sui dati).
+- U11 — Portare anche a livello di database i limiti di lunghezza e il controllo di marca/modello non vuoti dei campi di `vehicles` (migrazione in `supabase/`).
+- U12 — Civic Type R (`web/lib/vehicleData.ts`): confermare se l'anno 2022 vada coperto.
+- U13 — Valutare una pulizia una tantum delle righe di riserva gia' salvate in `chat_messages` (operazione sui dati): renderebbe
+  superflui i filtri in lettura di M3 e della route.
+- U14 — Confermare le potenze di Audi Q6 e-tron (292/326cv), A6 e-tron (326cv) e Peugeot E-208 GTi (281 o 280cv).
+(U9 e U10 risolti dalla PR #92.)
 
 ## Gia' in PR
+- #91: `check:cache` (M1); stesso file di M2/M3.
 - #68: migrazione di rafforzamento della RLS (solo `supabase/`).
