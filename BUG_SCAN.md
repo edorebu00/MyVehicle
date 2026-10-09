@@ -1,11 +1,10 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-08 01:20 (UTC)
+Data scan: 2026-10-09 01:22 (UTC)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri in `main` sono entrate le PR #89 (contesto della ricerca IA anche senza marca/modello), #90 (la pagina documenti
-nasconde i vecchi testi di riserva) e #92 (aggiornamento del catalogo dell'08/10). M1 e M2 dello scan precedente risultano
-risolti in `main`. Le route sotto `web/app/api/agent/*` restano invariate su autenticazione, validazione dell'input e limite
-d'uso condiviso.
+Da ieri in `main` e' entrata solo la PR #93 (aggiornamento del catalogo del 09/10: BMW M2 CS 2025, Porsche 911 GTS T-Hybrid,
+GT3, GT3 RS). Le route sotto `web/app/api/agent/*` restano invariate su autenticazione, validazione dell'input e limite d'uso
+condiviso.
 PR aperte al momento dello scan: #91 (`claude/worker-7-2026-10-07`, modulo dedicato per i testi di riserva e ripristino di
 `check:cache`), #68 (solo `supabase/`).
 
@@ -21,40 +20,45 @@ Nessun problema importante nuovo trovato.
 
 ## Minore
 
-### M1 — `npm run check:cache` non parte piu' (gia' in PR #91)
-File: `web/lib/chatHistory.ts:1-3`, `web/scripts/check-prompt-cache.mts:16`
-Con la PR #90 `chatHistory.ts` importa i cataloghi delle lingue tramite l'alias `@/`; lo script dei controlli sulla cache
-lo carica direttamente con node, che non risolve l'alias: lo script si ferma prima di eseguire qualsiasi controllo.
-Proposta: spostare `isEmptyReplyText` in un modulo a parte (e' esattamente cio' che fa la PR #91).
+### M1 — Ricerca IA: normalizzare gli spazi dei campi del veicolo prima di comporre il testo per il modello (rafforzamento)
+File: `web/app/api/agent/search/route.ts:408-415`
+Marca, modello e motore vengono solo accorciati con `clampText` (che toglie gli spazi in testa e in coda e taglia), poi
+inseriti nella riga "Veicolo di riferimento". Se un campo salvato contiene a capo o altri caratteri di controllo, il testo
+inviato al modello cambia struttura. Il modulo di inserimento usa campi a riga singola, quindi capita solo con dati salvati
+per altre vie, e tocca solo le ricerche dello stesso account.
+Proposta: sostituire nei tre campi ogni sequenza di spazi bianchi o caratteri di controllo con un solo spazio prima di usarli.
 
-### M2 — Pagina documenti: ordinamento della cronologia senza criterio di parita' (stesso file della PR #91)
+### M2 — Ricerca IA: il testo della ricerca oltre i 200 caratteri viene tagliato in silenzio
+File: `web/components/VehicleDetailTabs.tsx:216-221`, `web/app/(dashboard)/veicoli/[id]/page.tsx:76`,
+`web/app/api/agent/search/route.ts:28`, `:342`
+Il server accetta al massimo 200 caratteri (`MAX_QUERY_CHARS`) e taglia il resto senza avvisare. Il campo di ricerca non ha
+`maxLength`, e la ricerca automatica unisce marca, modello e motore (fino a 80 caratteri ciascuno nel modulo, 242 in tutto):
+la parte finale, di solito la motorizzazione, si perde a meta' parola senza che l'utente lo sappia.
+Proposta: `maxLength={200}` sul campo di ricerca e `defaultQuery` limitata a 200 caratteri, tagliata all'ultimo spazio.
+
+### M3 — Pagina documenti: ordinamento della cronologia senza criterio di parita' (stesso file della PR #91, invariato)
 File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:29-33`
-La pagina ordina i `chat_messages` solo per `created_at`, mentre la route della chat aggiunge `id` come secondo criterio
-(`chat/route.ts:156-157`, `186-187`). Con due righe dallo stesso istante l'ordine mostrato, e la riga esclusa dal taglio a 50,
-possono cambiare da un caricamento all'altro. Nella pratica e' raro: i due inserimenti avvengono in istruzioni separate.
-Proposta: aggiungere `.order("id", { ascending: false })` dopo l'ordinamento per data.
+Ordina solo per `created_at`, mentre la route della chat aggiunge `id` come secondo criterio. Proposta: aggiungere
+`.order("id", { ascending: false })`. Rimandato finche' la PR #91 e' aperta.
 
-### M3 — Pagina documenti: il filtro dei testi di riserva e' applicato dopo il limite e mostra righe di soli spazi (stesso file della PR #91)
+### M4 — Pagina documenti: filtro dei testi di riserva applicato dopo il limite, bolle vuote (stesso file della PR #91, invariato)
 File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:33-38`
-Il filtro viene applicato dopo `.limit(50)`, quindi ogni vecchia riga di riserva riduce i messaggi mostrati invece di far
-posto a uno piu' vecchio. Inoltre, a differenza di `toAlternatingMessages` nella route, non scarta le vecchie risposte
-dell'assistente vuote o di soli spazi (salvate prima dell'introduzione di `reply.trim()`), che restano bolle vuote.
-Proposta: scartare anche il contenuto vuoto dopo `trim()`; per il conteggio leggere qualche riga in piu' e tagliare a 50
-dopo il filtro.
+Proposta: scartare anche il contenuto vuoto dopo `trim()` e tagliare a 50 dopo il filtro. Rimandato finche' la PR #91 e' aperta.
 
-### M4-M7 — Invariati (decisioni del proprietario, vedi U3-U6)
+### M5-M8 — Invariati (decisioni del proprietario, vedi U3-U6)
 - Chat: il testo di riserva appare come una vera risposta e sparisce ricaricando la pagina (`web/components/ChatPanel.tsx`) = U6.
 - Chat: una risposta vuota del modello principale non passa al modello di riserva (`web/app/api/agent/chat/route.ts`) = U5.
 - API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts`) = U3.
 - Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata (`web/components/ChatPanel.tsx`) = U4.
 
 ## Rilievi esaminati e non trasformati in task
-- M2 e M3 toccano lo stesso file della PR #91 ancora aperta: per la regola anti-duplicati vengono rimandati a dopo la sua unione.
-- Potenze del catalogo (`web/lib/vehicleData.ts:874-880`, `:2059`): la revisione automatica dubita delle nuove varianti
-  Audi Q6/A6 e-tron (292/326cv) e della Peugeot E-208 GTi (281cv contro 280cv delle gemelle Stellantis, mentre Opel Mokka GSE e'
-  gia' 281cv). Sono dati, non difetti verificabili leggendo il codice: vedi U14.
-- `process-document` ha solo il limite in memoria, ma non chiama modelli e non rielabora i documenti gia' elaborati: invariato
-  rispetto agli scan precedenti.
+- `check:cache` non parte (`web/lib/chatHistory.ts:1-3`): gia' risolto dalla PR #91.
+- Elenco delle lingue scritto a mano nei testi di riserva (`web/lib/chatHistory.ts:1-3`): lo stesso codice e' spostato dalla
+  PR #91; da rivedere dopo la sua unione.
+- Limite 80 ripetuto come numero in cinque campi di `web/app/(dashboard)/veicoli/nuovo/page.tsx`: e' riordino, non un difetto.
+- Nuove voci di catalogo della PR #93 (M2 CS 530cv, 911 GTS T-Hybrid 541cv, GT3 510cv, GT3 RS 525cv): coerenti con i dati
+  pubblici. Le potenze Audi/Peugeot di ieri restano in U14.
+- `process-document` ha solo il limite in memoria, ma non chiama modelli e non rielabora i documenti gia' elaborati: invariato.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/` (invariato).
@@ -67,11 +71,9 @@ dopo il filtro.
 - U8 — Decidere se gli anni vadano limitati al periodo della motorizzazione (anche con "Altro") o offerti sempre per intero.
 - U11 — Portare anche a livello di database i limiti di lunghezza e il controllo di marca/modello non vuoti dei campi di `vehicles` (migrazione in `supabase/`).
 - U12 — Civic Type R (`web/lib/vehicleData.ts`): confermare se l'anno 2022 vada coperto.
-- U13 — Valutare una pulizia una tantum delle righe di riserva gia' salvate in `chat_messages` (operazione sui dati): renderebbe
-  superflui i filtri in lettura di M3 e della route.
+- U13 — Valutare una pulizia una tantum delle righe di riserva gia' salvate in `chat_messages` (operazione sui dati).
 - U14 — Confermare le potenze di Audi Q6 e-tron (292/326cv), A6 e-tron (326cv) e Peugeot E-208 GTi (281 o 280cv).
-(U9 e U10 risolti dalla PR #92.)
 
 ## Gia' in PR
-- #91: `check:cache` (M1); stesso file di M2/M3.
+- #91: `check:cache`; stesso file di M3/M4.
 - #68: migrazione di rafforzamento della RLS (solo `supabase/`).
