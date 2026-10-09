@@ -935,6 +935,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Competition 3.0 Turbo 410cv", yearFrom: 2018, yearTo: 2021 },
         { label: "CS 3.0 Turbo 450cv", yearFrom: 2020, yearTo: 2021 },
         { label: "3.0 Turbo 460cv", yearFrom: 2023, yearTo: null },
+        { label: "CS 3.0 Turbo 530cv", yearFrom: 2025, yearTo: null },
       ],
       M3: [
         { label: "4.0 V8 420cv", yearFrom: 2007, yearTo: 2013 },
@@ -2111,7 +2112,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "911": [
         { label: "Carrera 3.0 385cv", yearFrom: 2019, yearTo: null },
         { label: "Carrera S 3.0 450cv", yearFrom: 2019, yearTo: null },
+        { label: "Carrera GTS T-Hybrid 3.6 541cv", yearFrom: 2024, yearTo: null },
         { label: "Turbo S 3.7 650cv", yearFrom: 2020, yearTo: null },
+        { label: "GT3 4.0 510cv", yearFrom: 2021, yearTo: null },
+        { label: "GT3 RS 4.0 525cv", yearFrom: 2022, yearTo: null },
       ],
       "718 Cayman": [
         { label: "2.0 Turbo 300cv", yearFrom: 2016, yearTo: null },
