@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizePayload } from "@/lib/searchPayload";
+import { MAX_QUERY_CHARS } from "@/lib/validation";
 import VehicleDetailTabs from "@/components/VehicleDetailTabs";
 import DeleteVehicleButton from "@/components/DeleteVehicleButton";
 import type { ResourceLink, SearchPayload, SectionImage, SectionSpecs, Vehicle, VehicleSection } from "@/lib/types";
@@ -73,7 +74,14 @@ export default async function VehicleDetailPage({
   const initialSpecs: SectionSpecs = savedSearch?.specifiche || {};
 
   const v = vehicle as Vehicle;
-  const defaultQuery = [v.make, v.model, v.engine_code].filter(Boolean).join(" ");
+  const fullQuery = [v.make, v.model, v.engine_code].filter(Boolean).join(" ");
+  // Il server accetta al massimo MAX_QUERY_CHARS caratteri: si taglia qui, all'ultimo spazio, per non spezzare una parola.
+  let defaultQuery = fullQuery;
+  if (fullQuery.length > MAX_QUERY_CHARS) {
+    const prefix = fullQuery.slice(0, MAX_QUERY_CHARS);
+    const lastSpace = prefix.lastIndexOf(" ");
+    defaultQuery = (lastSpace > 0 ? prefix.slice(0, lastSpace) : prefix).trimEnd();
+  }
 
   return (
     <div>

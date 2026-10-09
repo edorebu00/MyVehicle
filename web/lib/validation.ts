@@ -5,6 +5,9 @@ export function isUuid(value: unknown): value is string {
   return typeof value === "string" && UUID_RE.test(value);
 }
 
+/** La query finisce nel prompt: un tetto evita richieste enormi (e costose) verso i modelli. */
+export const MAX_QUERY_CHARS = 200;
+
 /** Taglia una stringa a una lunghezza massima, restituendo null se vuota. */
 export function clampText(value: unknown, maxChars: number): string | null {
   if (typeof value !== "string") return null;

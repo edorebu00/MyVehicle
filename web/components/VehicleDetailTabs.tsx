@@ -8,6 +8,7 @@ import ResourceCategoryView from "./ResourceCategoryView";
 import { autoscoutSearchUrl } from "@/lib/autoscout";
 import { safeExternalUrl } from "@/lib/safeUrl";
 import { resolveLocale } from "@/i18n/locales";
+import { MAX_QUERY_CHARS } from "@/lib/validation";
 import type { ResourceLink, SectionImage, SectionKey, SectionSpecs, VehicleSection } from "@/lib/types";
 
 type ResourceTabId = "documenti" | "forum" | "video";
@@ -216,6 +217,7 @@ export default function VehicleDetailTabs({
                 <input
                   className="input"
                   placeholder={t("searchPlaceholder")}
+                  maxLength={MAX_QUERY_CHARS}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
