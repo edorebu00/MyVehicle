@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import FileUploader from "@/components/FileUploader";
 import DocumentList from "@/components/DocumentList";
 import ChatPanel from "@/components/ChatPanel";
-import { isEmptyReplyText } from "@/lib/chatHistory";
+import { isEmptyReplyText } from "@/lib/emptyReply";
 import type { ChatMessage, DocumentRow, Vehicle } from "@/lib/types";
 
 export default async function VehicleDocumentsPage({ params }: { params: Promise<{ id: string }> }) {
