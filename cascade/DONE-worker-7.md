@@ -1,2 +1,2 @@
-Data (UTC): 2026-10-07
-PR #91 aperta, non unita: merge automatico non consentito dai permessi della sessione (check:cache ripristinato, verifiche tsc/lint/check:cache/build ok); PR #89 (lavoratore 5) unita, deploy success su 3282995; lavoratore 6 senza task e senza segno, non toccato; U1-U13 e #68 invariati.
+Data (UTC): 2026-10-09
+nessun problema risolvibile: M1/M2 gia' risolti dalla PR #94 (lavoratore 4, deploy success); M3/M4 rimandati per la PR #91 aperta (unibile, in attesa); lavoratori 5 e 6 senza task; M5-M8, U1-U8, U11-U14 e #68 richiedono intervento umano.
