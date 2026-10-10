@@ -6,7 +6,7 @@ import { getAnthropicClient, CLAUDE_MODEL, EFFORT, logTokenUsage } from "@/lib/a
 import { getOpenAIClient, hasOpenAIFallback, OPENAI_SEARCH_MODEL } from "@/lib/openai";
 import { LOCALE_LANGUAGE_NAME, resolveLocale, type Locale } from "@/i18n/locales";
 import { checkRateLimit, checkSharedRateLimit, rateWindowStart } from "@/lib/rateLimit";
-import { clampText, isUuid } from "@/lib/validation";
+import { clampText, collapseWhitespace, isUuid, MAX_QUERY_CHARS } from "@/lib/validation";
 import { MAX_RISORSE, sanitizePayload } from "@/lib/searchPayload";
 import { RESOURCE_CATEGORIES, type SearchPayload } from "@/lib/types";
 
@@ -24,8 +24,6 @@ const ANTHROPIC_RETRY_TIMEOUT_MS = 45_000;
 const OPENAI_SEARCH_TIMEOUT_MS = 50_000;
 const ANTHROPIC_SEARCH_TIMEOUT_NO_FALLBACK_MS = ANTHROPIC_SEARCH_TIMEOUT_MS + OPENAI_SEARCH_TIMEOUT_MS;
 
-/** La query finisce nel prompt: un tetto evita richieste enormi (e costose) verso i modelli. */
-const MAX_QUERY_CHARS = 200;
 /** Marca, modello e motore del veicolo finiscono nel prompt: stesso principio della query. */
 const MAX_VEHICLE_FIELD_CHARS = 80;
 /** Ogni ricerca costa piu' chiamate al modello con web search: massimo 10 ogni 5 minuti per utente. */
@@ -405,9 +403,9 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (vehicle) {
-      const make = clampText(vehicle.make, MAX_VEHICLE_FIELD_CHARS);
-      const model = clampText(vehicle.model, MAX_VEHICLE_FIELD_CHARS);
-      const engine = clampText(vehicle.engine_code, MAX_VEHICLE_FIELD_CHARS);
+      const make = clampText(collapseWhitespace(vehicle.make), MAX_VEHICLE_FIELD_CHARS);
+      const model = clampText(collapseWhitespace(vehicle.model), MAX_VEHICLE_FIELD_CHARS);
+      const engine = clampText(collapseWhitespace(vehicle.engine_code), MAX_VEHICLE_FIELD_CHARS);
       if (make || model || engine) {
         const name = [make, model].filter(Boolean).join(" ");
         vehicleContext = `Veicolo di riferimento: ${vehicle.type === "moto" ? "moto" : "auto"}${name ? ` ${name}` : ""}${

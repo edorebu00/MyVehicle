@@ -594,6 +594,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "XPower Elettrica 435cv", yearFrom: 2023, yearTo: null },
       ],
       MG3: [{ label: "1.5 Hybrid+ 194cv", yearFrom: 2023, yearTo: null }],
+      Cyberster: [
+        { label: "Trophy Elettrica 77 kWh 340cv", yearFrom: 2024, yearTo: null },
+        { label: "GT Elettrica 77 kWh 503cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     SsangYong: {
       Tivoli: [
@@ -1443,6 +1447,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 T-GDI 120cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 CRDi 136cv", yearFrom: 2017, yearTo: null },
         { label: "N 2.0 T-GDI 280cv", yearFrom: 2018, yearTo: null },
+      ],
+      Inster: [
+        { label: "Elettrica 42 kWh 97cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 49 kWh 115cv", yearFrom: 2024, yearTo: null },
       ],
       Kona: [
         { label: "1.0 T-GDI 120cv", yearFrom: 2017, yearTo: null },
@@ -2378,6 +2386,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.9 DDiS 120cv", yearFrom: 2006, yearTo: 2014 },
       ],
       Baleno: [{ label: "1.0 Boosterjet 111cv", yearFrom: 2016, yearTo: null }],
+      "e Vitara": [
+        { label: "Elettrica 49 kWh 144cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 61 kWh 174cv", yearFrom: 2025, yearTo: null },
+        { label: "AllGrip-e Elettrica 61 kWh 184cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     Tesla: {
       "Model 3": [
