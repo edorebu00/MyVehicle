@@ -1448,10 +1448,6 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.6 CRDi 136cv", yearFrom: 2017, yearTo: null },
         { label: "N 2.0 T-GDI 280cv", yearFrom: 2018, yearTo: null },
       ],
-      Inster: [
-        { label: "Elettrica 42 kWh 97cv", yearFrom: 2024, yearTo: null },
-        { label: "Elettrica 49 kWh 115cv", yearFrom: 2024, yearTo: null },
-      ],
       Kona: [
         { label: "1.0 T-GDI 120cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 T-GDI Hybrid 141cv", yearFrom: 2019, yearTo: null },
