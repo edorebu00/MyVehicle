@@ -470,6 +470,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica Single Motor 231cv", yearFrom: 2020, yearTo: null },
         { label: "Elettrica Dual Motor 421cv", yearFrom: 2020, yearTo: null },
       ],
+      "Polestar 3": [
+        { label: "Long Range Dual Motor Elettrica 489cv", yearFrom: 2024, yearTo: null },
+        { label: "Performance Pack Elettrica 517cv", yearFrom: 2024, yearTo: null },
+      ],
+      "Polestar 4": [
+        { label: "Long Range Single Motor Elettrica 272cv", yearFrom: 2024, yearTo: null },
+        { label: "Long Range Dual Motor Elettrica 544cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     Rover: {
       "75": [
@@ -1044,6 +1052,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "30d 3.0 286cv", yearFrom: 2019, yearTo: null },
         { label: "M60i 4.4 530cv", yearFrom: 2022, yearTo: null },
       ],
+      XM: [
+        { label: "4.4 V8 Turbo Hybrid 653cv", yearFrom: 2023, yearTo: null },
+        { label: "Label Red 4.4 V8 Turbo Hybrid 748cv", yearFrom: 2023, yearTo: null },
+      ],
       iX: [
         { label: "xDrive40 326cv", yearFrom: 2021, yearTo: null },
         { label: "xDrive50 523cv", yearFrom: 2021, yearTo: null },
@@ -1544,6 +1556,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Avenger: [
         { label: "1.2 T3 Hybrid 100cv", yearFrom: 2023, yearTo: null },
         { label: "Elettrica 156cv", yearFrom: 2023, yearTo: null },
+        { label: "4xe 1.2 Hybrid 145cv", yearFrom: 2024, yearTo: null },
       ],
       Wrangler: [
         { label: "2.2 MultiJet 200cv", yearFrom: 2018, yearTo: null },
@@ -2657,6 +2670,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       EC40: [
         { label: "Elettrica 231cv", yearFrom: 2023, yearTo: null },
         { label: "Twin Motor 402cv", yearFrom: 2023, yearTo: null },
+      ],
+      EX90: [
+        { label: "Twin Motor 408cv", yearFrom: 2024, yearTo: null },
+        { label: "Twin Motor Performance 517cv", yearFrom: 2024, yearTo: null },
       ],
     },
     Ineos: {

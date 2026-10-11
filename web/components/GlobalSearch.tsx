@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import ResourceCategoryView from "./ResourceCategoryView";
 import type { ResourceLink } from "@/lib/types";
+import { MAX_QUERY_CHARS } from "@/lib/validation";
 
 export default function GlobalSearch() {
   const t = useTranslations("search");
@@ -62,6 +63,7 @@ export default function GlobalSearch() {
           placeholder={t("placeholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          maxLength={MAX_QUERY_CHARS}
         />
         <button type="submit" disabled={loading} className="btn-primary whitespace-nowrap">
           {loading ? (
