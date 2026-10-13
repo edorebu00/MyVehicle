@@ -1167,6 +1167,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 Hybrid 150cv", yearFrom: 2024, yearTo: null },
         { label: "2.0 TSI 204cv", yearFrom: 2024, yearTo: null },
         { label: "2.0 TSI VZ 265cv", yearFrom: 2024, yearTo: null },
+        { label: "1.5 e-Hybrid VZ 272cv", yearFrom: 2024, yearTo: null },
       ],
       Tavascan: [
         { label: "Endurance Elettrica 286cv", yearFrom: 2024, yearTo: null },
@@ -1361,6 +1362,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "ST 1.5 EcoBoost 200cv", yearFrom: 2020, yearTo: null },
       ],
       "Puma Gen-E": [{ label: "Elettrica 43 kWh 168cv", yearFrom: 2024, yearTo: null }],
+      Capri: [
+        { label: "Extended Range Elettrica 77 kWh 286cv", yearFrom: 2024, yearTo: null },
+        { label: "Extended Range AWD Elettrica 79 kWh 340cv", yearFrom: 2024, yearTo: null },
+      ],
       Kuga: [
         { label: "1.5 EcoBlue 120cv", yearFrom: 2019, yearTo: null },
         { label: "2.5 Duratec Plug-in Hybrid 225cv", yearFrom: 2020, yearTo: null },
@@ -1828,6 +1833,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "CLA200 1.3 163cv", yearFrom: 2019, yearTo: null },
         { label: "CLA220d 2.0 190cv", yearFrom: 2019, yearTo: null },
         { label: "CLA45 S AMG 2.0 Turbo 421cv", yearFrom: 2019, yearTo: null },
+        { label: "CLA250+ EQ Elettrica 85 kWh 272cv", yearFrom: 2025, yearTo: null },
+        { label: "CLA350 4MATIC EQ Elettrica 85 kWh 354cv", yearFrom: 2025, yearTo: null },
       ],
       GLA: [
         { label: "GLA200 1.3 163cv", yearFrom: 2020, yearTo: null },
