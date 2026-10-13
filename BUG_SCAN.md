@@ -1,9 +1,14 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-12 (UTC), eseguita alle 01:2x
+Data scan: 2026-10-13 (UTC), eseguita alle 01:18
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Da ieri `main` non e' cambiato: l'ultimo commit e' sempre `41645d3` (merge della PR #99). Le route sotto `web/app/api/` e `web/middleware.ts` sono le stesse dello scan precedente.
+Rispetto allo scan del 12/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #100, nuove versioni di catalogo per
+Cupra Terramar, Ford Capri e Mercedes CLA). Le nuove righe sono state controllate: nessuna chiave duplicata, e le versioni si
+sommano correttamente a quelle d'epoca gia' presenti in `web/lib/engineExtensions.ts` (Ford Capri 1969-1986).
+Il resto del codice sotto `web/`, comprese le route di `web/app/api/` e `web/middleware.ts`, e' identico allo scan precedente.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
+
+Nessun problema nuovo trovato oggi: l'elenco qui sotto e' quello gia' verificato, ricontrollato sul codice attuale.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -17,7 +22,7 @@ Nessun problema importante nuovo trovato.
 
 ## Minore
 
-### M1 — Chat: il campo di testo non ha un limite di lunghezza, ma il server tronca a 4000 caratteri (nuovo)
+### M1 — Chat: il campo di testo non ha un limite di lunghezza, ma il server tronca a 4000 caratteri (invariato, in attesa per arretrato)
 File: `web/components/ChatPanel.tsx:126-131`; limite lato server: `web/app/api/agent/chat/route.ts:35,134`
 In pratica, se un utente incolla una domanda piu' lunga di 4000 caratteri, la bolla mostra tutto il testo, ma il server salva e
 manda al modello solo i primi 4000. La risposta ignora la parte finale e, ricaricando la pagina, la domanda appare accorciata
