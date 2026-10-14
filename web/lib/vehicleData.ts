@@ -199,7 +199,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Pontiac: ["Fiero", "Grand Am", "GTO", "Sunfire"],
     Porsche: ["356", "550 Spyder", "718 Spyder", "912", "914", "918 Spyder", "959", "968", "Boxster", "Carrera GT", "Cayman", "Mission R", "Taycan Cross Turismo"],
     RAM: ["2500", "3500", "ProMaster"],
-    Renault: ["11", "14", "18", "20", "21", "25", "30", "4 E-Tech", "Alaskan", "Avantime", "Estafette", "Fuego", "Master", "Rafale", "R5 E-Tech", "Safrane", "Sport Spider", "Symbioz", "Vel Satis", "Wind"],
+    Renault: ["11", "14", "18", "20", "21", "25", "30", "4 E-Tech", "5 Turbo 3E", "Alaskan", "Avantime", "Estafette", "Fuego", "Master", "Rafale", "R5 E-Tech", "Safrane", "Sport Spider", "Symbioz", "Vel Satis", "Wind"],
     "Rolls Royce": ["Camargue", "Cullinan", "Dawn", "Ghost", "Park Ward", "Silver Cloud", "Silver Spirit", "Spectre"],
     Rover: ["25", "45", "200", "400", "600", "800", "Metro", "Mini", "P6", "SD1"],
     Saab: ["900", "9000", "9-2X", "9-4X", "9-7X"],
@@ -1552,6 +1552,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.3 T4 130cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 MultiJet 130cv", yearFrom: 2017, yearTo: null },
         { label: "4xe Plug-in Hybrid 240cv", yearFrom: 2020, yearTo: null },
+        { label: "e-Hybrid 1.2 145cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 213cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 4xe 375cv", yearFrom: 2025, yearTo: null },
       ],
       Cherokee: [{ label: "2.2 MultiJet 200cv", yearFrom: 2014, yearTo: 2020 }],
       "Grand Cherokee": [
@@ -1930,6 +1933,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Micra: [
         { label: "1.0 IG-T 92cv", yearFrom: 2017, yearTo: null },
         { label: "0.9 IG-T 90cv", yearFrom: 2017, yearTo: null },
+        { label: "Elettrica 40 kWh 122cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica 52 kWh 150cv", yearFrom: 2025, yearTo: null },
       ],
       Primera: [
         { label: "1.8 16v 116cv", yearFrom: 1996, yearTo: 2007 },
@@ -2181,6 +2186,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.6 E-Tech Hybrid 140cv", yearFrom: 2020, yearTo: null },
         { label: "RS 200 EDC 1.6 Turbo 200cv", yearFrom: 2013, yearTo: 2016 },
         { label: "RS 220 Trophy 1.6 Turbo 220cv", yearFrom: 2016, yearTo: 2019 },
+        { label: "1.2 TCe 115cv", yearFrom: 2025, yearTo: null },
+        { label: "1.6 E-Tech Hybrid 160cv", yearFrom: 2025, yearTo: null },
       ],
       Symbioz: [
         { label: "Mild Hybrid 1.2 140cv", yearFrom: 2024, yearTo: null },
@@ -2243,6 +2250,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       R4: [{ label: "1.1 34cv", yearFrom: 1961, yearTo: 1992 }],
       R5: [{ label: "1.4 Turbo 115cv", yearFrom: 1972, yearTo: 1996 }],
       R19: [{ label: "1.7 95cv", yearFrom: 1988, yearTo: 1996 }],
+      "5 Turbo 3E": [{ label: "Turbo 3E Elettrica 555cv", yearFrom: 2027, yearTo: null }],
       "R5 E-Tech": [
         { label: "Elettrica 40 kWh 120cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 52 kWh 150cv", yearFrom: 2024, yearTo: null },
