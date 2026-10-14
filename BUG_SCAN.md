@@ -1,14 +1,14 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-13 (UTC), eseguita alle 01:18
+Data scan: 2026-10-14 (UTC), eseguita alle 01:18
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Rispetto allo scan del 12/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #100, nuove versioni di catalogo per
-Cupra Terramar, Ford Capri e Mercedes CLA). Le nuove righe sono state controllate: nessuna chiave duplicata, e le versioni si
-sommano correttamente a quelle d'epoca gia' presenti in `web/lib/engineExtensions.ts` (Ford Capri 1969-1986).
+Rispetto allo scan del 13/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #101: nuova Renault Clio, Renault 5 Turbo 3E,
+Nissan Micra elettrica, nuova Jeep Compass). Le nuove righe sono state controllate: nessuna chiave duplicata nello stesso oggetto;
+"5 Turbo 3E" compare anche in `web/lib/catalogueSweep.ts:83`, ma `getModels` (`web/lib/vehicleData.ts:295`) elimina i doppioni.
 Il resto del codice sotto `web/`, comprese le route di `web/app/api/` e `web/middleware.ts`, e' identico allo scan precedente.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 
-Nessun problema nuovo trovato oggi: l'elenco qui sotto e' quello gia' verificato, ricontrollato sul codice attuale.
+Un solo rilievo nuovo, minore (M9, dato di catalogo); il resto dell'elenco e' quello gia' verificato, ricontrollato sul codice attuale.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -44,6 +44,13 @@ File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:29-38`. Rimandato fin
 - API senza sessione: il middleware risponde con un messaggio in inglese (`web/middleware.ts`) = U3.
 - Chat: dopo un invio dall'esito incerto la cronologia mostrata e' diversa da quella salvata = U4.
 
+### M9 — Catalogo: Renault 5 Turbo 3E ha un anno di inizio successivo all'anno corrente (nuovo)
+File: `web/lib/vehicleData.ts:2253`; calcolo degli anni: `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`
+In pratica, scegliendo la versione "Turbo 3E Elettrica 555cv" (inizio 2027), il menu degli anni propone solo il 2026, cioe'
+un anno precedente all'inizio indicato, perche' l'intervallo e' chiuso sull'anno corrente. E' un dato di catalogo da
+confermare (U17), non un difetto del calcolo.
+Proposta: confermare l'anno di inizio reale e, se e' 2027, decidere se tenere ora la versione in catalogo.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/chatHistory.ts:1-3`: importa i tre file di traduzione completi per leggere tre stringhe. E' usato solo lato server
   (route della chat e pagina documenti), quindi non pesa sul bundle del browser; il file e' comunque spostato dalla PR #91.
@@ -69,6 +76,7 @@ File: `web/app/(dashboard)/veicoli/[id]/documenti/page.tsx:29-38`. Rimandato fin
 - U14 — Confermare le potenze di Audi Q6 e-tron, A6 e-tron e Peugeot E-208 GTi.
 - U15 — Confermare l'anno di inizio di Jeep Avenger 4xe e il formato delle etichette Polestar 3/4.
 - U16 — Decidere se, quando una ricerca fallisce, i risultati precedenti vadano nascosti.
+- U17 — Renault 5 Turbo 3E (`web/lib/vehicleData.ts:2253`): confermare l'anno di inizio (oggi 2027, oltre l'anno corrente).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
