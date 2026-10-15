@@ -142,7 +142,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     BAIC: ["Beijing X35", "Beijing X55", "BJ40", "BJ60"],
     Bentley: ["Arnage", "Azure", "Blower", "Brooklands", "Eight", "R-Type", "Turbo R"],
     BMW: ["1500", "2002", "3.0 CSL", "507", "Isetta", "Serie 2 Active Tourer", "Serie 2 Gran Coupé", "Serie 4 Gran Coupé", "Serie 5 Touring", "Serie 6 Gran Turismo", "Serie 8 Gran Coupé", "i5", "i7", "iX2", "M1", "X7", "XM", "Z8"],
-    BYD: ["Atto 2", "Dolphin Surf", "Han", "Sealion 7", "Tang"],
+    BYD: ["Atto 2", "Dolphin Surf", "Han", "Seal U DM-i", "Sealion 7", "Tang"],
     Cadillac: ["ATS", "CT4", "CT5", "CTS", "DeVille", "Eldorado", "ELR", "Lyriq", "Seville", "SRX", "XT4", "XT5", "XT6"],
     Chevrolet: ["Blazer", "Bolt", "Chevelle", "Epica", "Impala", "Malibu", "Nova", "Tacuma", "Trailblazer", "Volt"],
     Autobianchi: ["Bianchina", "Primula", "Stellina"],
@@ -173,7 +173,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Isuzu: ["Trooper", "VehiCROSS"],
     Iveco: ["Eurocargo", "Massif", "Stralis"],
     Jaguar: ["C-Type", "D-Type", "E-Type", "I-Type", "Mark 2", "XJ220", "XJS"],
-    Jeep: ["CJ", "Grand Wagoneer", "Liberty", "Wagoneer", "Willys"],
+    Jeep: ["CJ", "Grand Wagoneer", "Liberty", "Wagoneer", "Wagoneer S", "Willys"],
     Kia: ["Cerato", "EV3", "EV4", "EV5", "Joice", "K4", "Magentis", "Mohave", "Pride", "PV5", "Pregio", "Sedona", "Shuma"],
     Lamborghini: ["350 GT", "400 GT", "Countach", "Espada", "Islero", "Jalpa", "LM002", "Miura", "Revuelto", "Silhouette", "Temerario", "Urraco"],
     Lancia: ["037", "Appia", "Ardea", "Augusta", "Aurelia", "Delta Integrale", "Flaminia", "Montecarlo", "Phedra", "Prisma", "Stratos", "Trevi", "Voyager", "Y10"],
@@ -195,7 +195,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     NIO: ["EL6", "EL7", "ET5", "ET7"],
     Opel: ["Ascona", "Campo", "Commodore", "GT", "Kadett", "Monterey", "Movano", "Omega", "Rocks-e", "Senator", "Signum", "Sintra", "Vivaro"],
     Peugeot: ["104", "301", "309", "404", "4007", "4008", "504", "505", "605", "607", "806", "e-3008", "e-5008", "Expert", "Rifter", "Tepee"],
-    Polestar: ["Polestar 1", "Polestar 3", "Polestar 4"],
+    Polestar: ["Polestar 1", "Polestar 3", "Polestar 4", "Polestar 5"],
     Pontiac: ["Fiero", "Grand Am", "GTO", "Sunfire"],
     Porsche: ["356", "550 Spyder", "718 Spyder", "912", "914", "918 Spyder", "959", "968", "Boxster", "Carrera GT", "Cayman", "Mission R", "Taycan Cross Turismo"],
     RAM: ["2500", "3500", "ProMaster"],
@@ -478,6 +478,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Long Range Single Motor Elettrica 272cv", yearFrom: 2024, yearTo: null },
         { label: "Long Range Dual Motor Elettrica 544cv", yearFrom: 2024, yearTo: null },
       ],
+      "Polestar 5": [
+        { label: "Dual Motor Elettrica 748cv", yearFrom: 2026, yearTo: null },
+        { label: "Performance Elettrica 884cv", yearFrom: 2026, yearTo: null },
+      ],
     },
     Rover: {
       "75": [
@@ -541,6 +545,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 204cv", yearFrom: 2023, yearTo: null },
       ],
       "Seal U": [{ label: "Elettrica 218cv", yearFrom: 2024, yearTo: null }],
+      "Seal U DM-i": [
+        { label: "Comfort DM-i Plug-in Hybrid 218cv", yearFrom: 2024, yearTo: null },
+        { label: "Design DM-i Plug-in Hybrid AWD 319cv", yearFrom: 2024, yearTo: null },
+      ],
       "Dolphin Surf": [
         { label: "Elettrica 88cv", yearFrom: 2025, yearTo: null },
         { label: "Elettrica 156cv", yearFrom: 2025, yearTo: null },
@@ -1574,6 +1582,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Gladiator: [{ label: "3.6 Pentastar 285cv", yearFrom: 2019, yearTo: null }],
       Commander: [{ label: "3.0 CRD 218cv", yearFrom: 2006, yearTo: 2010 }],
       Patriot: [{ label: "2.2 CRD 163cv", yearFrom: 2007, yearTo: 2016 }],
+      "Wagoneer S": [{ label: "Elettrica Dual Motor 600cv", yearFrom: 2026, yearTo: null }],
     },
     Kia: {
       Picanto: [
@@ -1617,9 +1626,18 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 204cv", yearFrom: 2023, yearTo: null },
         { label: "GT-Line 384cv", yearFrom: 2023, yearTo: null },
       ],
-      EV3: [{ label: "Elettrica 204cv", yearFrom: 2024, yearTo: null }],
-      EV4: [{ label: "Elettrica 204cv", yearFrom: 2025, yearTo: null }],
-      EV5: [{ label: "Elettrica 218cv", yearFrom: 2026, yearTo: null }],
+      EV3: [
+        { label: "Elettrica 204cv", yearFrom: 2024, yearTo: null },
+        { label: "GT 292cv", yearFrom: 2026, yearTo: null },
+      ],
+      EV4: [
+        { label: "Elettrica 204cv", yearFrom: 2025, yearTo: null },
+        { label: "GT 292cv", yearFrom: 2026, yearTo: null },
+      ],
+      EV5: [
+        { label: "Elettrica 218cv", yearFrom: 2026, yearTo: null },
+        { label: "GT 306cv", yearFrom: 2026, yearTo: null },
+      ],
       PV5: [{ label: "Elettrica 163cv", yearFrom: 2025, yearTo: null }],
       ProCeed: [
         { label: "1.4 T-GDI 140cv", yearFrom: 2018, yearTo: null },
@@ -1852,6 +1870,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       GLC: [
         { label: "GLC200 2.0 197cv", yearFrom: 2019, yearTo: null },
         { label: "GLC300d 2.0 245cv", yearFrom: 2019, yearTo: null },
+        { label: "AMG GLC63 S E Performance 2.0 Turbo Hybrid 680cv", yearFrom: 2024, yearTo: null },
       ],
       GLE: [
         { label: "GLE300d 2.0 245cv", yearFrom: 2019, yearTo: null },
