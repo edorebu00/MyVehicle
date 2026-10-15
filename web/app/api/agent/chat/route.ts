@@ -5,7 +5,8 @@ import { getAnthropicClient, CLAUDE_MODEL, EFFORT, logTokenUsage } from "@/lib/a
 import { getOpenAIClient, hasOpenAIFallback, OPENAI_MODEL } from "@/lib/openai";
 import { LOCALE_LANGUAGE_NAME, resolveLocale } from "@/i18n/locales";
 import { checkRateLimit, checkSharedRateLimit, rateWindowStart } from "@/lib/rateLimit";
-import { historyWindow, isEmptyReplyText } from "@/lib/chatHistory";
+import { historyWindow } from "@/lib/chatHistory";
+import { isEmptyReplyText } from "@/lib/emptyReply";
 import { buildChatSystemBlocks, flattenSystemBlocks } from "@/lib/chatPrompt";
 import { clampText, isUuid } from "@/lib/validation";
 
