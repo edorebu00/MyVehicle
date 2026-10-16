@@ -1,14 +1,15 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-15 (UTC), eseguita alle 01:21
+Data scan: 2026-10-16 (UTC), eseguita alle 01:30
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Rispetto allo scan del 14/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #102: Jeep Wagoneer S, Polestar 5,
-BYD Seal U DM-i, versioni GT di Kia EV3/EV4/EV5, AMG GLC 63 S E Performance). `npx tsc --noEmit` passa (nessuna chiave
-duplicata nello stesso oggetto); "Wagoneer S" e "Polestar 5" compaiono anche in `web/lib/catalogueSweep.ts:55,79`, ma `getModels`
-elimina i doppioni. Il resto del codice sotto `web/`, comprese le route di `web/app/api/` e `web/middleware.ts`, e' identico allo scan precedente.
+Rispetto allo scan del 15/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #103: Lancia Gamma di nuova generazione,
+Jeep Recon, motorizzazioni DS N°8). Nessuna chiave duplicata nello stesso oggetto: `tsc` non segnala errori in `web/lib/vehicleData.ts`
+(in questo ambiente mancano le dipendenze, quindi gli altri errori di `tsc` riguardano solo i tipi non installati). "Recon" compare
+anche in `web/lib/catalogueSweep.ts:55`, ma `getModels` elimina i doppioni. Il resto del codice sotto `web/`, comprese le route di
+`web/app/api/` e `web/middleware.ts`, e' identico allo scan precedente. `supabase/` non e' cambiata.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 
-Due rilievi nuovi, minori (M10 e M11, dati di catalogo); il resto dell'elenco e' quello gia' verificato, ricontrollato sul codice attuale
+Un rilievo nuovo, minore (M12, dati di catalogo); il resto dell'elenco e' quello gia' verificato, ricontrollato sul codice attuale
 (numeri di riga di `web/lib/vehicleData.ts` aggiornati).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
@@ -66,6 +67,13 @@ file (circa 324cv e 608cv). Inoltre la DM-i e' un modello a parte ("Seal U DM-i"
 vede solo la versione elettrica. E' una scelta di catalogo.
 Proposta: confermare potenze e collocazione della DM-i (U18).
 
+### M12 — Catalogo: potenza della Jeep Recon e dati della nuova Lancia Gamma da confermare (nuovo)
+File: `web/lib/vehicleData.ts:1591` (Jeep Recon, "650cv"), `:1714-1720` (Lancia Gamma 2026)
+In pratica "650cv" della Recon sembra il valore in hp (circa 659cv metrici), come gia' visto in M11 per la Wagoneer S. Le potenze
+delle versioni Gamma 2026 (in particolare "HF Integrale Elettrica 375cv") sono da confermare sui dati ufficiali. Il modello Gamma
+mescola la versione del 1976-1984 e quelle del 2026: il menu degli anni funziona per motorizzazione, quindi non e' un difetto.
+Proposta: confermare le potenze (U18).
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#102) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -97,7 +105,7 @@ Proposta: confermare potenze e collocazione della DM-i (U18).
 - U15 — Confermare l'anno di inizio di Jeep Avenger 4xe e il formato delle etichette Polestar 3/4.
 - U16 — Decidere se, quando una ricerca fallisce, i risultati precedenti vadano nascosti.
 - U17 — Renault 5 Turbo 3E (`web/lib/vehicleData.ts:2272`): confermare l'anno di inizio (oggi 2027, oltre l'anno corrente).
-- U18 — Confermare anni di inizio di Jeep Wagoneer S e AMG GLC63 S E Performance, potenze di Seal U DM-i AWD e Wagoneer S e se la DM-i debba stare sotto "Seal U" (M10, M11).
+- U18 — Confermare anni di inizio di Jeep Wagoneer S e AMG GLC63 S E Performance, potenze di Seal U DM-i AWD, Wagoneer S, Jeep Recon e Lancia Gamma 2026, e se la DM-i debba stare sotto "Seal U" (M10, M11, M12).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
