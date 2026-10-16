@@ -173,7 +173,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Isuzu: ["Trooper", "VehiCROSS"],
     Iveco: ["Eurocargo", "Massif", "Stralis"],
     Jaguar: ["C-Type", "D-Type", "E-Type", "I-Type", "Mark 2", "XJ220", "XJS"],
-    Jeep: ["CJ", "Grand Wagoneer", "Liberty", "Wagoneer", "Wagoneer S", "Willys"],
+    Jeep: ["CJ", "Grand Wagoneer", "Liberty", "Recon", "Wagoneer", "Wagoneer S", "Willys"],
     Kia: ["Cerato", "EV3", "EV4", "EV5", "Joice", "K4", "Magentis", "Mohave", "Pride", "PV5", "Pregio", "Sedona", "Shuma"],
     Lamborghini: ["350 GT", "400 GT", "Countach", "Espada", "Islero", "Jalpa", "LM002", "Miura", "Revuelto", "Silhouette", "Temerario", "Urraco"],
     Lancia: ["037", "Appia", "Ardea", "Augusta", "Aurelia", "Delta Integrale", "Flaminia", "Montecarlo", "Phedra", "Prisma", "Stratos", "Trevi", "Voyager", "Y10"],
@@ -1229,6 +1229,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.6 PureTech 250cv", yearFrom: 2021, yearTo: null },
         { label: "Hybrid E-Tense 360cv", yearFrom: 2021, yearTo: null },
       ],
+      "DS N°8": [
+        { label: "Elettrica 230cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica Long Range 245cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica Long Range AWD 350cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     Fiat: {
       Panda: [
@@ -1583,6 +1588,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Commander: [{ label: "3.0 CRD 218cv", yearFrom: 2006, yearTo: 2010 }],
       Patriot: [{ label: "2.2 CRD 163cv", yearFrom: 2007, yearTo: 2016 }],
       "Wagoneer S": [{ label: "Elettrica Dual Motor 600cv", yearFrom: 2026, yearTo: null }],
+      Recon: [{ label: "Elettrica Dual Motor 650cv", yearFrom: 2026, yearTo: null }],
     },
     Kia: {
       Picanto: [
@@ -1705,7 +1711,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Beta: [{ label: "1.6 90cv", yearFrom: 1972, yearTo: 1984 }],
       Fulvia: [{ label: "1.3 Rallye 90cv", yearFrom: 1965, yearTo: 1976 }],
       Flavia: [{ label: "1.8 92cv", yearFrom: 1960, yearTo: 1971 }],
-      Gamma: [{ label: "2.5 140cv", yearFrom: 1976, yearTo: 1984 }],
+      Gamma: [
+        { label: "2.5 140cv", yearFrom: 1976, yearTo: 1984 },
+        { label: "1.2 Turbo Hybrid 145cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 230cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica Long Range 245cv", yearFrom: 2026, yearTo: null },
+        { label: "HF Integrale Elettrica 375cv", yearFrom: 2026, yearTo: null },
+      ],
       Lybra: [
         { label: "1.8 16v 131cv", yearFrom: 1999, yearTo: 2005 },
         { label: "2.4 JTD 150cv", yearFrom: 1999, yearTo: 2005 },
