@@ -213,7 +213,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Tata: ["Indica", "Nano"],
     Tesla: ["Cybertruck", "Roadster", "Semi"],
     Toyota: ["bZ4X", "Carina", "Century", "Cressida", "Crown", "GR Corolla", "GR Yaris", "Land Cruiser Prado", "Paseo", "Previa", "Proace", "Proace City", "Sera", "Starlet", "Tercel", "Urban Cruiser", "bZ3"],
-    Volkswagen: ["Atlas", "Atlas Cross Sport", "Derby", "ID.2all", "ID. Buzz", "ID.5", "ID.7", "ID.7 Tourer", "Iltis", "LT", "Santana", "T-Cross", "T5", "T6", "T7", "Tayron", "Vento", "Virtus"],
+    Volkswagen: ["Atlas", "Atlas Cross Sport", "Derby", "ID.2all", "ID. Buzz", "ID. Cross", "ID. Polo", "ID.5", "ID.7", "ID.7 Tourer", "Iltis", "LT", "Santana", "T-Cross", "T5", "T6", "T7", "Tayron", "Vento", "Virtus"],
     Volvo: ["140", "460", "480", "740", "760", "850", "940", "960", "1800", "Amazon", "C40", "EX40", "EX90", "ES90", "V40 Cross Country"],
     XPeng: ["G6", "G9", "P7"],
     Zeekr: ["001", "7X", "X"],
@@ -1013,7 +1013,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       i8: [{ label: "1.5 Turbo Ibrida 374cv", yearFrom: 2014, yearTo: 2020 }],
       iX1: [{ label: "xDrive30 313cv", yearFrom: 2022, yearTo: null }],
-      iX3: [{ label: "286cv", yearFrom: 2020, yearTo: null }],
+      iX3: [
+        { label: "286cv", yearFrom: 2020, yearTo: null },
+        { label: "xDrive50 469cv", yearFrom: 2026, yearTo: null },
+      ],
       X1: [
         { label: "18d 2.0 150cv", yearFrom: 2015, yearTo: null },
         { label: "20i 2.0 192cv", yearFrom: 2015, yearTo: null },
@@ -1834,7 +1837,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "CLK 320 V6 218cv", yearFrom: 1997, yearTo: 2010 },
       ],
       CLS: [{ label: "CLS 350d 3.0 286cv", yearFrom: 2018, yearTo: null }],
-      GLS: [{ label: "GLS 400d 3.0 330cv", yearFrom: 2019, yearTo: null }],
+      GLS: [
+        { label: "GLS 400d 3.0 330cv", yearFrom: 2019, yearTo: null },
+        { label: "AMG GLS63 4.0 V8 612cv", yearFrom: 2020, yearTo: null },
+      ],
       "AMG GT": [{ label: "4.0 V8 Turbo 476cv", yearFrom: 2014, yearTo: null }],
       EQV: [{ label: "Elettrica 204cv", yearFrom: 2020, yearTo: null }],
       "Classe A": [
@@ -1887,6 +1893,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       GLE: [
         { label: "GLE300d 2.0 245cv", yearFrom: 2019, yearTo: null },
         { label: "GLE450 3.0 367cv", yearFrom: 2019, yearTo: null },
+        { label: "AMG GLE63 S 4.0 V8 612cv", yearFrom: 2019, yearTo: null },
       ],
       Sprinter: [
         { label: "2.1 CDI 143cv", yearFrom: 2018, yearTo: null },
@@ -2196,6 +2203,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Macan: [
         { label: "2.0 Turbo 265cv", yearFrom: 2014, yearTo: null },
         { label: "GTS 2.9 V6 380cv", yearFrom: 2020, yearTo: null },
+        { label: "Elettrica 4 408cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 4S 516cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Turbo 639cv", yearFrom: 2024, yearTo: null },
       ],
       Cayenne: [
         { label: "3.0 V6 340cv", yearFrom: 2018, yearTo: null },
@@ -2245,6 +2255,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Twingo: [
         { label: "1.0 SCe 65cv", yearFrom: 2014, yearTo: null },
         { label: "Elettrica 82cv", yearFrom: 2020, yearTo: null },
+        { label: "Elettrica 27,5 kWh 82cv", yearFrom: 2026, yearTo: null },
       ],
       Austral: [
         { label: "1.3 TCe 140cv", yearFrom: 2022, yearTo: null },
@@ -2651,6 +2662,17 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "ID.4": [
         { label: "Elettrica Pro 170cv", yearFrom: 2021, yearTo: null },
         { label: "GTX 4motion 299cv", yearFrom: 2021, yearTo: null },
+      ],
+      "ID. Polo": [
+        { label: "Elettrica 37 kWh 116cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 37 kWh 135cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 52 kWh 211cv", yearFrom: 2026, yearTo: null },
+        { label: "GTI Elettrica 52 kWh 226cv", yearFrom: 2026, yearTo: null },
+      ],
+      "ID. Cross": [
+        { label: "Elettrica 37 kWh 116cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 37 kWh 135cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 52 kWh 211cv", yearFrom: 2026, yearTo: null },
       ],
     },
     Volvo: {
