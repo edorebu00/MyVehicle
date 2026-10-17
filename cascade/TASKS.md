@@ -1,4 +1,4 @@
-Data (UTC): 2026-10-16
+Data (UTC): 2026-10-17
 
 Nessun task.
-Arretrato: 3 PR dei lavoratori ancora aperte (#98, #96, #91), quindi oggi non si creano nuovi task. I dettagli sono in BUG_SCAN.md.
+Arretrato: le PR aperte dei lavoratori (#91, #96, #98) sono 3, quindi oggi non vengono creati nuovi task; i rilievi nuovi (M13, M14) sono dati di catalogo da confermare e sono in BUG_SCAN.md sotto "Richiede intervento umano" (U19).
