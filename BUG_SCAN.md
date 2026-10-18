@@ -1,15 +1,13 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-17 (UTC), eseguita alle 01:30
+Data scan: 2026-10-18 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Rispetto allo scan del 16/10 su `main` e' cambiato solo `web/lib/vehicleData.ts` (PR #104: BMW iX3 Neue Klasse, AMG GLE63 S/GLS63,
-Macan elettrica, VW ID. Polo/ID. Cross, nuova Twingo elettrica). Il resto del codice sotto `web/`, comprese le route di
-`web/app/api/` e `web/middleware.ts`, e' identico allo scan precedente. `supabase/` non e' cambiata.
+Dallo scan del 17/10 `main` non e' cambiato (ultimo commit: merge della PR #104): il codice sotto `web/` e `supabase/` e'
+identico a quello gia' esaminato, quindi l'elenco qui sotto resta valido con gli stessi numeri di riga (ricontrollati a campione).
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 
-Due rilievi nuovi, minori (M13, M14, dati di catalogo); il resto dell'elenco e' quello gia' verificato, ricontrollato sul codice attuale
-(numeri di riga di `web/lib/vehicleData.ts` aggiornati).
+Nessun rilievo nuovo: il codice non e' cambiato dallo scan precedente.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -52,28 +50,28 @@ un anno precedente all'inizio indicato, perche' l'intervallo e' chiuso sull'anno
 confermare (U17), non un difetto del calcolo.
 Proposta: confermare l'anno di inizio reale e, se e' 2027, decidere se tenere ora la versione in catalogo.
 
-### M10 — Catalogo: anni di inizio da confermare per due nuove versioni (nuovo)
+### M10 — Catalogo: anni di inizio da confermare per due nuove versioni (invariato)
 File: `web/lib/vehicleData.ts:1585` (Jeep Wagoneer S, inizio 2026) e `:1873` (AMG GLC63 S E Performance, inizio 2024);
 calcolo degli anni: `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`
 In pratica il menu degli anni parte da `yearFrom`: chi ha una Wagoneer S del 2024-2025 (anno modello 2024) o una GLC 63 S E
 Performance del 2023 non trova il proprio anno. La C63 AMG con lo stesso motore (`:1842`) parte dal 2023.
 Proposta: confermare gli anni di inizio reali (U18).
 
-### M11 — Catalogo: potenze e struttura da confermare per due nuove versioni (nuovo)
+### M11 — Catalogo: potenze e struttura da confermare per due nuove versioni (invariato)
 File: `web/lib/vehicleData.ts:548-551` (BYD Seal U DM-i), `:1585` (Jeep Wagoneer S)
 In pratica "319cv" (Seal U DM-i AWD) e "600cv" (Wagoneer S) sembrano valori in hp anziche' in cavalli metrici come nel resto del
 file (circa 324cv e 608cv). Inoltre la DM-i e' un modello a parte ("Seal U DM-i") accanto a "Seal U", cosi' chi sceglie "Seal U"
 vede solo la versione elettrica. E' una scelta di catalogo.
 Proposta: confermare potenze e collocazione della DM-i (U18).
 
-### M12 — Catalogo: potenza della Jeep Recon e dati della nuova Lancia Gamma da confermare (nuovo)
+### M12 — Catalogo: potenza della Jeep Recon e dati della nuova Lancia Gamma da confermare (invariato)
 File: `web/lib/vehicleData.ts:1591` (Jeep Recon, "650cv"), `:1714-1720` (Lancia Gamma 2026)
 In pratica "650cv" della Recon sembra il valore in hp (circa 659cv metrici), come gia' visto in M11 per la Wagoneer S. Le potenze
 delle versioni Gamma 2026 (in particolare "HF Integrale Elettrica 375cv") sono da confermare sui dati ufficiali. Il modello Gamma
 mescola la versione del 1976-1984 e quelle del 2026: il menu degli anni funziona per motorizzazione, quindi non e' un difetto.
 Proposta: confermare le potenze (U18).
 
-### M13 — Catalogo: generazioni vecchie e nuove sovrapposte sotto lo stesso modello (nuovo)
+### M13 — Catalogo: generazioni vecchie e nuove sovrapposte sotto lo stesso modello (invariato)
 File: `web/lib/vehicleData.ts:1017-1018` (iX3), `:2204-2209` (Macan), `:2256-2258` (Twingo), `:1896` (GLE)
 In pratica le motorizzazioni della generazione precedente restano con `yearTo: null` accanto a quelle nuove: per una iX3 del 2026
 il menu offre anche "286cv" (generazione precedente), per una Twingo 2026 compaiono "Elettrica 82cv" e "Elettrica 27,5 kWh 82cv"
@@ -81,7 +79,7 @@ quasi uguali, e "2.0 Turbo 265cv" della Macan arriva fino all'anno corrente. "AM
 GLS63 aggiunta insieme (stessa motorizzazione) parte dal 2020. La motorizzazione scelta finisce nel testo della ricerca IA.
 Proposta: confermare gli anni di fine delle generazioni precedenti e l'anno di inizio della GLE63 S (U19).
 
-### M14 — Catalogo: "ID. Polo" affiancata a "ID.2all" e "ID. Cross" con dati da confermare (nuovo)
+### M14 — Catalogo: "ID. Polo" affiancata a "ID.2all" e "ID. Cross" con dati da confermare (invariato)
 File: `web/lib/vehicleData.ts:216` (elenco modelli Volkswagen), `:2666-2676`
 In pratica "ID.2all" (nome del prototipo da cui deriva la ID. Polo) resta nell'elenco senza motorizzazioni, accanto a "ID. Polo"
 che ne ha quattro: la stessa auto puo' essere salvata con due nomi di modello. Le tre versioni di "ID. Cross" sono copie di quelle
