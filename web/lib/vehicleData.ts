@@ -461,6 +461,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       SF90: [{ label: "4.0 V8 Turbo Ibrida 1000cv", yearFrom: 2019, yearTo: null }],
       "F12 Berlinetta": [{ label: "6.3 V12 740cv", yearFrom: 2012, yearTo: 2017 }],
       GTC4Lusso: [{ label: "6.3 V12 690cv", yearFrom: 2016, yearTo: 2020 }],
+      "296 GTB": [{ label: "3.0 V6 Turbo Ibrida 830cv", yearFrom: 2021, yearTo: null }],
+      "296 GTS": [{ label: "3.0 V6 Turbo Ibrida 830cv", yearFrom: 2022, yearTo: null }],
+      Purosangue: [{ label: "6.5 V12 725cv", yearFrom: 2023, yearTo: null }],
+      "12Cilindri": [{ label: "6.5 V12 830cv", yearFrom: 2024, yearTo: null }],
     },
     Lada: {
       Niva: [{ label: "1.7 80cv", yearFrom: 1977, yearTo: null }],
@@ -961,9 +965,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "4.0 V8 420cv", yearFrom: 2007, yearTo: 2013 },
         { label: "3.0 Turbo 431cv", yearFrom: 2014, yearTo: 2018 },
         { label: "Competition 3.0 Turbo 450cv", yearFrom: 2016, yearTo: 2018 },
+        { label: "CS 3.0 Turbo 460cv", yearFrom: 2018, yearTo: 2018 },
         { label: "3.0 Turbo 480cv", yearFrom: 2021, yearTo: null },
         { label: "Competition 3.0 Turbo 510cv", yearFrom: 2021, yearTo: null },
         { label: "Touring Competition 3.0 Turbo 510cv", yearFrom: 2022, yearTo: null },
+        { label: "CS 3.0 Turbo 550cv", yearFrom: 2023, yearTo: 2024 },
       ],
       M4: [
         { label: "3.0 Turbo 431cv", yearFrom: 2014, yearTo: 2020 },
