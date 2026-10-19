@@ -58,7 +58,7 @@ export const CATALOGUE_SWEEP: Record<VehicleType, Record<string, string[]>> = {
     Lamborghini: ["Centenario", "Countach LPI 800-4", "Essenza SCV12", "Fenomeno", "Jarama", "Reventón", "Sesto Elemento", "Sián", "Veneno"],
     Lancia: ["Aprilia", "Artena", "Astura", "Delta S4", "Dikappa", "Dilambda", "Epsilon", "Hyena", "Lambda", "LC2", "Theta", "Trikappa", "Zeta"],
     "Land Rover": ["101 Forward Control", "Defender 90", "Defender 110", "Defender 130", "Lightweight", "Series IIA", "Wolf"],
-    Leapmotor: ["B10", "C01", "C11", "C16"],
+    Leapmotor: ["B05", "B10", "C01", "C11", "C16"],
     Lexus: ["IS F", "LM", "RC", "RC F", "TX"],
     Ligier: ["Ambra", "Be Sun", "Be Up", "Flex", "IXO", "JS RC", "JS2", "Myli", "Nova", "Optima", "X-Too"],
     Lotus: ["2-Eleven", "3-Eleven", "340R", "Carlton", "Cortina", "Eclat", "Elite", "Europa", "Evija", "Excel", "Seven", "Type 49", "Type 72"],

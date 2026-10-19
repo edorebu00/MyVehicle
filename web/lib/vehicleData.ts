@@ -439,8 +439,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "Omoda 7": [{ label: "Super Hybrid System Plug-in 279cv", yearFrom: 2026, yearTo: null }],
       "Omoda 9": [{ label: "Super Hybrid System i-AWD 537cv", yearFrom: 2025, yearTo: null }],
+      "Omoda E5": [{ label: "Elettrica 62 kWh 204cv", yearFrom: 2024, yearTo: null }],
     },
     Leapmotor: {
+      B05: [
+        { label: "Elettrica 56.2 kWh 218cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 67.1 kWh 218cv", yearFrom: 2026, yearTo: null },
+      ],
       B10: [
         { label: "Life Elettrica 56.2 kWh 218cv", yearFrom: 2025, yearTo: null },
         { label: "Design Elettrica 67.1 kWh 218cv", yearFrom: 2025, yearTo: null },
@@ -539,6 +544,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
     },
     BYD: {
+      "Atto 2": [
+        { label: "Elettrica 45 kWh 177cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica Long Range 64.8 kWh 204cv", yearFrom: 2025, yearTo: null },
+      ],
       "Atto 3": [{ label: "Elettrica 204cv", yearFrom: 2022, yearTo: null }],
       Seal: [
         { label: "Elettrica RWD 313cv", yearFrom: 2023, yearTo: null },
@@ -672,6 +681,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.2 Diesel 160cv", yearFrom: 2016, yearTo: null },
         { label: "2.2 Diesel 190cv", yearFrom: 2016, yearTo: null },
         { label: "2.9 V6 Bi-Turbo Quadrifoglio 510cv", yearFrom: 2016, yearTo: null },
+        { label: "2.9 V6 Bi-Turbo Quadrifoglio Luna Rossa 520cv", yearFrom: 2026, yearTo: null },
       ],
       Junior: [
         { label: "1.2 Hybrid 136cv", yearFrom: 2024, yearTo: null },
