@@ -2200,7 +2200,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Carrera 3.0 385cv", yearFrom: 2019, yearTo: null },
         { label: "Carrera S 3.0 450cv", yearFrom: 2019, yearTo: null },
         { label: "Carrera GTS T-Hybrid 3.6 541cv", yearFrom: 2024, yearTo: null },
-        { label: "Turbo S 3.7 650cv", yearFrom: 2020, yearTo: null },
+        { label: "Turbo S 3.7 650cv", yearFrom: 2020, yearTo: 2025 },
+        { label: "Turbo S T-Hybrid 3.6 711cv", yearFrom: 2026, yearTo: null },
         { label: "GT3 4.0 510cv", yearFrom: 2021, yearTo: null },
         { label: "GT3 RS 4.0 525cv", yearFrom: 2022, yearTo: null },
       ],
@@ -2500,7 +2501,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     Toyota: {
       Aygo: [{ label: "1.0 VVT-i 72cv", yearFrom: 2014, yearTo: 2022 }],
       iQ: [{ label: "1.0 VVT-i 68cv", yearFrom: 2009, yearTo: 2015 }],
-      "Yaris Cross": [{ label: "1.5 Hybrid 116cv", yearFrom: 2021, yearTo: null }],
+      "Yaris Cross": [
+        { label: "1.5 Hybrid 116cv", yearFrom: 2021, yearTo: 2025 },
+        { label: "1.5 Hybrid 130cv", yearFrom: 2026, yearTo: null },
+      ],
       "Corolla Cross": [
         { label: "1.8 Hybrid 140cv", yearFrom: 2022, yearTo: null },
         { label: "2.0 Hybrid 197cv", yearFrom: 2022, yearTo: null },
@@ -2758,6 +2762,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       EX90: [
         { label: "Twin Motor 408cv", yearFrom: 2024, yearTo: null },
         { label: "Twin Motor Performance 517cv", yearFrom: 2024, yearTo: null },
+      ],
+      ES90: [
+        { label: "Single Motor Extended Range Elettrica 333cv", yearFrom: 2025, yearTo: null },
+        { label: "Twin Motor Performance Elettrica 680cv", yearFrom: 2025, yearTo: null },
       ],
     },
     Ineos: {
