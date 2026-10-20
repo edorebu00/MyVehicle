@@ -1,13 +1,16 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-19 (UTC), eseguita alle 01:20
+Data scan: 2026-10-20 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 18/10 su `main` e' entrata solo la PR #105 (aggiornamento del catalogo in `web/lib/vehicleData.ts`: Ferrari
-296 GTB/GTS, Purosangue, 12Cilindri e due versioni CS della BMW M3). Il resto del codice sotto `web/` e `supabase/` e' identico
-a quello gia' esaminato. Le nuove voci sono coerenti (i modelli Ferrari compaiono gia' nell'elenco modelli, gli anni sono
-plausibili e non superano l'anno corrente). I numeri di riga di `web/lib/vehicleData.ts` qui sotto sono stati riallineati al file attuale.
+Dallo scan del 19/10 su `main` e' entrata solo la PR #106 (aggiornamento del catalogo: `web/lib/vehicleData.ts` con Leapmotor B05,
+BYD Atto 2, Omoda E5 e Giulia Quadrifoglio Luna Rossa; `web/lib/catalogueSweep.ts` con B05 nell'elenco Leapmotor). Il resto del
+codice sotto `web/` e `supabase/` e' identico a quello gia' esaminato. Le nuove voci sono coerenti: "Atto 2" era gia' nell'elenco
+modelli BYD ma senza motorizzazioni (ora le ha), "Omoda E5" e "B05" compaiono negli elenchi di `catalogueSweep.ts`, Giulia esiste
+gia' tra i modelli Alfa Romeo, nessun duplicato con `web/lib/engineExtensions.ts` e nessun anno oltre quello corrente.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
+I numeri di riga di `web/lib/vehicleData.ts` citati sotto si riferiscono al file prima della PR #106; dopo la riga 439 vanno
+spostati in avanti di 1 (Omoda E5), dopo la 444 di 5 (B05), dopo la 546 di 9 (Atto 2) e dopo la 683 di 10 (Giulia).
 
 Nessun rilievo nuovo.
 
