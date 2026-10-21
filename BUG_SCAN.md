@@ -1,18 +1,17 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-20 (UTC), eseguita alle 01:20
+Data scan: 2026-10-21 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 19/10 su `main` e' entrata solo la PR #106 (aggiornamento del catalogo: `web/lib/vehicleData.ts` con Leapmotor B05,
-BYD Atto 2, Omoda E5 e Giulia Quadrifoglio Luna Rossa; `web/lib/catalogueSweep.ts` con B05 nell'elenco Leapmotor). Il resto del
-codice sotto `web/` e `supabase/` e' identico a quello gia' esaminato. Le nuove voci sono coerenti: "Atto 2" era gia' nell'elenco
-modelli BYD ma senza motorizzazioni (ora le ha), "Omoda E5" e "B05" compaiono negli elenchi di `catalogueSweep.ts`, Giulia esiste
-gia' tra i modelli Alfa Romeo, nessun duplicato con `web/lib/engineExtensions.ts` e nessun anno oltre quello corrente.
+Dallo scan del 20/10 su `main` e' entrata solo la PR #107 (aggiornamento del catalogo in `web/lib/vehicleData.ts`: Porsche 911
+Turbo S T-Hybrid, Toyota Yaris Cross Hybrid 130 e Volvo ES90). Il resto del codice sotto `web/` e `supabase/` e' identico a quello
+gia' esaminato, quindi la revisione di oggi si e' concentrata sulle righe cambiate. Le nuove voci sono coerenti: "ES90" era gia'
+nell'elenco modelli Volvo (riga 217) senza motorizzazioni e ora le ha, "911" e "Yaris Cross" esistono gia', nessun duplicato con
+`web/lib/engineExtensions.ts`, nessun anno oltre quello corrente e le versioni sostituite ora hanno un anno di fine.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` citati sotto si riferiscono al file prima della PR #106; dopo la riga 439 vanno
-spostati in avanti di 1 (Omoda E5), dopo la 444 di 5 (B05), dopo la 546 di 9 (Atto 2) e dopo la 683 di 10 (Giulia).
+I numeri di riga di `web/lib/vehicleData.ts` citati sotto per i rilievi precedenti si riferiscono al file prima delle PR #106 e #107.
 
-Nessun rilievo nuovo.
+Un solo rilievo nuovo, minore (M15, dato di catalogo).
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -92,6 +91,12 @@ della ID. Polo e i dati di produzione non sono ancora confermati. Togliere "ID.2
 salvati con quel nome: e' una scelta del proprietario.
 Proposta: decidere se togliere o rinominare "ID.2all" e confermare le versioni della ID. Cross (U19).
 
+### M15 — Catalogo: anno di passaggio della Yaris Cross Hybrid 130 da confermare (nuovo)
+File: `web/lib/vehicleData.ts:2504-2507`; calcolo degli anni: `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`
+In pratica la versione "1.5 Hybrid 130cv" parte dal 2026 e la "116cv" finisce nel 2025: se la 130cv e' arrivata gia' con il
+model year 2025 (fine 2024), chi ha una Yaris Cross 130cv del 2025 non trova il proprio anno. E' un dato di catalogo (U20).
+Proposta: confermare l'anno di inizio reale della 130cv e, se serve, anticiparlo.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -125,6 +130,7 @@ Proposta: decidere se togliere o rinominare "ID.2all" e confermare le versioni d
 - U17 — Renault 5 Turbo 3E (`web/lib/vehicleData.ts:2301`): confermare l'anno di inizio (oggi 2027, oltre l'anno corrente).
 - U18 — Confermare anni di inizio di Jeep Wagoneer S e AMG GLC63 S E Performance, potenze di Seal U DM-i AWD, Wagoneer S, Jeep Recon e Lancia Gamma 2026, e se la DM-i debba stare sotto "Seal U" (M10, M11, M12).
 - U19 — Confermare gli anni di fine delle generazioni precedenti di iX3, Macan e Twingo, l'anno di inizio della AMG GLE63 S, le versioni della ID. Cross e decidere se tenere "ID.2all" accanto a "ID. Polo" (M13, M14).
+- U20 — Confermare l'anno di inizio della Toyota Yaris Cross 1.5 Hybrid 130cv (M15).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
