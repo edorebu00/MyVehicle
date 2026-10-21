@@ -871,6 +871,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       RS3: [
         { label: "2.5 TFSI 367cv", yearFrom: 2017, yearTo: 2020 },
         { label: "2.5 TFSI 400cv", yearFrom: 2021, yearTo: null },
+        { label: "2.5 TFSI Performance Edition 407cv", yearFrom: 2022, yearTo: 2023 },
       ],
       RS4: [
         { label: "Avant 4.2 V8 420cv", yearFrom: 2005, yearTo: 2008 },
@@ -997,6 +998,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "4.4 V8 Turbo 600cv", yearFrom: 2018, yearTo: 2023 },
         { label: "Competition 4.4 V8 Turbo 625cv", yearFrom: 2018, yearTo: 2023 },
         { label: "Ibrida 4.4 V8 Turbo 727cv", yearFrom: 2024, yearTo: null },
+        { label: "Touring Ibrida 4.4 V8 Turbo 727cv", yearFrom: 2024, yearTo: null },
       ],
       M8: [
         { label: "4.4 V8 Turbo 600cv", yearFrom: 2019, yearTo: null },
@@ -1748,6 +1750,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 D200 200cv", yearFrom: 2020, yearTo: null },
         { label: "3.0 D300 300cv", yearFrom: 2020, yearTo: null },
         { label: "P400e Plug-in Hybrid 404cv", yearFrom: 2020, yearTo: null },
+        { label: "Octa 4.4 V8 Turbo Mild Hybrid 635cv", yearFrom: 2024, yearTo: null },
       ],
       Discovery: [
         { label: "3.0 D250 249cv", yearFrom: 2017, yearTo: null },
@@ -1768,6 +1771,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Range Rover Sport": [
         { label: "3.0 D300 300cv", yearFrom: 2022, yearTo: null },
         { label: "P440e Plug-in Hybrid 440cv", yearFrom: 2022, yearTo: null },
+        { label: "SV 4.4 V8 Turbo Mild Hybrid 635cv", yearFrom: 2023, yearTo: null },
       ],
       Freelander: [{ label: "2.2 TD4 150cv", yearFrom: 2006, yearTo: 2014 }],
       "Range Rover Velar": [{ label: "2.0 D200 200cv", yearFrom: 2017, yearTo: null }],
