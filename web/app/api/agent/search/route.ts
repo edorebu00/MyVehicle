@@ -337,7 +337,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: tErr("invalidRequest") }, { status: 400 });
   }
 
-  const query = clampText(body.query, MAX_QUERY_CHARS);
+  const query = clampText(collapseWhitespace(body.query), MAX_QUERY_CHARS);
   if (!query || query.length < 2) {
     return NextResponse.json({ error: tErr("searchQueryTooShort") }, { status: 400 });
   }
