@@ -1173,7 +1173,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Formentor: [
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
         { label: "2.0 TSI 190cv", yearFrom: 2020, yearTo: null },
-        { label: "2.0 TSI VZ5 390cv", yearFrom: 2021, yearTo: null },
+        { label: "2.5 TSI VZ5 390cv", yearFrom: 2021, yearTo: null },
       ],
       Leon: [
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
@@ -1477,7 +1477,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 e:HEV Hybrid 215cv", yearFrom: 2018, yearTo: 2022 },
       ],
       "ZR-V": [{ label: "2.0 e:HEV Hybrid 184cv", yearFrom: 2023, yearTo: null }],
-      Prelude: [{ label: "2.2 VTEC 185cv", yearFrom: 1996, yearTo: 2001 }],
+      Prelude: [
+        { label: "2.2 VTEC 185cv", yearFrom: 1996, yearTo: 2001 },
+        { label: "2.0 e:HEV Hybrid 184cv", yearFrom: 2026, yearTo: null },
+      ],
       Integra: [{ label: "1.8 VTEC Type R 190cv", yearFrom: 1995, yearTo: 2001 }],
       S2000: [{ label: "2.0 VTEC 240cv", yearFrom: 1999, yearTo: 2009 }],
       "FR-V": [{ label: "2.2 i-CTDi 140cv", yearFrom: 2004, yearTo: 2009 }],
@@ -1841,6 +1844,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Plug-in Hybrid 327cv", yearFrom: 2022, yearTo: null },
       ],
       "MX-30": [{ label: "Elettrica 145cv", yearFrom: 2020, yearTo: null }],
+      "CX-80": [
+        { label: "3.3 e-Skyactiv D 254cv", yearFrom: 2024, yearTo: null },
+        { label: "Plug-in Hybrid 327cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     "Mercedes-Benz": {
       "190": [
@@ -2212,10 +2219,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "718 Cayman": [
         { label: "2.0 Turbo 300cv", yearFrom: 2016, yearTo: null },
         { label: "GTS 4.0 400cv", yearFrom: 2020, yearTo: null },
+        { label: "GT4 4.0 420cv", yearFrom: 2019, yearTo: null },
+        { label: "GT4 RS 4.0 500cv", yearFrom: 2022, yearTo: null },
       ],
       "718 Boxster": [
         { label: "2.0 Turbo 300cv", yearFrom: 2016, yearTo: null },
         { label: "GTS 4.0 400cv", yearFrom: 2020, yearTo: null },
+      ],
+      "718 Spyder": [
+        { label: "4.0 420cv", yearFrom: 2019, yearTo: null },
+        { label: "RS 4.0 500cv", yearFrom: 2024, yearTo: null },
       ],
       Panamera: [
         { label: "3.0 V6 330cv", yearFrom: 2016, yearTo: null },
