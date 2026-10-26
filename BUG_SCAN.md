@@ -1,16 +1,18 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-22 (UTC), eseguita alle 01:18
+Data scan: 2026-10-26 (UTC), eseguita alle 11:25 (ripresa della routine dopo il limite d'uso)
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 21/10 su `main` e' entrata solo la PR #108 (aggiornamento del catalogo in `web/lib/vehicleData.ts`, 4 righe: Audi RS3
-Performance Edition, BMW M5 Touring, Land Rover Defender Octa e Range Rover Sport SV). Il resto del codice sotto `web/` e `supabase/`
-e' identico a quello gia' esaminato, quindi la revisione di oggi si e' concentrata sulle righe cambiate. Le nuove voci sono coerenti:
-i modelli "RS3", "M5", "Defender" e "Range Rover Sport" esistono gia' negli elenchi, nessun duplicato con `web/lib/engineExtensions.ts`,
-nessun anno oltre quello corrente, la RS3 Performance Edition (serie limitata) ha correttamente un anno di fine.
+Dallo scan del 22/10 su `main` e' entrata solo la PR #109 (aggiornamento del catalogo in `web/lib/vehicleData.ts`, +15/-2 righe:
+Porsche 718 Cayman GT4/GT4 RS, 718 Spyder/Spyder RS, Honda Prelude e:HEV, Mazda CX-80, e la correzione della cilindrata della
+Cupra Formentor VZ5 da 2.0 a 2.5). Il resto del codice sotto `web/` e `supabase/` e' identico a quello gia' esaminato, quindi la
+revisione di oggi si e' concentrata sulle righe cambiate. Le nuove voci sono coerenti: "CX-80" e "718 Spyder" esistono gia'
+nell'elenco esteso dei modelli (righe 187 e 200), "Prelude" e "718 Cayman" in quello principale; nessuna chiave di modello duplicata
+in `ENGINE_DATA` (controllo automatico su tutto il file), nessuna sovrapposizione con `web/lib/engineExtensions.ts`, nessun anno
+oltre quello corrente (Prelude e:HEV dal 2026), nessun altro punto del codice usa la vecchia etichetta della Formentor VZ5.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` citati sotto per i rilievi precedenti si riferiscono al file prima delle PR #106-#108
-(M15 e' aggiornato: le righe si sono spostate di 4).
+I numeri di riga di `web/lib/vehicleData.ts` citati sotto per i rilievi precedenti si riferiscono al file prima delle PR #106-#109
+(con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13).
 
 Nessun problema nuovo trovato oggi; i rilievi qui sotto sono quelli gia' noti, ricontrollati.
 
