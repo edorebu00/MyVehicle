@@ -451,6 +451,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Design Elettrica 67.1 kWh 218cv", yearFrom: 2025, yearTo: null },
       ],
     },
+    "Lynk & Co": {
+      "01": [{ label: "1.5 Turbo Plug-in Hybrid 261cv", yearFrom: 2021, yearTo: null }],
+    },
     RAM: {
       "1500": [{ label: "5.7 V8 HEMI 395cv", yearFrom: 2019, yearTo: null }],
     },
@@ -586,6 +589,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     },
     GWM: {
       "Ora Funky Cat": [{ label: "Elettrica 171cv", yearFrom: 2023, yearTo: null }],
+      "Ora 03": [
+        { label: "Elettrica 47,8 kWh 171cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 63,1 kWh 171cv", yearFrom: 2024, yearTo: null },
+      ],
+      "Tank 300": [
+        { label: "2.4 Turbodiesel 184cv", yearFrom: 2026, yearTo: null },
+        { label: "Hi4-T Plug-in Hybrid 408cv", yearFrom: 2026, yearTo: null },
+      ],
       Hover: [{ label: "2.4 16v 126cv", yearFrom: 2008, yearTo: 2013 }],
       "Hover 5": [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: 2018 }],
       Steed: [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: null }],
