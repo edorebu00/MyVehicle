@@ -1,16 +1,18 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-27 (UTC), eseguita alle 01:18
+Data scan: 2026-10-28 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 26/10 su `main` non e' entrato nulla: l'ultimo merge resta la PR #109 (22/10), gia' esaminata. Il codice sotto
-`web/` e `supabase/` e' identico a quello verificato ieri; oggi sono stati ricontrollati di persona autenticazione, limiti d'uso
-per utente (anche quelli condivisi tra le istanze) e limiti sugli input delle tre route sotto `web/app/api/agent/`, senza novita'.
+Dallo scan del 27/10 su `main` sono entrate le PR #110 e #111, che toccano solo `web/lib/vehicleData.ts` (+20 righe di catalogo:
+Lynk & Co 01, BYD Han e Tang, GWM Ora 03 e Tank 300, Lexus LBX). Le nuove voci sono state controllate di persona: i modelli
+esistono gia' negli elenchi (`VEHICLE_DATA`, `CATALOGUE_EXTENSIONS` o `web/lib/catalogueSweep.ts:45`), non ci sono chiavi doppie
+e `getEngineVariants` le restituisce. Il resto del codice sotto `web/` e `supabase/` e' identico a quello verificato ieri.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` citati sotto per i rilievi precedenti si riferiscono al file prima delle PR #106-#109
-(con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13).
+I numeri di riga di `web/lib/vehicleData.ts` citati sotto per i rilievi precedenti si riferiscono al file prima delle PR #106-#111
+(con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
+con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20).
 
-Nessun problema nuovo trovato oggi; i rilievi qui sotto sono quelli gia' noti, ricontrollati.
+Un solo rilievo nuovo, minore e di catalogo (M16); gli altri sono quelli gia' noti, ricontrollati.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -96,6 +98,14 @@ In pratica la versione "1.5 Hybrid 130cv" parte dal 2026 e la "116cv" finisce ne
 model year 2025 (fine 2024), chi ha una Yaris Cross 130cv del 2025 non trova il proprio anno. E' un dato di catalogo (U20).
 Proposta: confermare l'anno di inizio reale della 130cv e, se serve, anticiparlo.
 
+### M16 — Catalogo: GWM "Ora Funky Cat" e "Ora 03" sono la stessa auto, entrambe aperte fino a oggi (nuovo)
+File: `web/lib/vehicleData.ts:596-600` (nel file attuale)
+In pratica "Ora 03" e' il nome con cui la Funky Cat e' venduta in Europa dal 2024, ma "Ora Funky Cat" resta con `yearTo: null`:
+chi ha questa auto puo' salvarla con due nomi di modello, e per un'auto del 2025 la Funky Cat propone ancora "Elettrica 171cv"
+senza capacita' della batteria. Sono dati di catalogo da confermare, come per M13-M14 (anche gli anni di inizio di BYD Han
+e Tang, 2023, e la batteria da 108,8 kWh della Tang dal 2025 vanno confermati sui dati ufficiali).
+Proposta: confermare se chiudere la Funky Cat al 2023 e gli anni delle nuove voci BYD (U21).
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -130,6 +140,7 @@ Proposta: confermare l'anno di inizio reale della 130cv e, se serve, anticiparlo
 - U18 — Confermare anni di inizio di Jeep Wagoneer S e AMG GLC63 S E Performance, potenze di Seal U DM-i AWD, Wagoneer S, Jeep Recon e Lancia Gamma 2026, e se la DM-i debba stare sotto "Seal U" (M10, M11, M12).
 - U19 — Confermare gli anni di fine delle generazioni precedenti di iX3, Macan e Twingo, l'anno di inizio della AMG GLE63 S, le versioni della ID. Cross e decidere se tenere "ID.2all" accanto a "ID. Polo" (M13, M14).
 - U20 — Confermare l'anno di inizio della Toyota Yaris Cross 1.5 Hybrid 130cv (M15).
+- U21 — Decidere se chiudere "Ora Funky Cat" all'arrivo di "Ora 03" e confermare gli anni di BYD Han e Tang (M16).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
