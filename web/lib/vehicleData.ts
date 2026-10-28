@@ -451,6 +451,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Design Elettrica 67.1 kWh 218cv", yearFrom: 2025, yearTo: null },
       ],
     },
+    "Lynk & Co": {
+      "01": [{ label: "1.5 Turbo Plug-in Hybrid 261cv", yearFrom: 2021, yearTo: null }],
+    },
     RAM: {
       "1500": [{ label: "5.7 V8 HEMI 395cv", yearFrom: 2019, yearTo: null }],
     },
@@ -570,6 +573,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica RWD 313cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica AWD 530cv", yearFrom: 2024, yearTo: null },
       ],
+      Han: [{ label: "Elettrica 85,4 kWh 517cv", yearFrom: 2023, yearTo: null }],
+      Tang: [
+        { label: "Elettrica 86,4 kWh 517cv", yearFrom: 2023, yearTo: 2025 },
+        { label: "Elettrica 108,8 kWh 517cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     Chevrolet: {
       Aveo: [{ label: "1.2 16v 86cv", yearFrom: 2011, yearTo: 2015 }],
@@ -586,6 +594,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     },
     GWM: {
       "Ora Funky Cat": [{ label: "Elettrica 171cv", yearFrom: 2023, yearTo: null }],
+      "Ora 03": [
+        { label: "Elettrica 47,8 kWh 171cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 63,1 kWh 171cv", yearFrom: 2024, yearTo: null },
+      ],
+      "Tank 300": [
+        { label: "2.4 Turbodiesel 184cv", yearFrom: 2026, yearTo: null },
+        { label: "Hi4-T Plug-in Hybrid 408cv", yearFrom: 2026, yearTo: null },
+      ],
       Hover: [{ label: "2.4 16v 126cv", yearFrom: 2008, yearTo: 2013 }],
       "Hover 5": [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: 2018 }],
       Steed: [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: null }],
@@ -606,6 +622,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       IS: [{ label: "300h Hybrid 223cv", yearFrom: 2013, yearTo: null }],
       LC: [{ label: "500h Hybrid 359cv", yearFrom: 2017, yearTo: null }],
       LS: [{ label: "500h Hybrid 359cv", yearFrom: 2017, yearTo: null }],
+      LBX: [
+        { label: "1.5 Hybrid 136cv", yearFrom: 2023, yearTo: null },
+        { label: "Morizo RR 1.6 Turbo 305cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     MG: {
       ZS: [
