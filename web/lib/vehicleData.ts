@@ -1155,6 +1155,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 PureTech 83cv", yearFrom: 2016, yearTo: null },
         { label: "1.2 PureTech 110cv", yearFrom: 2016, yearTo: null },
         { label: "1.5 BlueHDi 100cv", yearFrom: 2016, yearTo: null },
+        { label: "Elettrica ë-C3 113cv", yearFrom: 2024, yearTo: null },
       ],
       "C3 Aircross": [
         { label: "1.2 PureTech 110cv", yearFrom: 2017, yearTo: null },
@@ -1506,6 +1507,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "FR-V": [{ label: "2.2 i-CTDi 140cv", yearFrom: 2004, yearTo: 2009 }],
       Insight: [{ label: "1.3 Hybrid 102cv", yearFrom: 2009, yearTo: 2014 }],
       e: [{ label: "Elettrica 136cv", yearFrom: 2020, yearTo: 2024 }],
+      "e:Ny1": [{ label: "Elettrica 150 kW 204cv", yearFrom: 2023, yearTo: null }],
     },
     Hyundai: {
       i10: [
@@ -2305,6 +2307,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Scenic: [
         { label: "1.3 TCe 140cv", yearFrom: 2016, yearTo: 2022 },
         { label: "1.5 dCi 110cv", yearFrom: 2016, yearTo: 2022 },
+        { label: "Elettrica 60 kWh 170cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 87 kWh 220cv", yearFrom: 2024, yearTo: null },
       ],
       Twingo: [
         { label: "1.0 SCe 65cv", yearFrom: 2014, yearTo: null },
