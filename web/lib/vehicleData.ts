@@ -2202,6 +2202,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 98 kWh 230cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica Dual Motor 73 kWh 325cv", yearFrom: 2024, yearTo: null },
       ],
+      "e-5008": [
+        { label: "Elettrica 73 kWh 210cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 98 kWh 230cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Dual Motor 73 kWh 325cv", yearFrom: 2024, yearTo: null },
+      ],
       Partner: [
         { label: "1.5 BlueHDi 100cv", yearFrom: 2018, yearTo: null },
         { label: "Elettrica e-Partner 136cv", yearFrom: 2021, yearTo: null },
@@ -2473,6 +2478,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 100 kWh 363cv", yearFrom: 2025, yearTo: null },
         { label: "Brabus Elettrica 100 kWh 646cv", yearFrom: 2025, yearTo: null },
       ],
+      "#1": [
+        { label: "Elettrica 49 kWh 272cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 66 kWh 272cv", yearFrom: 2023, yearTo: null },
+        { label: "Brabus Elettrica 66 kWh AWD 428cv", yearFrom: 2023, yearTo: null },
+      ],
+      "#3": [
+        { label: "Elettrica 49 kWh 272cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 66 kWh 272cv", yearFrom: 2024, yearTo: null },
+        { label: "Brabus Elettrica 66 kWh AWD 428cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     Subaru: {
       Impreza: [
@@ -2723,6 +2738,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "ID.4": [
         { label: "Elettrica Pro 170cv", yearFrom: 2021, yearTo: null },
         { label: "GTX 4motion 299cv", yearFrom: 2021, yearTo: null },
+      ],
+      "ID. Buzz": [
+        { label: "Elettrica 77 kWh 204cv", yearFrom: 2022, yearTo: 2024 },
+        { label: "Elettrica 79 kWh 286cv", yearFrom: 2024, yearTo: null },
+        { label: "GTX Elettrica AWD 340cv", yearFrom: 2024, yearTo: null },
+      ],
+      "ID.7": [
+        { label: "Pro Elettrica 77 kWh 286cv", yearFrom: 2023, yearTo: null },
+        { label: "Pro S Elettrica 86 kWh 286cv", yearFrom: 2024, yearTo: null },
+        { label: "GTX Elettrica 86 kWh AWD 340cv", yearFrom: 2024, yearTo: null },
       ],
       "ID. Polo": [
         { label: "Elettrica 37 kWh 116cv", yearFrom: 2026, yearTo: null },
