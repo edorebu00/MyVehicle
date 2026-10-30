@@ -1,17 +1,19 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-29 (UTC), eseguita alle 01:20
+Data scan: 2026-10-30 (UTC), eseguita alle 01:25
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 28/10 su `main` non e' entrato nessun commit (ultimo: merge della PR #111, gia' esaminato ieri): il codice sotto
-`web/` e `supabase/` e' identico a quello verificato ieri. I rilievi qui sotto sono stati ricontrollati sul codice attuale
-(numeri di riga validi, route di `web/app/api/agent/*` con autenticazione e limiti invariati).
+Dallo scan del 29/10 su `main` e' entrato solo il merge della PR #112 (catalogo: 4 righe aggiunte in `web/lib/vehicleData.ts`,
+Citroën ë-C3, Honda e:Ny1, Renault Scenic E-Tech Electric). Nessun altro file sotto `web/` o `supabase/` e' cambiato: le route di
+`web/app/api/agent/*` (autenticazione, limiti d'uso, validazione) sono identiche a quelle verificate ieri. Le 4 righe nuove sono
+state controllate una per una; il resto dei rilievi e' stato ricontrollato sul codice attuale.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#111
+I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#112
 (con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
-con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20).
+con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
+con la PR #112, nel file attuale, le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4).
 
-Nessun rilievo nuovo: i rilievi sono quelli gia' noti, ricontrollati.
+Un rilievo nuovo, minore e di catalogo (M17, dalla PR #112); gli altri sono quelli gia' noti, ricontrollati.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -105,6 +107,14 @@ senza capacita' della batteria. Sono dati di catalogo da confermare, come per M1
 e Tang, 2023, e la batteria da 108,8 kWh della Tang dal 2025 vanno confermati sui dati ufficiali).
 Proposta: confermare se chiudere la Funky Cat al 2023 e gli anni delle nuove voci BYD (U21).
 
+### M17 — Catalogo: Citroën ë-C3 presente sia come versione di "C3" sia come modello a se' senza motorizzazioni (nuovo)
+File: `web/lib/vehicleData.ts:1154-1159` (nel file attuale); modello separato: `web/lib/catalogueSweep.ts:29` ("ë-C3")
+In pratica la PR #112 aggiunge "Elettrica ë-C3 113cv" sotto il modello "C3", ma l'elenco modelli Citroën contiene anche "ë-C3"
+(dal catalogo esteso, senza motorizzazioni): chi sceglie "ë-C3" trova solo il campo libero, chi sceglie "C3" trova la versione
+elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre motorizzazioni della C3 del 2016 restano con
+`yearTo: null` accanto a quella della nuova generazione 2024, come gia' visto in M13. E' una scelta di catalogo (U22).
+Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine delle versioni 2016 della C3.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -140,6 +150,7 @@ Proposta: confermare se chiudere la Funky Cat al 2023 e gli anni delle nuove voc
 - U19 — Confermare gli anni di fine delle generazioni precedenti di iX3, Macan e Twingo, l'anno di inizio della AMG GLE63 S, le versioni della ID. Cross e decidere se tenere "ID.2all" accanto a "ID. Polo" (M13, M14).
 - U20 — Confermare l'anno di inizio della Toyota Yaris Cross 1.5 Hybrid 130cv (M15).
 - U21 — Decidere se chiudere "Ora Funky Cat" all'arrivo di "Ora 03" e confermare gli anni di BYD Han e Tang (M16).
+- U22 — Decidere se la Citroën ë-C3 vada sotto "C3" o sotto il modello "ë-C3" e confermare la fine delle versioni 2016 della C3 (M17).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
