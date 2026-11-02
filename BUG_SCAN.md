@@ -1,19 +1,21 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-10-30 (UTC), eseguita alle 01:25
+Data scan: 2026-11-02 (UTC), eseguita alle 11:25
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 29/10 su `main` e' entrato solo il merge della PR #112 (catalogo: 4 righe aggiunte in `web/lib/vehicleData.ts`,
-Citroën ë-C3, Honda e:Ny1, Renault Scenic E-Tech Electric). Nessun altro file sotto `web/` o `supabase/` e' cambiato: le route di
-`web/app/api/agent/*` (autenticazione, limiti d'uso, validazione) sono identiche a quelle verificate ieri. Le 4 righe nuove sono
-state controllate una per una; il resto dei rilievi e' stato ricontrollato sul codice attuale.
+Dallo scan del 30/10 su `main` e' entrato solo il merge della PR #113 (catalogo: 25 righe aggiunte in `web/lib/vehicleData.ts`,
+Peugeot e-5008, Smart #1/#3, Volkswagen ID. Buzz/ID.7). Nessun altro file sotto `web/` o `supabase/` e' cambiato: le route di
+`web/app/api/agent/*` (autenticazione, limiti d'uso, validazione) sono identiche a quelle verificate negli scan precedenti. Le 25
+righe nuove sono state controllate una per una, insieme a come si uniscono a `web/lib/engineExtensions.ts` in `getEngineVariants`.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#112
+I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#113
 (con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
 con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
-con la PR #112, nel file attuale, le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4).
+con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4;
+con la PR #113, nel file attuale, le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25.
+Riferimenti diretti nel file attuale: Renault 5 Turbo 3E `:2358`, Macan `:2264`, Twingo `:2318`, Yaris Cross Hybrid 130 `:2562`, ID. Polo `:2752`).
 
-Un rilievo nuovo, minore e di catalogo (M17, dalla PR #112); gli altri sono quelli gia' noti, ricontrollati.
+Un rilievo nuovo, minore e di catalogo (M18, dalla PR #113); gli altri sono quelli gia' noti, ricontrollati.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -107,13 +109,27 @@ senza capacita' della batteria. Sono dati di catalogo da confermare, come per M1
 e Tang, 2023, e la batteria da 108,8 kWh della Tang dal 2025 vanno confermati sui dati ufficiali).
 Proposta: confermare se chiudere la Funky Cat al 2023 e gli anni delle nuove voci BYD (U21).
 
-### M17 — Catalogo: Citroën ë-C3 presente sia come versione di "C3" sia come modello a se' senza motorizzazioni (nuovo)
+### M17 — Catalogo: Citroën ë-C3 presente sia come versione di "C3" sia come modello a se' senza motorizzazioni (invariato)
 File: `web/lib/vehicleData.ts:1154-1159` (nel file attuale); modello separato: `web/lib/catalogueSweep.ts:29` ("ë-C3")
 In pratica la PR #112 aggiunge "Elettrica ë-C3 113cv" sotto il modello "C3", ma l'elenco modelli Citroën contiene anche "ë-C3"
 (dal catalogo esteso, senza motorizzazioni): chi sceglie "ë-C3" trova solo il campo libero, chi sceglie "C3" trova la versione
 elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre motorizzazioni della C3 del 2016 restano con
 `yearTo: null` accanto a quella della nuova generazione 2024, come gia' visto in M13. E' una scelta di catalogo (U22).
 Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine delle versioni 2016 della C3.
+
+### M18 — Catalogo: le nuove voci di ID.7, ID. Buzz, Smart #1 e #3 si sommano a quelle gia' presenti con nomi diversi (nuovo)
+File: `web/lib/vehicleData.ts:2481-2490` (Smart #1/#3) e `:2742-2751` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
+`web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3150-3164`
+In pratica `getEngineVariants` somma `ENGINE_DATA` ed `ENGINE_EXTENSIONS` togliendo solo le etichette identiche, e la PR #113 ha
+aggiunto in `ENGINE_DATA` motorizzazioni che esistevano gia' nelle estensioni con un'etichetta diversa. Il menu mostra quindi
+doppioni della stessa versione: per la ID.7 "Pro Elettrica 77 kWh 286cv" e "Elettrica 77 kWh 286cv", "Pro S Elettrica 86 kWh 286cv"
+e "Elettrica 86 kWh 286cv"; per Smart #1 e #3 "Brabus Elettrica 66 kWh AWD 428cv" e "Brabus 66 kWh 428cv". Per la ID. Buzz
+compaiono sia "Elettrica 79 kWh 286cv" (dal 2024) sia "Elettrica 86 kWh 286cv" (dal 2023), con batterie diverse per la stessa
+versione; "Elettrica 77 kWh 204cv" ora chiude al 2024 perche' a parita' di etichetta vince la voce di `ENGINE_DATA`. Per la #1
+"Elettrica 66 kWh 272cv" parte ora dal 2023 invece che dal 2022 (stesso motivo): chi ha una #1 del 2022 non trova piu' il proprio
+anno per quella versione. La e-5008 non ha doppioni (nessuna voce nelle estensioni). Quali etichette e quali anni siano giusti e'
+un dato di catalogo da confermare (U23).
+Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni) dopo aver confermato batterie e anni di inizio.
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -151,6 +167,7 @@ Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine 
 - U20 — Confermare l'anno di inizio della Toyota Yaris Cross 1.5 Hybrid 130cv (M15).
 - U21 — Decidere se chiudere "Ora Funky Cat" all'arrivo di "Ora 03" e confermare gli anni di BYD Han e Tang (M16).
 - U22 — Decidere se la Citroën ë-C3 vada sotto "C3" o sotto il modello "ë-C3" e confermare la fine delle versioni 2016 della C3 (M17).
+- U23 — Scegliere un'unica voce per ciascuna motorizzazione di ID.7, ID. Buzz, Smart #1 e #3, confermando batterie (ID. Buzz 79 o 86 kWh) e anni di inizio (Smart #1 2022 o 2023) (M18).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
