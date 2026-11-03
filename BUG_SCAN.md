@@ -1,11 +1,11 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-02 (UTC), eseguita alle 11:25
+Data scan: 2026-11-03 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 30/10 su `main` e' entrato solo il merge della PR #113 (catalogo: 25 righe aggiunte in `web/lib/vehicleData.ts`,
-Peugeot e-5008, Smart #1/#3, Volkswagen ID. Buzz/ID.7). Nessun altro file sotto `web/` o `supabase/` e' cambiato: le route di
-`web/app/api/agent/*` (autenticazione, limiti d'uso, validazione) sono identiche a quelle verificate negli scan precedenti. Le 25
-righe nuove sono state controllate una per una, insieme a come si uniscono a `web/lib/engineExtensions.ts` in `getEngineVariants`.
+Dallo scan del 02/11 (11:25 UTC) `main` non e' cambiato: l'ultimo commit e' ancora il merge della PR #113 (`52e3c9a`) e
+l'albero di `main` e' identico a quello gia' esaminato (verificato con `git diff` sull'intero repository). Nessun file sotto
+`web/` o `supabase/` e' cambiato, quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi qui
+sotto restano quelli verificati ieri; numeri di riga invariati.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#113
@@ -15,7 +15,7 @@ con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 d
 con la PR #113, nel file attuale, le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25.
 Riferimenti diretti nel file attuale: Renault 5 Turbo 3E `:2358`, Macan `:2264`, Twingo `:2318`, Yaris Cross Hybrid 130 `:2562`, ID. Polo `:2752`).
 
-Un rilievo nuovo, minore e di catalogo (M18, dalla PR #113); gli altri sono quelli gia' noti, ricontrollati.
+Nessun problema nuovo: codice invariato dall'ultimo scan. I rilievi M1-M18 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -117,7 +117,7 @@ elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre mot
 `yearTo: null` accanto a quella della nuova generazione 2024, come gia' visto in M13. E' una scelta di catalogo (U22).
 Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine delle versioni 2016 della C3.
 
-### M18 — Catalogo: le nuove voci di ID.7, ID. Buzz, Smart #1 e #3 si sommano a quelle gia' presenti con nomi diversi (nuovo)
+### M18 — Catalogo: le nuove voci di ID.7, ID. Buzz, Smart #1 e #3 si sommano a quelle gia' presenti con nomi diversi (invariato)
 File: `web/lib/vehicleData.ts:2481-2490` (Smart #1/#3) e `:2742-2751` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
 `web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3150-3164`
 In pratica `getEngineVariants` somma `ENGINE_DATA` ed `ENGINE_EXTENSIONS` togliendo solo le etichette identiche, e la PR #113 ha
