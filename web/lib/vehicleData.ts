@@ -827,6 +827,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TFSI S3 310cv", yearFrom: 2016, yearTo: 2024 },
         { label: "2.0 TFSI S3 333cv", yearFrom: 2024, yearTo: null },
       ],
+      S3: [
+        { label: "2.0 TFSI quattro 300cv", yearFrom: 2013, yearTo: 2016 },
+        { label: "2.0 TFSI quattro 310cv", yearFrom: 2016, yearTo: 2024 },
+        { label: "2.0 TFSI quattro 333cv", yearFrom: 2024, yearTo: null },
+      ],
       A4: [
         { label: "2.0 TDI 150cv", yearFrom: 2015, yearTo: null },
         { label: "2.0 TFSI 190cv", yearFrom: 2015, yearTo: null },
@@ -867,6 +872,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TFSI 252cv", yearFrom: 2016, yearTo: null },
         { label: "SQ5 3.0 TDI 341cv", yearFrom: 2016, yearTo: null },
       ],
+      SQ5: [{ label: "3.0 TDI 341cv", yearFrom: 2016, yearTo: null }],
       Q7: [
         { label: "3.0 TDI 286cv", yearFrom: 2015, yearTo: null },
         { label: "3.0 TFSI 340cv", yearFrom: 2015, yearTo: null },
@@ -875,6 +881,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "3.0 TDI 286cv", yearFrom: 2018, yearTo: null },
         { label: "SQ8 4.0 TDI 435cv", yearFrom: 2019, yearTo: null },
       ],
+      SQ8: [{ label: "4.0 TDI 435cv", yearFrom: 2019, yearTo: null }],
       TT: [
         { label: "2.0 TFSI 230cv", yearFrom: 2014, yearTo: 2023 },
         { label: "2.0 TDI 184cv", yearFrom: 2014, yearTo: 2023 },
@@ -2670,6 +2677,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 TDI 150cv", yearFrom: 2015, yearTo: null },
       ],
       Eos: [{ label: "1.4 TSI 122cv", yearFrom: 2006, yearTo: 2015 }],
+      Tayron: [
+        { label: "1.5 eTSI 150cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TDI 150cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TDI 4MOTION 193cv", yearFrom: 2024, yearTo: null },
+        { label: "eHybrid 204cv", yearFrom: 2024, yearTo: null },
+        { label: "eHybrid 272cv", yearFrom: 2024, yearTo: null },
+      ],
       Taigo: [
         { label: "1.0 TSI 110cv", yearFrom: 2021, yearTo: null },
         { label: "1.5 TSI 150cv", yearFrom: 2021, yearTo: null },
