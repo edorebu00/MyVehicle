@@ -16,7 +16,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     "Alfa Romeo": ["Giulia", "Giulietta", "Stelvio", "Tonale", "Junior", "MiTo", "159", "156", "166", "164", "155", "147", "146", "145", "75", "33", "4C", "Brera", "Spider", "GTV", "GT"],
     Alpine: ["A110"],
     Autobianchi: ["Y10", "A112"],
-    Audi: ["80/90", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4 e-tron", "Q5", "Q7", "Q8", "Q8 e-tron", "e-tron GT", "R8", "TT", "RS3", "RS4", "RS5", "RS6", "RS7", "RS Q3", "RS Q8", "TT RS"],
+    Audi: ["80/90", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4 e-tron", "Q5", "Q7", "Q8", "Q8 e-tron", "Q9", "e-tron GT", "R8", "TT", "RS3", "RS4", "RS5", "RS6", "RS7", "RS Q3", "RS Q8", "TT RS"],
     Bentley: ["Bentayga", "Continental", "Flying Spur", "Mulsanne"],
     BMW: ["Serie 1", "Serie 2", "Serie 3", "Serie 4", "Serie 5", "Serie 6", "Serie 7", "Serie 8", "M2", "M3", "M4", "M5", "M8", "X1", "X2", "X3", "X3 M", "X4", "X4 M", "X5", "X5 M", "X6", "X6 M", "X7", "Z1", "Z3", "Z4", "Z4 M", "i3", "i4", "i8", "iX", "iX1", "iX3"],
     BYD: ["Atto 3", "Seal", "Dolphin", "Seal U"],
@@ -37,7 +37,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     Fiat: ["Panda", "Grande Panda", "Topolino", "Grizzly", "Grizzly Fastback", "500", "600", "500X", "500L", "Tipo", "Punto", "Uno", "Ritmo", "126", "127", "131", "Cinquecento", "Seicento", "Idea", "Bravo", "Stilo", "Marea", "Coupé", "Barchetta", "Croma", "Multipla", "Ducato", "Doblo", "Fiorino", "Qubo", "Ulysse", "Sedici"],
     Ford: ["Fiesta", "Focus", "Puma", "Kuga", "EcoSport", "Explorer", "Mondeo", "Sierra", "Scorpio", "Cougar", "Escort", "Mustang", "C-Max", "S-Max", "Ka", "Ranger", "Galaxy", "Transit"],
     Genesis: ["G70", "GV70"],
-    GWM: ["Ora Funky Cat", "Hover", "Hover 5", "Steed"],
+    GWM: ["Ora Funky Cat", "H7", "Hover", "Hover 5", "Steed"],
     Honda: ["Civic", "Jazz", "CR-V", "HR-V", "ZR-V", "Accord", "Prelude", "Integra", "S2000", "FR-V", "Insight", "e"],
     Hummer: ["H2", "H3"],
     Hyundai: ["i10", "i20", "i30", "i40", "Atos", "Bayon", "Coupe", "Galloper", "Getz", "H-1", "Kona", "ix20", "ix35", "Matrix", "Santa Fe", "Staria", "Terracan", "Veloster", "Ioniq", "Ioniq 5", "Ioniq 6"],
@@ -49,7 +49,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     Lada: ["Niva"],
     Jaguar: ["XE", "XF", "F-Pace", "E-Pace", "I-Pace", "F-Type", "S-Type", "X-Type", "XJ", "XK"],
     Jeep: ["Renegade", "Compass", "Cherokee", "Grand Cherokee", "Avenger", "Wrangler", "Gladiator", "Commander", "Patriot"],
-    Kia: ["Picanto", "Rio", "Ceed", "ProCeed", "Xceed", "Sportage", "Niro", "e-Niro", "Stonic", "Sorento", "Soul", "Stinger", "Carens", "Carnival", "Optima", "Venga", "EV6", "EV9"],
+    Kia: ["Picanto", "Rio", "Ceed", "ProCeed", "Xceed", "Sportage", "Niro", "e-Niro", "Stonic", "Sorento", "Seltos", "Soul", "Stinger", "Carens", "Carnival", "Optima", "Venga", "EV6", "EV9"],
     Lamborghini: ["Huracán", "Aventador", "Urus", "Diablo", "Gallardo", "Murciélago"],
     Lancia: ["Ypsilon", "Delta", "Musa", "Thesis", "Kappa", "Thema", "Dedra", "Beta", "Fulvia", "Flavia", "Gamma", "Lybra", "Y"],
     "Land Rover": ["Defender", "Discovery", "Discovery Sport", "Freelander", "Range Rover", "Range Rover Evoque", "Range Rover Sport", "Range Rover Velar"],
@@ -206,7 +206,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Seat: ["127", "131", "600", "850", "Cordoba", "Exeo", "Inca", "Malaga", "Marbella", "Panda", "Ronda", "Toledo"],
     SsangYong: ["Actyon", "Musso", "Rodius", "Torres"],
     Seres: ["3", "5"],
-    Škoda: ["105", "120", "1000 MB", "Elroq", "Epiq", "Favorit", "Felicia", "Forman", "Kushaq", "Slavia"],
+    Škoda: ["105", "120", "1000 MB", "Elroq", "Epiq", "Favorit", "Felicia", "Forman", "Kushaq", "Peaq", "Slavia"],
     Smart: ["#1", "#3", "Crossblade", "Roadster"],
     Subaru: ["360", "Alcyone", "Ascent", "Baja", "Justy", "Solterra", "SVX", "Tribeca", "Vivio"],
     Suzuki: ["Across", "Alto", "Cappuccino", "Celerio", "Kizashi", "Liana", "S-Presso", "Samurai", "Swace", "Wagon R+", "X-90", "e Vitara"],
@@ -602,6 +602,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.4 Turbodiesel 184cv", yearFrom: 2026, yearTo: null },
         { label: "Hi4-T Plug-in Hybrid 408cv", yearFrom: 2026, yearTo: null },
       ],
+      H7: [
+        { label: "Hybrid Hi2 247cv", yearFrom: 2026, yearTo: null },
+        { label: "Plug-in Hi4 435cv", yearFrom: 2026, yearTo: null },
+      ],
       Hover: [{ label: "2.4 16v 126cv", yearFrom: 2008, yearTo: 2013 }],
       "Hover 5": [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: 2018 }],
       Steed: [{ label: "2.0 VGT 143cv", yearFrom: 2013, yearTo: null }],
@@ -882,6 +886,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "SQ8 4.0 TDI 435cv", yearFrom: 2019, yearTo: null },
       ],
       SQ8: [{ label: "4.0 TDI 435cv", yearFrom: 2019, yearTo: null }],
+      Q9: [
+        { label: "3.0 TDI mhev 245cv", yearFrom: 2026, yearTo: null },
+        { label: "3.0 TDI mhev 299cv", yearFrom: 2026, yearTo: null },
+      ],
       TT: [
         { label: "2.0 TFSI 230cv", yearFrom: 2014, yearTo: 2023 },
         { label: "2.0 TDI 184cv", yearFrom: 2014, yearTo: 2023 },
@@ -1672,6 +1680,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Sorento: [
         { label: "2.2 CRDi 200cv", yearFrom: 2020, yearTo: null },
         { label: "1.6 T-GDI Plug-in Hybrid 265cv", yearFrom: 2020, yearTo: null },
+      ],
+      Seltos: [
+        { label: "1.6 T-GDI 180cv", yearFrom: 2026, yearTo: null },
+        { label: "1.6 Full Hybrid 154cv", yearFrom: 2026, yearTo: null },
+        { label: "1.6 Full Hybrid e-AWD 178cv", yearFrom: 2026, yearTo: null },
       ],
       Xceed: [
         { label: "1.0 T-GDI 120cv", yearFrom: 2019, yearTo: null },
@@ -2469,6 +2482,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 60 204cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 85 286cv", yearFrom: 2024, yearTo: null },
         { label: "vRS Elettrica 84 kWh 340cv", yearFrom: 2025, yearTo: null },
+      ],
+      Peaq: [
+        { label: "Peaq 60 Elettrica 204cv", yearFrom: 2026, yearTo: null },
+        { label: "Peaq 90x Elettrica 299cv", yearFrom: 2026, yearTo: null },
       ],
     },
     Smart: {
