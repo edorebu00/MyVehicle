@@ -1,21 +1,26 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-03 (UTC), eseguita alle 01:20
+Data scan: 2026-11-04 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 02/11 (11:25 UTC) `main` non e' cambiato: l'ultimo commit e' ancora il merge della PR #113 (`52e3c9a`) e
-l'albero di `main` e' identico a quello gia' esaminato (verificato con `git diff` sull'intero repository). Nessun file sotto
-`web/` o `supabase/` e' cambiato, quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi qui
-sotto restano quelli verificati ieri; numeri di riga invariati.
+Dallo scan del 03/11 `main` ha un solo commit nuovo: la PR #114 (`4d58ba5`), che aggiunge 14 righe di dati di catalogo in
+`web/lib/vehicleData.ts` (motorizzazioni di Audi S3, SQ5, SQ8 e Volkswagen Tayron). Nessun altro file sotto `web/` o
+`supabase/` e' cambiato (verificato con `git diff 52e3c9a origin/main`), quindi le route di `web/app/api/agent/*`
+(chat, process-document, search) e i rilievi qui sotto restano quelli gia' verificati.
+Verifica della PR #114 fatta leggendo il codice: le quattro chiavi nuove non esistono gia' nello stesso oggetto (nessuna chiave
+doppia), i quattro modelli sono gia' nell'elenco modelli (`web/lib/vehicleData.ts:141`, `:216`) e non hanno voci in
+`web/lib/engineExtensions.ts`, quindi non creano doppioni nel menu come in M18.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#113
+I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#114
 (con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
 con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
 con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4;
-con la PR #113, nel file attuale, le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25.
-Riferimenti diretti nel file attuale: Renault 5 Turbo 3E `:2358`, Macan `:2264`, Twingo `:2318`, Yaris Cross Hybrid 130 `:2562`, ID. Polo `:2752`).
+con la PR #113 le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25;
+con la PR #114 le righe successive alla 829 si spostano di altre 5, alla 869 di 6, alla 876 di 7, alla 2672 di 14.
+Riferimenti diretti nel file attuale: Renault 5 Turbo 3E `:2365`, Macan `:2271`, Twingo `:2325`, Yaris Cross Hybrid 130 `:2569`, ID. Polo `:2766`).
+I riferimenti di M17 e M18 sono aggiornati al file attuale.
 
-Nessun problema nuovo: codice invariato dall'ultimo scan. I rilievi M1-M18 restano aperti come descritti.
+Nessun problema nuovo: l'unico cambiamento e' di dati di catalogo, senza difetti. I rilievi M1-M18 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -110,7 +115,7 @@ e Tang, 2023, e la batteria da 108,8 kWh della Tang dal 2025 vanno confermati su
 Proposta: confermare se chiudere la Funky Cat al 2023 e gli anni delle nuove voci BYD (U21).
 
 ### M17 — Catalogo: Citroën ë-C3 presente sia come versione di "C3" sia come modello a se' senza motorizzazioni (invariato)
-File: `web/lib/vehicleData.ts:1154-1159` (nel file attuale); modello separato: `web/lib/catalogueSweep.ts:29` ("ë-C3")
+File: `web/lib/vehicleData.ts:1161-1166` (nel file attuale); modello separato: `web/lib/catalogueSweep.ts:29` ("ë-C3")
 In pratica la PR #112 aggiunge "Elettrica ë-C3 113cv" sotto il modello "C3", ma l'elenco modelli Citroën contiene anche "ë-C3"
 (dal catalogo esteso, senza motorizzazioni): chi sceglie "ë-C3" trova solo il campo libero, chi sceglie "C3" trova la versione
 elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre motorizzazioni della C3 del 2016 restano con
@@ -118,8 +123,8 @@ elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre mot
 Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine delle versioni 2016 della C3.
 
 ### M18 — Catalogo: le nuove voci di ID.7, ID. Buzz, Smart #1 e #3 si sommano a quelle gia' presenti con nomi diversi (invariato)
-File: `web/lib/vehicleData.ts:2481-2490` (Smart #1/#3) e `:2742-2751` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
-`web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3150-3164`
+File: `web/lib/vehicleData.ts:2488-2497` (Smart #1/#3) e `:2756-2765` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
+`web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3164-3178`
 In pratica `getEngineVariants` somma `ENGINE_DATA` ed `ENGINE_EXTENSIONS` togliendo solo le etichette identiche, e la PR #113 ha
 aggiunto in `ENGINE_DATA` motorizzazioni che esistevano gia' nelle estensioni con un'etichetta diversa. Il menu mostra quindi
 doppioni della stessa versione: per la ID.7 "Pro Elettrica 77 kWh 286cv" e "Elettrica 77 kWh 286cv", "Pro S Elettrica 86 kWh 286cv"
@@ -145,6 +150,11 @@ Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni
 - `web/app/(dashboard)/veicoli/[id]/page.tsx:77-84`: il testo di ricerca predefinito non uniforma gli spazi; l'effetto si
   risolve lato server con la PR #96.
 - `GlobalSearch.tsx:44-46` e `:31`: invariati rispetto allo scan del 10/10 (vedi U16).
+
+- PR #114: le versioni della S3 compaiono ora sia sotto il modello "S3" sia sotto "A3" ("2.0 TFSI S3 ...", gia' presenti), e lo
+  stesso vale per "SQ5"/"Q5" e "SQ8"/"Q8": la stessa auto puo' essere salvata con due nomi di modello, come gia' accadeva per
+  altre coppie (M14, M17). Gli anni coincidono con quelli delle voci gia' esistenti; l'anno di inizio 2016 della SQ5 3.0 TDI e'
+  ripreso dalla voce gia' presente sotto Q5. Scelta di catalogo, non un difetto del codice.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/`.
