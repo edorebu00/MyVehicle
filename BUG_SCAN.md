@@ -1,26 +1,27 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-04 (UTC), eseguita alle 01:20
+Data scan: 2026-11-05 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 03/11 `main` ha un solo commit nuovo: la PR #114 (`4d58ba5`), che aggiunge 14 righe di dati di catalogo in
-`web/lib/vehicleData.ts` (motorizzazioni di Audi S3, SQ5, SQ8 e Volkswagen Tayron). Nessun altro file sotto `web/` o
-`supabase/` e' cambiato (verificato con `git diff 52e3c9a origin/main`), quindi le route di `web/app/api/agent/*`
-(chat, process-document, search) e i rilievi qui sotto restano quelli gia' verificati.
-Verifica della PR #114 fatta leggendo il codice: le quattro chiavi nuove non esistono gia' nello stesso oggetto (nessuna chiave
-doppia), i quattro modelli sono gia' nell'elenco modelli (`web/lib/vehicleData.ts:141`, `:216`) e non hanno voci in
-`web/lib/engineExtensions.ts`, quindi non creano doppioni nel menu come in M18.
+Dallo scan del 04/11 `main` ha un solo cambiamento nuovo: la PR #115 (`1350426`, unita con `8b6cf81`), che aggiunge dati di
+catalogo in `web/lib/vehicleData.ts` (modelli e motorizzazioni di Audi Q9, GWM H7, Kia Seltos e Skoda Peaq). Nessun altro file
+sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 4d58ba5 origin/main`), quindi le route di `web/app/api/agent/*`
+(chat, process-document, search) e i rilievi gia' noti restano quelli verificati.
+Verifica della PR #115 fatta leggendo il codice: le quattro chiavi nuove di `ENGINE_DATA` non esistono gia' nello stesso oggetto
+(nessuna chiave doppia) e i nomi aggiunti agli elenchi modelli non sono doppi (`getModels` li unisce comunque con un `Set`).
+Audi Q9, GWM H7 e Skoda Peaq non hanno voci in `web/lib/engineExtensions.ts`; la Kia Seltos invece si', vedi M19.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#114
+I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#115
 (con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
 con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
 con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4;
 con la PR #113 le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25;
-con la PR #114 le righe successive alla 829 si spostano di altre 5, alla 869 di 6, alla 876 di 7, alla 2672 di 14.
-Riferimenti diretti nel file attuale: Renault 5 Turbo 3E `:2365`, Macan `:2271`, Twingo `:2325`, Yaris Cross Hybrid 130 `:2569`, ID. Polo `:2766`).
-I riferimenti di M17 e M18 sono aggiornati al file attuale.
+con la PR #114 le righe successive alla 829 si spostano di altre 5, alla 869 di 6, alla 876 di 7, alla 2672 di 14;
+con la PR #115, nel file del 04/11, le righe successive alla 604 si spostano di altre 4, alla 884 di 8, alla 1675 di 13, alla 2472 di 17.
+I riferimenti di M17, M18 e M19 sono aggiornati al file attuale.
 
-Nessun problema nuovo: l'unico cambiamento e' di dati di catalogo, senza difetti. I rilievi M1-M18 restano aperti come descritti.
+Un problema nuovo, Minore (M19): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U24).
+I rilievi M1-M18 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -123,8 +124,8 @@ elettrica, e la stessa auto puo' essere salvata con due nomi. Inoltre le tre mot
 Proposta: decidere sotto quale nome tenere la ë-C3 e confermare l'anno di fine delle versioni 2016 della C3.
 
 ### M18 — Catalogo: le nuove voci di ID.7, ID. Buzz, Smart #1 e #3 si sommano a quelle gia' presenti con nomi diversi (invariato)
-File: `web/lib/vehicleData.ts:2488-2497` (Smart #1/#3) e `:2756-2765` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
-`web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3164-3178`
+File: `web/lib/vehicleData.ts:2505-2514` (Smart #1/#3) e `:2773-2782` (ID. Buzz/ID.7) nel file attuale; voci gia' esistenti:
+`web/lib/engineExtensions.ts:146-153` (ID.7, ID. Buzz) e `:811-818` (#1, #3); unione: `web/lib/vehicleData.ts:3181-3196`
 In pratica `getEngineVariants` somma `ENGINE_DATA` ed `ENGINE_EXTENSIONS` togliendo solo le etichette identiche, e la PR #113 ha
 aggiunto in `ENGINE_DATA` motorizzazioni che esistevano gia' nelle estensioni con un'etichetta diversa. Il menu mostra quindi
 doppioni della stessa versione: per la ID.7 "Pro Elettrica 77 kWh 286cv" e "Elettrica 77 kWh 286cv", "Pro S Elettrica 86 kWh 286cv"
@@ -135,6 +136,16 @@ versione; "Elettrica 77 kWh 204cv" ora chiude al 2024 perche' a parita' di etich
 anno per quella versione. La e-5008 non ha doppioni (nessuna voce nelle estensioni). Quali etichette e quali anni siano giusti e'
 un dato di catalogo da confermare (U23).
 Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni) dopo aver confermato batterie e anni di inizio.
+
+### M19 — Catalogo: le nuove motorizzazioni della Kia Seltos si sommano a quelle gia' presenti nelle estensioni (nuovo)
+File: `web/lib/vehicleData.ts:1684-1688` (voci aggiunte dalla PR #115); voci gia' esistenti: `web/lib/engineExtensions.ts:731-734`;
+unione: `web/lib/vehicleData.ts:3181-3196`
+In pratica `getEngineVariants` toglie solo le etichette identiche, quindi per la Seltos il menu mostra cinque versioni:
+"1.6 T-GDI 180cv", "1.6 Full Hybrid 154cv" e "1.6 Full Hybrid e-AWD 178cv" dal 2026, piu' "1.6 T-GDI 177cv" e "1.6 CRDi 136cv"
+dal 2019 con `yearTo: null`. "1.6 T-GDI 180cv" e "1.6 T-GDI 177cv" sembrano la stessa versione con due potenze diverse, e le voci
+della generazione 2019 restano aperte fino a oggi accanto a quelle 2026, come gia' visto in M13 e M18. Quale potenza e quale anno
+di fine siano giusti e' un dato di catalogo da confermare (U24).
+Proposta: tenere una sola voce per il 1.6 T-GDI e chiudere le versioni 2019 all'anno corretto, dopo averli confermati.
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -178,6 +189,7 @@ Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni
 - U21 — Decidere se chiudere "Ora Funky Cat" all'arrivo di "Ora 03" e confermare gli anni di BYD Han e Tang (M16).
 - U22 — Decidere se la Citroën ë-C3 vada sotto "C3" o sotto il modello "ë-C3" e confermare la fine delle versioni 2016 della C3 (M17).
 - U23 — Scegliere un'unica voce per ciascuna motorizzazione di ID.7, ID. Buzz, Smart #1 e #3, confermando batterie (ID. Buzz 79 o 86 kWh) e anni di inizio (Smart #1 2022 o 2023) (M18).
+- U24 — Kia Seltos: confermare la potenza del 1.6 T-GDI (177 o 180cv) e l'anno di fine delle versioni 2019, tenendo una sola voce per versione (M19).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
