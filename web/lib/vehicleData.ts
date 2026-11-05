@@ -450,6 +450,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Life Elettrica 56.2 kWh 218cv", yearFrom: 2025, yearTo: null },
         { label: "Design Elettrica 67.1 kWh 218cv", yearFrom: 2025, yearTo: null },
       ],
+      C10: [{ label: "Elettrica 69.9 kWh 218cv", yearFrom: 2024, yearTo: null }],
+      T03: [{ label: "Elettrica 37.3 kWh 95cv", yearFrom: 2024, yearTo: null }],
     },
     "Lynk & Co": {
       "01": [{ label: "1.5 Turbo Plug-in Hybrid 261cv", yearFrom: 2021, yearTo: null }],
@@ -2770,6 +2772,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica Pro 170cv", yearFrom: 2021, yearTo: null },
         { label: "GTX 4motion 299cv", yearFrom: 2021, yearTo: null },
       ],
+      "ID.5": [
+        { label: "Pro 77 kWh 286cv", yearFrom: 2022, yearTo: null },
+        { label: "GTX 4motion 299cv", yearFrom: 2022, yearTo: 2024 },
+        { label: "GTX 4motion 340cv", yearFrom: 2024, yearTo: null },
+      ],
       "ID. Buzz": [
         { label: "Elettrica 77 kWh 204cv", yearFrom: 2022, yearTo: 2024 },
         { label: "Elettrica 79 kWh 286cv", yearFrom: 2024, yearTo: null },
@@ -2839,6 +2846,14 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       XC40: [
         { label: "B3 1.5 163cv", yearFrom: 2018, yearTo: null },
         { label: "Elettrica Recharge 231cv", yearFrom: 2020, yearTo: null },
+      ],
+      C40: [
+        { label: "Recharge Single Motor 69 kWh 238cv", yearFrom: 2021, yearTo: 2024 },
+        { label: "Recharge Twin 82 kWh AWD 408cv", yearFrom: 2021, yearTo: 2024 },
+      ],
+      EX40: [
+        { label: "Single Motor 70 kWh 238cv", yearFrom: 2024, yearTo: null },
+        { label: "Single Motor Extended Range 70 kWh 252cv", yearFrom: 2024, yearTo: null },
       ],
       XC60: [
         { label: "B4 2.0 197cv", yearFrom: 2017, yearTo: null },
