@@ -1221,6 +1221,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Leon: [
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
         { label: "2.0 TSI 300cv", yearFrom: 2020, yearTo: null },
+        { label: "1.5 e-Hybrid VZ 272cv", yearFrom: 2024, yearTo: null },
       ],
       Born: [
         { label: "Elettrica 150cv", yearFrom: 2021, yearTo: null },
@@ -2006,6 +2007,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 Cooper 136cv", yearFrom: 2017, yearTo: null },
         { label: "2.0 Cooper S 178cv", yearFrom: 2017, yearTo: null },
         { label: "Cooper SE Plug-in Hybrid 224cv", yearFrom: 2017, yearTo: null },
+        { label: "1.5 C 170cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 S ALL4 218cv", yearFrom: 2024, yearTo: null },
+        { label: "John Cooper Works ALL4 300cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica E 64.7 kWh 204cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica SE ALL4 64.7 kWh 313cv", yearFrom: 2024, yearTo: null },
       ],
       Clubman: [
         { label: "1.5 Cooper 136cv", yearFrom: 2015, yearTo: null },
@@ -2449,6 +2455,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
         { label: "2.0 TDI 150cv", yearFrom: 2020, yearTo: null },
         { label: "RS 2.0 TSI 245cv", yearFrom: 2020, yearTo: null },
+        { label: "RS iV 1.4 TSI Plug-in Hybrid 245cv", yearFrom: 2020, yearTo: 2023 },
       ],
       Kamiq: [
         { label: "1.0 TSI 116cv", yearFrom: 2019, yearTo: null },
