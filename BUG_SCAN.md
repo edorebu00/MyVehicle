@@ -1,30 +1,32 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-06 (UTC), eseguita alle 01:20
+Data scan: 2026-11-07 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 05/11 `main` ha un solo cambiamento nuovo: la PR #116 (`0ace492`, unita con `def05d1`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (motorizzazioni di Leapmotor C10/T03, Volkswagen ID.5, Volvo C40/EX40). Nessun altro file
-sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 8b6cf81 origin/main`), quindi le route di `web/app/api/agent/*`
+Dallo scan del 06/11 `main` ha un solo cambiamento nuovo: la PR #117 (`b5873f6`, unita con `0fc616a`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (motorizzazioni di Audi A5/S5, BMW X5 e Mercedes Classe C elettrica). Nessun altro file
+sotto `web/` o `supabase/` e' cambiato (verificato con `git diff def05d1 origin/main`), quindi le route di `web/app/api/agent/*`
 (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi
 si e' concentrata sul codice cambiato.
-Verifica della PR #116 fatta leggendo il codice: le cinque chiavi nuove di `ENGINE_DATA` non esistono gia' nello stesso oggetto
-(nessuna chiave doppia) e i cinque modelli sono gia' negli elenchi dei modelli. Pero' ID.5, C40, C10 e T03 hanno gia' voci in
-`web/lib/engineExtensions.ts` con etichette diverse: vedi M20. La EX40 non ha voci nelle estensioni.
+Verifica della PR #117 fatta leggendo il codice: la chiave nuova `S5` di `ENGINE_DATA` non esiste gia' nello stesso oggetto
+(nessuna chiave doppia) e il modello "S5" e' gia' nell'elenco dei modelli Audi (`web/lib/vehicleData.ts:141`). A5, S5, X5 e
+Classe C non hanno voci in `web/lib/engineExtensions.ts`, quindi non ci sono doppioni con le estensioni. Pero' le nuove voci di
+A5 e X5 si affiancano a quelle della generazione precedente lasciate aperte: vedi M21.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#116
+I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#117
 (con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
 con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
 con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4;
 con la PR #113 le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25;
 con la PR #114 le righe successive alla 829 si spostano di altre 5, alla 869 di 6, alla 876 di 7, alla 2672 di 14;
 con la PR #115, nel file del 04/11, le righe successive alla 604 si spostano di altre 4, alla 884 di 8, alla 1675 di 13, alla 2472 di 17;
-con la PR #116, nel file del 05/11, le righe successive alla 452 si spostano di altre 2, alla 2772 di 7, alla 2847 di 15
-(quindi `getEngineVariants`, indicata in M18 e M19 alle righe 3181-3196, e' ora a `web/lib/vehicleData.ts:3196-3211`).
-I riferimenti di M20 sono aggiornati al file attuale.
+con la PR #116, nel file del 05/11, le righe successive alla 452 si spostano di altre 2, alla 2772 di 7, alla 2847 di 15;
+con la PR #117, nel file del 06/11, le righe successive alla 848 si spostano di altre 3, alla 1095 di 5, alla 1931 di 6
+(quindi `getEngineVariants`, indicata in M18 e M19 alle righe 3181-3196, e' ora a `web/lib/vehicleData.ts:3202-3217`).
+I riferimenti di M20 si riferiscono al file del 06/11; quelli di M21 al file attuale.
 
-Un problema nuovo, Minore (M20): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U25).
-I rilievi M1-M19 restano aperti come descritti.
+Un problema nuovo, Minore (M21): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U26).
+I rilievi M1-M20 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -140,7 +142,7 @@ anno per quella versione. La e-5008 non ha doppioni (nessuna voce nelle estensio
 un dato di catalogo da confermare (U23).
 Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni) dopo aver confermato batterie e anni di inizio.
 
-### M19 — Catalogo: le nuove motorizzazioni della Kia Seltos si sommano a quelle gia' presenti nelle estensioni (nuovo)
+### M19 — Catalogo: le nuove motorizzazioni della Kia Seltos si sommano a quelle gia' presenti nelle estensioni (invariato)
 File: `web/lib/vehicleData.ts:1684-1688` (voci aggiunte dalla PR #115); voci gia' esistenti: `web/lib/engineExtensions.ts:731-734`;
 unione: `web/lib/vehicleData.ts:3181-3196`
 In pratica `getEngineVariants` toglie solo le etichette identiche, quindi per la Seltos il menu mostra cinque versioni:
@@ -150,7 +152,7 @@ della generazione 2019 restano aperte fino a oggi accanto a quelle 2026, come gi
 di fine siano giusti e' un dato di catalogo da confermare (U24).
 Proposta: tenere una sola voce per il 1.6 T-GDI e chiudere le versioni 2019 all'anno corretto, dopo averli confermati.
 
-### M20 — Catalogo: le nuove motorizzazioni di ID.5, C40, C10 e T03 si sommano a quelle gia' presenti nelle estensioni (nuovo)
+### M20 — Catalogo: le nuove motorizzazioni di ID.5, C40, C10 e T03 si sommano a quelle gia' presenti nelle estensioni (invariato)
 File: `web/lib/vehicleData.ts:453-454` (Leapmotor C10/T03), `:2775-2779` (ID.5), `:2850-2857` (C40/EX40), voci aggiunte dalla PR #116;
 voci gia' esistenti: `web/lib/engineExtensions.ts:141-145` (ID.5), `:615-618` (C40), `:837-843` (C10, T03); unione: `web/lib/vehicleData.ts:3196-3211`
 In pratica `getEngineVariants` toglie solo le etichette identiche, quindi il menu mostra doppioni della stessa versione:
@@ -162,6 +164,15 @@ batteria della Twin, 78 o 82 kWh, in contrasto tra le due fonti). Per la EX40 la
 indicata con la stessa batteria da 70 kWh della Single Motor: il valore della batteria e' da confermare. Quali etichette, batterie e
 anni siano giusti e' un dato di catalogo da confermare (U25), come gia' visto in M18 e M19.
 Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni) dopo aver confermato batterie e anni.
+
+### M21 — Catalogo: nuove motorizzazioni di Audi A5 e BMW X5 accanto a quelle della generazione precedente ancora aperte (nuovo)
+File: `web/lib/vehicleData.ts:846-851` (A5), `:1096-1101` (X5)
+In pratica, come in M13: sotto "A5" le voci 2016 ("2.0 TDI 190cv", "2.0 TFSI 252cv") restano con `yearTo: null` accanto alle
+nuove voci 2024 ("2.0 TDI mhev 204cv", "2.0 TFSI 204cv"), quindi per una A5 del 2025 il menu offre insieme motori di due
+generazioni diverse; lo stesso succede sotto "X5" per una X5 del 2026 ("30d 3.0 286cv" del 2018 accanto a "40d xDrive 3.0 313cv").
+La motorizzazione scelta finisce nel testo della ricerca IA. Le etichette nuove della X5 ("40d xDrive 3.0 313cv",
+"40 xDrive 3.0 400cv") hanno anche un formato diverso da quelle gia' presenti ("30d 3.0 286cv"): solo estetico.
+Proposta: confermare l'anno di fine delle voci della generazione precedente di A5 e X5 (U26).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -207,6 +218,7 @@ Proposta: tenere una sola voce per versione (in `ENGINE_DATA` o nelle estensioni
 - U23 — Scegliere un'unica voce per ciascuna motorizzazione di ID.7, ID. Buzz, Smart #1 e #3, confermando batterie (ID. Buzz 79 o 86 kWh) e anni di inizio (Smart #1 2022 o 2023) (M18).
 - U24 — Kia Seltos: confermare la potenza del 1.6 T-GDI (177 o 180cv) e l'anno di fine delle versioni 2019, tenendo una sola voce per versione (M19).
 - U25 — ID.5, C40, Leapmotor C10 e T03: scegliere un'unica voce per ciascuna motorizzazione, confermando batteria della C40 Twin (78 o 82 kWh), anno di fine della C40 e batteria della EX40 Extended Range (M20).
+- U26 — Audi A5 e BMW X5: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte fino all'anno corrente (M21).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
