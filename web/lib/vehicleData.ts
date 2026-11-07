@@ -846,7 +846,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       A5: [
         { label: "2.0 TDI 190cv", yearFrom: 2016, yearTo: null },
         { label: "2.0 TFSI 252cv", yearFrom: 2016, yearTo: null },
+        { label: "2.0 TDI mhev 204cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TFSI 204cv", yearFrom: 2024, yearTo: null },
       ],
+      S5: [{ label: "3.0 TFSI quattro mhev 367cv", yearFrom: 2024, yearTo: null }],
       A6: [
         { label: "2.0 TDI 204cv", yearFrom: 2018, yearTo: null },
         { label: "3.0 TDI 286cv", yearFrom: 2018, yearTo: null },
@@ -1093,6 +1096,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       X5: [
         { label: "30d 3.0 286cv", yearFrom: 2018, yearTo: null },
         { label: "X5 M 4.4 600cv", yearFrom: 2019, yearTo: null },
+        { label: "40d xDrive 3.0 313cv", yearFrom: 2026, yearTo: null },
+        { label: "40 xDrive 3.0 400cv", yearFrom: 2026, yearTo: null },
       ],
       X6: [
         { label: "30d 3.0 286cv", yearFrom: 2019, yearTo: null },
@@ -1929,6 +1934,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "C200 1.5 204cv", yearFrom: 2021, yearTo: null },
         { label: "C220d 2.0 200cv", yearFrom: 2021, yearTo: null },
         { label: "C63 AMG 2.0 Turbo Hybrid 680cv", yearFrom: 2023, yearTo: null },
+        { label: "C400 4Matic EQ Elettrica 94 kWh 490cv", yearFrom: 2026, yearTo: null },
       ],
       "Classe E": [
         { label: "E200 2.0 197cv", yearFrom: 2016, yearTo: null },
