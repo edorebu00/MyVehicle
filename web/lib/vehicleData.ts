@@ -158,7 +158,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     "DS Automobiles": ["DS 3 Crossback", "DS 4 Crossback", "DS 7 Crossback", "DS N°8"],
     EBRO: ["S400", "S700", "S800"],
     EVO: ["3", "4", "5", "6", "7", "Cross 4", "Spazio"],
-    Ferrari: ["12Cilindri", "250 GTO", "288 GTO", "296 GTB", "296 GTS", "308", "328", "348", "400", "412", "550 Maranello", "575M Maranello", "599 GTB", "612 Scaglietti", "812 Superfast", "Daytona SP3", "Dino", "Enzo", "F40", "F50", "LaFerrari", "Mondial", "Purosangue", "Testarossa"],
+    Ferrari: ["12Cilindri", "250 GTO", "288 GTO", "296 GTB", "296 GTS", "308", "328", "348", "400", "412", "550 Maranello", "575M Maranello", "599 GTB", "612 Scaglietti", "812 Superfast", "Daytona SP3", "Dino", "Enzo", "F40", "F50", "LaFerrari", "Luce", "Mondial", "Purosangue", "Testarossa"],
     Fiat: ["124", "130", "132", "500e", "600e", "850", "850 Spider", "Argenta", "Campagnola", "Dino", "Duna", "Freemont", "Fullback", "Grande Punto", "Mobi", "Palio", "Regata", "Scudo", "Talento", "Tempra", "Toro", "Viaggio", "X1/9"],
     Ford: ["Anglia", "Bronco", "Capri", "Edge", "F-150", "GT", "Granada", "Maverick", "Mustang Mach-E", "Probe", "Puma Gen-E", "RS200", "Taunus", "Tourneo Connect", "Tourneo Courier", "Tourneo Custom", "Transit Connect", "Transit Courier", "Transit Custom"],
     Genesis: ["G80", "G90", "GV60", "GV80"],
@@ -475,6 +475,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "296 GTS": [{ label: "3.0 V6 Turbo Ibrida 830cv", yearFrom: 2022, yearTo: null }],
       Purosangue: [{ label: "6.5 V12 725cv", yearFrom: 2023, yearTo: null }],
       "12Cilindri": [{ label: "6.5 V12 830cv", yearFrom: 2024, yearTo: null }],
+      Luce: [{ label: "Elettrica Quad Motor 122 kWh 1050cv", yearFrom: 2026, yearTo: null }],
     },
     Lada: {
       Niva: [{ label: "1.7 80cv", yearFrom: 1977, yearTo: null }],
@@ -725,6 +726,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 Turbo 200cv", yearFrom: 2017, yearTo: null },
         { label: "2.2 Diesel 190cv", yearFrom: 2017, yearTo: null },
         { label: "2.9 V6 Bi-Turbo Quadrifoglio 510cv", yearFrom: 2018, yearTo: null },
+        { label: "2.9 V6 Bi-Turbo Quadrifoglio Q4 520cv", yearFrom: 2026, yearTo: null },
       ],
       Tonale: [
         { label: "1.5 Hybrid 130cv", yearFrom: 2022, yearTo: null },
@@ -982,6 +984,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "330d 3.0 265cv", yearFrom: 2012, yearTo: null },
         { label: "320i 2.0 184cv", yearFrom: 2012, yearTo: null },
         { label: "M340i 3.0 374cv", yearFrom: 2019, yearTo: null },
+        { label: "318 2.0 Turbo 156cv", yearFrom: 2026, yearTo: null },
+        { label: "320 2.0 Turbo 211cv", yearFrom: 2026, yearTo: null },
+        { label: "M350 xDrive 3.0 443cv", yearFrom: 2026, yearTo: null },
       ],
       "Serie 4": [
         { label: "420d 2.0 190cv", yearFrom: 2013, yearTo: null },
@@ -1481,7 +1486,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.0 EcoBlue 150cv", yearFrom: 2015, yearTo: null },
         { label: "2.5 Duratec Hybrid 190cv", yearFrom: 2019, yearTo: null },
       ],
-      Explorer: [{ label: "3.0 EcoBoost PHEV 457cv", yearFrom: 2019, yearTo: null }],
+      Explorer: [
+        { label: "3.0 EcoBoost PHEV 457cv", yearFrom: 2019, yearTo: null },
+        { label: "Standard Range Elettrica 52 kWh 170cv", yearFrom: 2024, yearTo: null },
+        { label: "Extended Range Elettrica 77 kWh 286cv", yearFrom: 2024, yearTo: null },
+        { label: "Extended Range AWD Elettrica 79 kWh 340cv", yearFrom: 2024, yearTo: null },
+      ],
       Ka: [
         { label: "1.2 Ti-VCT 70cv", yearFrom: 2016, yearTo: 2021 },
         { label: "1.2 Ti-VCT 85cv", yearFrom: 2016, yearTo: 2021 },
