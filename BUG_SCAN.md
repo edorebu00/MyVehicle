@@ -1,16 +1,18 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-08 (UTC), eseguita alle 01:18
+Data scan: 2026-11-09 (UTC), eseguita alle 01:18
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 07/11 `main` ha un solo cambiamento nuovo: la PR #118 (`c5ef163`, unita con `23fdad1`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (Cupra Leon 1.5 e-Hybrid VZ, Mini Countryman generazione 2024, Skoda Octavia RS iV).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 0fc616a origin/main`), quindi le route di
+Dallo scan del 08/11 `main` ha un solo cambiamento nuovo: la PR #119 (`cb631ef`, unita con `844a73c`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (Ferrari Luce, Alfa Romeo Stelvio Quadrifoglio Q4 520cv, BMW Serie 3 generazione 2026,
+Ford Explorer elettrica).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 23fdad1 origin/main`), quindi le route di
 `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
 la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #118 fatta leggendo il codice: le voci nuove stanno sotto le chiavi gia' esistenti `Cupra.Leon`,
-`Mini.Countryman` e `Škoda.Octavia` (nessuna chiave doppia); Leon, Countryman e Octavia non hanno voci in
-`web/lib/engineExtensions.ts`, quindi non ci sono doppioni con le estensioni; la Octavia RS iV ha correttamente un anno di fine
-(2020-2023). Pero' le nuove voci 2024 della Countryman si affiancano a quelle 2017 lasciate aperte: vedi M22.
+Verifica della PR #119 fatta leggendo il codice: "Luce" e' stato aggiunto sia all'elenco dei modelli Ferrari delle estensioni
+(`web/lib/vehicleData.ts:161`) sia a `ENGINE_DATA` (riga 478), quindi il modello compare nel menu con la sua motorizzazione;
+le altre voci stanno sotto le chiavi gia' esistenti `Alfa Romeo.Stelvio`, `BMW.Serie 3` e `Ford.Explorer` (nessuna chiave doppia);
+Stelvio (auto), Serie 3 ed Explorer non hanno voci in `web/lib/engineExtensions.ts` (la "Stelvio" li' e' quella Moto Guzzi),
+quindi non ci sono doppioni con le estensioni. Pero' le voci nuove si affiancano a quelle precedenti lasciate aperte: vedi M23.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#117
@@ -24,11 +26,13 @@ con la PR #116, nel file del 05/11, le righe successive alla 452 si spostano di 
 con la PR #117, nel file del 06/11, le righe successive alla 848 si spostano di altre 3, alla 1095 di 5, alla 1931 di 6
 (quindi `getEngineVariants`, indicata in M18 e M19 alle righe 3181-3196, era a `web/lib/vehicleData.ts:3202-3217` nel file del 07/11);
 con la PR #118, nel file del 07/11, le righe successive alla 1223 si spostano di altre 1, alla 2008 di 6, alla 2451 di 7
-(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3209-3224`).
-I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file attuale.
+(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3209-3224` nel file del 08/11);
+con la PR #119, nel file del 08/11, le righe successive alla 477 si spostano di altre 1, alla 727 di 2, alla 984 di 5, alla 1483 di 10
+(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3219-3234`).
+I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file del 08/11, quelli di M23 al file attuale.
 
-Un problema nuovo, Minore (M22): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U27).
-I rilievi M1-M21 restano aperti come descritti.
+Un problema nuovo, Minore (M23): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U28).
+I rilievi M1-M22 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -176,13 +180,23 @@ La motorizzazione scelta finisce nel testo della ricerca IA. Le etichette nuove 
 "40 xDrive 3.0 400cv") hanno anche un formato diverso da quelle gia' presenti ("30d 3.0 286cv"): solo estetico.
 Proposta: confermare l'anno di fine delle voci della generazione precedente di A5 e X5 (U26).
 
-### M22 — Catalogo: nuove motorizzazioni della Mini Countryman 2024 accanto a quelle della generazione 2017 ancora aperte (nuovo)
+### M22 — Catalogo: nuove motorizzazioni della Mini Countryman 2024 accanto a quelle della generazione 2017 ancora aperte (invariato)
 File: `web/lib/vehicleData.ts:2006-2015`
 In pratica, come in M13 e M21: sotto "Countryman" le voci 2017 ("1.5 Cooper 136cv", "2.0 Cooper S 178cv",
 "Cooper SE Plug-in Hybrid 224cv") restano con `yearTo: null` accanto alle cinque nuove voci 2024 ("1.5 C 170cv",
 "2.0 S ALL4 218cv", "John Cooper Works ALL4 300cv", le due elettriche), quindi per una Countryman del 2025 il menu offre insieme
 motori di due generazioni diverse; la motorizzazione scelta finisce nel testo della ricerca IA.
 Proposta: confermare l'anno di fine delle voci 2017 della Countryman (U27).
+
+### M23 — Catalogo: nuove motorizzazioni di BMW Serie 3, Ford Explorer e Stelvio Quadrifoglio accanto a quelle precedenti ancora aperte (nuovo)
+File: `web/lib/vehicleData.ts:981-990`, `web/lib/vehicleData.ts:725-730`, `web/lib/vehicleData.ts:1489-1494`
+In pratica, come in M13, M21 e M22: sotto "Serie 3" le voci 2012/2019 ("318d 2.0 150cv", "320d 2.0 190cv", "330d 3.0 265cv",
+"320i 2.0 184cv", "M340i 3.0 374cv") restano con `yearTo: null` accanto alle tre nuove voci 2026 ("318 2.0 Turbo 156cv",
+"320 2.0 Turbo 211cv", "M350 xDrive 3.0 443cv"); sotto "Explorer" la "3.0 EcoBoost PHEV 457cv" del 2019 resta aperta accanto alle
+tre elettriche 2024; sotto "Stelvio" la "2.9 V6 Bi-Turbo Quadrifoglio 510cv" resta aperta accanto alla "Quadrifoglio Q4 520cv"
+del 2026. Per un veicolo del 2026 il menu offre quindi motori di generazioni o aggiornamenti diversi insieme; la motorizzazione
+scelta finisce nel testo della ricerca IA.
+Proposta: confermare l'anno di fine delle voci precedenti di Serie 3, Explorer e Stelvio Quadrifoglio (U28).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -230,6 +244,7 @@ Proposta: confermare l'anno di fine delle voci 2017 della Countryman (U27).
 - U25 — ID.5, C40, Leapmotor C10 e T03: scegliere un'unica voce per ciascuna motorizzazione, confermando batteria della C40 Twin (78 o 82 kWh), anno di fine della C40 e batteria della EX40 Extended Range (M20).
 - U26 — Audi A5 e BMW X5: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte fino all'anno corrente (M21).
 - U27 — Mini Countryman: confermare l'anno di fine delle motorizzazioni della generazione 2017, oggi aperte accanto a quelle 2024 (M22).
+- U28 — BMW Serie 3, Ford Explorer e Alfa Romeo Stelvio: confermare l'anno di fine delle motorizzazioni precedenti, oggi aperte accanto a quelle nuove (M23).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
