@@ -138,7 +138,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Alpine: ["A106", "A108", "A310", "A610", "GTA"],
     "Alfa Romeo": ["6", "8C Competizione", "33 Stradale", "90", "1900", "2600", "Alfasud", "Alfetta", "Arna", "Montreal", "RZ", "Sprint", "SZ"],
     "Aston Martin": ["DB4", "DB5", "DB6", "DB7", "DB9", "DB12", "DBR1", "Lagonda", "One-77", "Valhalla", "Valkyrie", "Vantage", "Virage"],
-    Audi: ["50", "100", "200", "A4 allroad", "A6 allroad", "A6 e-tron", "Coupé", "Q6 e-tron", "Quattro", "RS e-tron GT", "S1", "S3", "S4", "S5", "S6", "S6 e-tron", "S7", "S8", "SQ2", "SQ5", "SQ6 e-tron", "SQ7", "SQ8", "TT Roadster", "V8"],
+    Audi: ["50", "100", "200", "A2 e-tron", "A4 allroad", "A6 allroad", "A6 e-tron", "Coupé", "Q6 e-tron", "Quattro", "RS e-tron GT", "S1", "S3", "S4", "S5", "S6", "S6 e-tron", "S7", "S8", "SQ2", "SQ5", "SQ6 e-tron", "SQ7", "SQ8", "TT Roadster", "V8"],
     BAIC: ["Beijing X35", "Beijing X55", "BJ40", "BJ60"],
     Bentley: ["Arnage", "Azure", "Blower", "Brooklands", "Eight", "R-Type", "Turbo R"],
     BMW: ["1500", "2002", "3.0 CSL", "507", "Isetta", "Serie 2 Active Tourer", "Serie 2 Gran Coupé", "Serie 4 Gran Coupé", "Serie 5 Touring", "Serie 6 Gran Turismo", "Serie 8 Gran Coupé", "i5", "i7", "iX2", "M1", "X7", "XM", "Z8"],
@@ -959,6 +959,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica quattro 462cv", yearFrom: 2025, yearTo: null },
       ],
       "S6 e-tron": [{ label: "Elettrica quattro 551cv", yearFrom: 2025, yearTo: null }],
+      "A2 e-tron": [
+        { label: "Elettrica 52 kWh 170cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 61 kWh 190cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 84 kWh 231cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 84 kWh 326cv", yearFrom: 2026, yearTo: null },
+      ],
     },
     BMW: {
       "Serie 1": [
@@ -1263,6 +1269,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.3 TCe 150cv", yearFrom: 2018, yearTo: null },
         { label: "1.5 dCi 115cv", yearFrom: 2018, yearTo: 2022 },
         { label: "1.6 Hybrid 140cv", yearFrom: 2024, yearTo: null },
+        { label: "1.2 TCe ECO-G 120cv GPL", yearFrom: 2024, yearTo: null },
       ],
       Bigster: [
         { label: "1.2 TCe 140cv", yearFrom: 2025, yearTo: null },
@@ -1310,6 +1317,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 Hybrid 70cv", yearFrom: 2020, yearTo: null },
         { label: "1.2 8v 69cv", yearFrom: 2012, yearTo: 2020 },
         { label: "0.9 TwinAir 85cv", yearFrom: 2012, yearTo: 2019 },
+        { label: "1.2 8v 69cv GPL", yearFrom: 2012, yearTo: null },
       ],
       "500": [
         { label: "1.0 Hybrid 70cv", yearFrom: 2020, yearTo: null },
@@ -2628,6 +2636,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       GT86: [{ label: "2.0 Boxer 200cv", yearFrom: 2012, yearTo: 2021 }],
       GR86: [{ label: "2.4 Boxer 234cv", yearFrom: 2021, yearTo: null }],
       "GR Corolla": [{ label: "1.6 Turbo 300cv", yearFrom: 2022, yearTo: null }],
+      "GR Yaris": [
+        { label: "1.6 Turbo 261cv", yearFrom: 2020, yearTo: 2023 },
+        { label: "1.6 Turbo 280cv", yearFrom: 2024, yearTo: null },
+      ],
       Verso: [
         { label: "1.8 147cv", yearFrom: 2009, yearTo: 2018 },
         { label: "2.0 D-4D 126cv", yearFrom: 2009, yearTo: 2018 },
