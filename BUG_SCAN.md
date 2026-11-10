@@ -1,18 +1,18 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-09 (UTC), eseguita alle 01:18
+Data scan: 2026-11-10 (UTC), eseguita alle 01:19
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 08/11 `main` ha un solo cambiamento nuovo: la PR #119 (`cb631ef`, unita con `844a73c`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (Ferrari Luce, Alfa Romeo Stelvio Quadrifoglio Q4 520cv, BMW Serie 3 generazione 2026,
-Ford Explorer elettrica).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 23fdad1 origin/main`), quindi le route di
+Dallo scan del 09/11 `main` ha un solo cambiamento nuovo: la PR #120 (`13436c1`, unita con `02fda18`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (Audi A2 e-tron, Toyota GR Yaris, GPL per Dacia Duster e Fiat Panda).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 844a73c origin/main`), quindi le route di
 `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
 la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #119 fatta leggendo il codice: "Luce" e' stato aggiunto sia all'elenco dei modelli Ferrari delle estensioni
-(`web/lib/vehicleData.ts:161`) sia a `ENGINE_DATA` (riga 478), quindi il modello compare nel menu con la sua motorizzazione;
-le altre voci stanno sotto le chiavi gia' esistenti `Alfa Romeo.Stelvio`, `BMW.Serie 3` e `Ford.Explorer` (nessuna chiave doppia);
-Stelvio (auto), Serie 3 ed Explorer non hanno voci in `web/lib/engineExtensions.ts` (la "Stelvio" li' e' quella Moto Guzzi),
-quindi non ci sono doppioni con le estensioni. Pero' le voci nuove si affiancano a quelle precedenti lasciate aperte: vedi M23.
+Verifica della PR #120 fatta leggendo il codice: "A2 e-tron" e' stato aggiunto sia all'elenco dei modelli Audi delle estensioni
+(`web/lib/vehicleData.ts:141`) sia a `ENGINE_DATA` (righe 962-967); "GR Yaris" era gia' nell'elenco dei modelli Toyota (riga 215)
+e ora ha voci in `ENGINE_DATA` (righe 2639-2642) oltre a quelle gia' presenti in `web/lib/engineExtensions.ts:522-525`, con le
+stesse etichette: `getEngineVariants` (`web/lib/vehicleData.ts:3231-3245`) scarta le etichette ripetute e tiene la voce di
+`ENGINE_DATA`, quindi nel menu non compaiono doppioni (vedi "Rilievi esaminati"). Le voci GPL stanno sotto le chiavi gia'
+esistenti `Dacia.Duster` e `Fiat.Panda`. Un dato da confermare sulla Panda: vedi M24.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#117
@@ -28,11 +28,14 @@ con la PR #117, nel file del 06/11, le righe successive alla 848 si spostano di 
 con la PR #118, nel file del 07/11, le righe successive alla 1223 si spostano di altre 1, alla 2008 di 6, alla 2451 di 7
 (quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3209-3224` nel file del 08/11);
 con la PR #119, nel file del 08/11, le righe successive alla 477 si spostano di altre 1, alla 727 di 2, alla 984 di 5, alla 1483 di 10
-(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3219-3234`).
-I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file del 08/11, quelli di M23 al file attuale.
+(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3219-3234` nel file del 09/11);
+con la PR #120, nel file del 09/11, le righe successive alla 958 si spostano di altre 6, alla 1262 di 7, alla 1309 di 8, alla 2617 di 12
+(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3231-3245`).
+I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file del 08/11, quelli di M23
+al file del 09/11, quelli di M24 al file attuale.
 
-Un problema nuovo, Minore (M23): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U28).
-I rilievi M1-M22 restano aperti come descritti.
+Un problema nuovo, Minore (M24): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U29).
+I rilievi M1-M23 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -198,6 +201,14 @@ del 2026. Per un veicolo del 2026 il menu offre quindi motori di generazioni o a
 scelta finisce nel testo della ricerca IA.
 Proposta: confermare l'anno di fine delle voci precedenti di Serie 3, Explorer e Stelvio Quadrifoglio (U28).
 
+### M24 — Catalogo: Fiat Panda "1.2 8v 69cv GPL" aperta fino all'anno corrente mentre la stessa motorizzazione a benzina finisce nel 2020 (nuovo)
+File: `web/lib/vehicleData.ts:1316-1321`
+In pratica: sotto "Panda" la nuova voce "1.2 8v 69cv GPL" ha `yearFrom: 2012, yearTo: null`, mentre la "1.2 8v 69cv" a benzina,
+cioe' lo stesso motore, ha `yearTo: 2020` ed e' stata sostituita dalla "1.0 Hybrid 70cv" del 2020. Per una Panda del 2025 il menu
+offre quindi la versione GPL di un motore che il catalogo considera fuori produzione; la motorizzazione scelta finisce nel testo
+della ricerca IA.
+Proposta: confermare l'anno di fine della Panda 1.2 GPL (U29).
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -217,6 +228,10 @@ Proposta: confermare l'anno di fine delle voci precedenti di Serie 3, Explorer e
   stesso vale per "SQ5"/"Q5" e "SQ8"/"Q8": la stessa auto puo' essere salvata con due nomi di modello, come gia' accadeva per
   altre coppie (M14, M17). Gli anni coincidono con quelli delle voci gia' esistenti; l'anno di inizio 2016 della SQ5 3.0 TDI e'
   ripreso dalla voce gia' presente sotto Q5. Scelta di catalogo, non un difetto del codice.
+
+- PR #120: "GR Yaris" ha ora le stesse due etichette sia in `ENGINE_DATA` (`web/lib/vehicleData.ts:2639-2642`) sia in
+  `web/lib/engineExtensions.ts:522-525`; prevale la voce di `ENGINE_DATA`, che chiude la 261cv al 2023 (prima era aperta).
+  Le righe nelle estensioni sono ormai inutilizzate ma innocue: toglierle sarebbe riordino, non correzione di un difetto.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/`.
@@ -245,6 +260,7 @@ Proposta: confermare l'anno di fine delle voci precedenti di Serie 3, Explorer e
 - U26 — Audi A5 e BMW X5: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte fino all'anno corrente (M21).
 - U27 — Mini Countryman: confermare l'anno di fine delle motorizzazioni della generazione 2017, oggi aperte accanto a quelle 2024 (M22).
 - U28 — BMW Serie 3, Ford Explorer e Alfa Romeo Stelvio: confermare l'anno di fine delle motorizzazioni precedenti, oggi aperte accanto a quelle nuove (M23).
+- U29 — Fiat Panda: confermare l'anno di fine della "1.2 8v 69cv GPL", oggi aperta mentre la stessa motorizzazione a benzina finisce nel 2020 (M24).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
