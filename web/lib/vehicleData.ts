@@ -1193,6 +1193,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "C3 Aircross": [
         { label: "1.2 PureTech 110cv", yearFrom: 2017, yearTo: null },
         { label: "1.5 BlueHDi 100cv", yearFrom: 2017, yearTo: null },
+        { label: "1.2 PureTech 100cv", yearFrom: 2024, yearTo: null },
+        { label: "1.2 PureTech Hybrid 136cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica ë-C3 Aircross 113cv", yearFrom: 2025, yearTo: null },
       ],
       C4: [
         { label: "1.2 PureTech 130cv", yearFrom: 2020, yearTo: null },
@@ -1582,6 +1585,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Santa Fe": [
         { label: "2.2 CRDi 200cv", yearFrom: 2018, yearTo: null },
         { label: "1.6 T-GDI Plug-in Hybrid 265cv", yearFrom: 2020, yearTo: null },
+        { label: "1.6 T-GDI Hybrid 215cv", yearFrom: 2024, yearTo: null },
       ],
       Ioniq: [
         { label: "Hybrid 141cv", yearFrom: 2016, yearTo: 2022 },
@@ -2569,6 +2573,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Swift: [
         { label: "1.2 Dualjet 90cv", yearFrom: 2017, yearTo: null },
         { label: "1.4 Boosterjet Sport 140cv", yearFrom: 2018, yearTo: null },
+        { label: "1.2 Dualjet Hybrid 82cv", yearFrom: 2024, yearTo: null },
       ],
       Vitara: [
         { label: "1.4 Boosterjet 129cv", yearFrom: 2015, yearTo: null },
