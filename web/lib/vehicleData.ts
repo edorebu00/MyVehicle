@@ -1267,6 +1267,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.0 TCe 90cv", yearFrom: 2020, yearTo: null },
         { label: "1.0 Bi-Fuel GPL 100cv", yearFrom: 2021, yearTo: null },
       ],
+      "Sandero Stepway": [
+        { label: "1.0 TCe 110cv", yearFrom: 2025, yearTo: null },
+        { label: "1.2 TCe ECO-G 120cv GPL", yearFrom: 2025, yearTo: null },
+        { label: "1.8 Hybrid 155cv", yearFrom: 2025, yearTo: null },
+      ],
       Duster: [
         { label: "1.0 TCe 90cv", yearFrom: 2018, yearTo: null },
         { label: "1.3 TCe 150cv", yearFrom: 2018, yearTo: null },
@@ -1563,10 +1568,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 MPI 84cv", yearFrom: 2020, yearTo: null },
         { label: "N 1.6 T-GDI 204cv", yearFrom: 2021, yearTo: null },
       ],
+      "i20 N": [{ label: "1.6 T-GDI 204cv", yearFrom: 2021, yearTo: 2023 }],
       i30: [
         { label: "1.0 T-GDI 120cv", yearFrom: 2017, yearTo: null },
         { label: "1.6 CRDi 136cv", yearFrom: 2017, yearTo: null },
         { label: "N 2.0 T-GDI 280cv", yearFrom: 2018, yearTo: null },
+      ],
+      "i30 N": [
+        { label: "2.0 T-GDI 250cv", yearFrom: 2017, yearTo: 2020 },
+        { label: "2.0 T-GDI Performance 275cv", yearFrom: 2017, yearTo: 2020 },
+        { label: "2.0 T-GDI Performance 280cv", yearFrom: 2021, yearTo: 2023 },
       ],
       Inster: [
         { label: "Elettrica 42 kWh 97cv", yearFrom: 2024, yearTo: null },
@@ -2824,6 +2835,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "ID.7": [
         { label: "Pro Elettrica 77 kWh 286cv", yearFrom: 2023, yearTo: null },
+        { label: "Pro S Elettrica 86 kWh 286cv", yearFrom: 2024, yearTo: null },
+        { label: "GTX Elettrica 86 kWh AWD 340cv", yearFrom: 2024, yearTo: null },
+      ],
+      "ID.7 Tourer": [
+        { label: "Pro Elettrica 77 kWh 286cv", yearFrom: 2024, yearTo: null },
         { label: "Pro S Elettrica 86 kWh 286cv", yearFrom: 2024, yearTo: null },
         { label: "GTX Elettrica 86 kWh AWD 340cv", yearFrom: 2024, yearTo: null },
       ],
