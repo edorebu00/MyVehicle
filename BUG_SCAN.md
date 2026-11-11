@@ -1,18 +1,17 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-10 (UTC), eseguita alle 01:19
+Data scan: 2026-11-11 (UTC), eseguita alle 01:25
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 09/11 `main` ha un solo cambiamento nuovo: la PR #120 (`13436c1`, unita con `02fda18`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (Audi A2 e-tron, Toyota GR Yaris, GPL per Dacia Duster e Fiat Panda).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 844a73c origin/main`), quindi le route di
+Dallo scan del 10/11 `main` ha un solo cambiamento nuovo: la PR #121 (`89a7a3e`, unita con `ed42967`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (nuova generazione Citroën C3 Aircross, Suzuki Swift ibrida, Hyundai Santa Fe Hybrid).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 02fda18 origin/main`), quindi le route di
 `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
 la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #120 fatta leggendo il codice: "A2 e-tron" e' stato aggiunto sia all'elenco dei modelli Audi delle estensioni
-(`web/lib/vehicleData.ts:141`) sia a `ENGINE_DATA` (righe 962-967); "GR Yaris" era gia' nell'elenco dei modelli Toyota (riga 215)
-e ora ha voci in `ENGINE_DATA` (righe 2639-2642) oltre a quelle gia' presenti in `web/lib/engineExtensions.ts:522-525`, con le
-stesse etichette: `getEngineVariants` (`web/lib/vehicleData.ts:3231-3245`) scarta le etichette ripetute e tiene la voce di
-`ENGINE_DATA`, quindi nel menu non compaiono doppioni (vedi "Rilievi esaminati"). Le voci GPL stanno sotto le chiavi gia'
-esistenti `Dacia.Duster` e `Fiat.Panda`. Un dato da confermare sulla Panda: vedi M24.
+Verifica della PR #121 fatta leggendo il codice: le voci stanno sotto le chiavi gia' esistenti `Citroën."C3 Aircross"`
+(`web/lib/vehicleData.ts:1193-1199`), `Hyundai."Santa Fe"` (righe 1585-1589) e `Suzuki.Swift` (righe 2573-2577); i tre modelli sono
+gia' nel catalogo base (righe 28, 43, 86) e non hanno voci in `web/lib/engineExtensions.ts`, quindi non ci sono doppioni.
+L'elettrica "ë-C3 Aircross" e' una versione di "C3 Aircross" e non esiste un modello separato con quel nome. Un rilievo nuovo
+dello stesso tipo di M21-M23: vedi M25.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#117
@@ -30,12 +29,14 @@ con la PR #118, nel file del 07/11, le righe successive alla 1223 si spostano di
 con la PR #119, nel file del 08/11, le righe successive alla 477 si spostano di altre 1, alla 727 di 2, alla 984 di 5, alla 1483 di 10
 (quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3219-3234` nel file del 09/11);
 con la PR #120, nel file del 09/11, le righe successive alla 958 si spostano di altre 6, alla 1262 di 7, alla 1309 di 8, alla 2617 di 12
-(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3231-3245`).
+(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3231-3245` nel file del 10/11);
+con la PR #121, nel file del 10/11, le righe successive alla 1192 si spostano di altre 3, alla 1583 di 4, alla 2572 di 5
+(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3236-3250`).
 I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file del 08/11, quelli di M23
-al file del 09/11, quelli di M24 al file attuale.
+al file del 09/11, quelli di M24 al file del 10/11, quelli di M25 al file attuale.
 
-Un problema nuovo, Minore (M24): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U29).
-I rilievi M1-M23 restano aperti come descritti.
+Un problema nuovo, Minore (M25): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U30).
+I rilievi M1-M24 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -191,7 +192,7 @@ In pratica, come in M13 e M21: sotto "Countryman" le voci 2017 ("1.5 Cooper 136c
 motori di due generazioni diverse; la motorizzazione scelta finisce nel testo della ricerca IA.
 Proposta: confermare l'anno di fine delle voci 2017 della Countryman (U27).
 
-### M23 — Catalogo: nuove motorizzazioni di BMW Serie 3, Ford Explorer e Stelvio Quadrifoglio accanto a quelle precedenti ancora aperte (nuovo)
+### M23 — Catalogo: nuove motorizzazioni di BMW Serie 3, Ford Explorer e Stelvio Quadrifoglio accanto a quelle precedenti ancora aperte (invariato)
 File: `web/lib/vehicleData.ts:981-990`, `web/lib/vehicleData.ts:725-730`, `web/lib/vehicleData.ts:1489-1494`
 In pratica, come in M13, M21 e M22: sotto "Serie 3" le voci 2012/2019 ("318d 2.0 150cv", "320d 2.0 190cv", "330d 3.0 265cv",
 "320i 2.0 184cv", "M340i 3.0 374cv") restano con `yearTo: null` accanto alle tre nuove voci 2026 ("318 2.0 Turbo 156cv",
@@ -201,13 +202,23 @@ del 2026. Per un veicolo del 2026 il menu offre quindi motori di generazioni o a
 scelta finisce nel testo della ricerca IA.
 Proposta: confermare l'anno di fine delle voci precedenti di Serie 3, Explorer e Stelvio Quadrifoglio (U28).
 
-### M24 — Catalogo: Fiat Panda "1.2 8v 69cv GPL" aperta fino all'anno corrente mentre la stessa motorizzazione a benzina finisce nel 2020 (nuovo)
+### M24 — Catalogo: Fiat Panda "1.2 8v 69cv GPL" aperta fino all'anno corrente mentre la stessa motorizzazione a benzina finisce nel 2020 (invariato)
 File: `web/lib/vehicleData.ts:1316-1321`
 In pratica: sotto "Panda" la nuova voce "1.2 8v 69cv GPL" ha `yearFrom: 2012, yearTo: null`, mentre la "1.2 8v 69cv" a benzina,
 cioe' lo stesso motore, ha `yearTo: 2020` ed e' stata sostituita dalla "1.0 Hybrid 70cv" del 2020. Per una Panda del 2025 il menu
 offre quindi la versione GPL di un motore che il catalogo considera fuori produzione; la motorizzazione scelta finisce nel testo
 della ricerca IA.
 Proposta: confermare l'anno di fine della Panda 1.2 GPL (U29).
+
+### M25 — Catalogo: nuove motorizzazioni di Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe accanto a quelle precedenti ancora aperte (nuovo)
+File: `web/lib/vehicleData.ts:1193-1199`, `web/lib/vehicleData.ts:2573-2577`, `web/lib/vehicleData.ts:1585-1589`
+In pratica, come in M13 e M21-M23: sotto "C3 Aircross" le voci 2017 ("1.2 PureTech 110cv", "1.5 BlueHDi 100cv") restano con
+`yearTo: null` accanto alle nuove voci 2024-2025 ("1.2 PureTech 100cv", "1.2 PureTech Hybrid 136cv", l'elettrica 113cv); sotto
+"Swift" le voci 2017-2018 ("1.2 Dualjet 90cv", "1.4 Boosterjet Sport 140cv") restano aperte accanto alla "1.2 Dualjet Hybrid 82cv"
+del 2024; sotto "Santa Fe" la "2.2 CRDi 200cv" del 2018 resta aperta accanto alla "1.6 T-GDI Hybrid 215cv" del 2024. Per un
+veicolo del 2025 il menu offre quindi motori di generazioni diverse insieme; la motorizzazione scelta finisce nel testo della
+ricerca IA.
+Proposta: confermare l'anno di fine delle motorizzazioni della generazione precedente di C3 Aircross, Swift e Santa Fe (U30).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -261,6 +272,7 @@ Proposta: confermare l'anno di fine della Panda 1.2 GPL (U29).
 - U27 — Mini Countryman: confermare l'anno di fine delle motorizzazioni della generazione 2017, oggi aperte accanto a quelle 2024 (M22).
 - U28 — BMW Serie 3, Ford Explorer e Alfa Romeo Stelvio: confermare l'anno di fine delle motorizzazioni precedenti, oggi aperte accanto a quelle nuove (M23).
 - U29 — Fiat Panda: confermare l'anno di fine della "1.2 8v 69cv GPL", oggi aperta mentre la stessa motorizzazione a benzina finisce nel 2020 (M24).
+- U30 — Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte accanto a quelle nuove (M25).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.

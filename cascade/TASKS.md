@@ -1,3 +1,3 @@
-Data (UTC): 2026-11-10
+Data (UTC): 2026-11-11
 Nessun task.
-Motivo: 3 PR dei lavoratori ancora aperte (#91, #96, #98); per la regola sull'arretrato oggi non vengono creati nuovi task. Su main solo la PR #120 (dati di catalogo, verificata): un rilievo nuovo di catalogo (M24), che richiede una conferma del proprietario (U29).
+Motivo: 3 PR dei lavoratori ancora aperte (#91, #96, #98); per la regola sull'arretrato oggi non vengono creati nuovi task. Su main solo la PR #121 (dati di catalogo, verificata): un rilievo nuovo di catalogo (M25), che richiede una conferma del proprietario (U30).
