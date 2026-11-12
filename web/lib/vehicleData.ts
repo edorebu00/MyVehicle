@@ -650,6 +650,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "XPower Elettrica 435cv", yearFrom: 2023, yearTo: null },
       ],
       MG3: [{ label: "1.5 Hybrid+ 194cv", yearFrom: 2023, yearTo: null }],
+      "MGS5 EV": [
+        { label: "Comfort Elettrica 49 kWh 170cv", yearFrom: 2025, yearTo: null },
+        { label: "Luxury Elettrica 64 kWh 231cv", yearFrom: 2025, yearTo: null },
+      ],
       Cyberster: [
         { label: "Trophy Elettrica 77 kWh 340cv", yearFrom: 2024, yearTo: null },
         { label: "GT Elettrica 77 kWh 503cv", yearFrom: 2024, yearTo: null },
@@ -893,6 +897,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "SQ8 4.0 TDI 435cv", yearFrom: 2019, yearTo: null },
       ],
       SQ8: [{ label: "4.0 TDI 435cv", yearFrom: 2019, yearTo: null }],
+      SQ7: [{ label: "4.0 TFSI V8 507cv", yearFrom: 2024, yearTo: null }],
       Q9: [
         { label: "3.0 TDI mhev 245cv", yearFrom: 2026, yearTo: null },
         { label: "3.0 TDI mhev 299cv", yearFrom: 2026, yearTo: null },
@@ -1498,6 +1503,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.3 EcoBoost 290cv", yearFrom: 2015, yearTo: null },
         { label: "5.0 V8 GT 450cv", yearFrom: 2015, yearTo: null },
       ],
+      "Mustang Mach-E": [
+        { label: "Standard Range Elettrica 75.7 kWh 269cv", yearFrom: 2021, yearTo: null },
+        { label: "GT Elettrica 98.8 kWh 487cv", yearFrom: 2021, yearTo: null },
+      ],
       "S-Max": [
         { label: "2.0 EcoBlue 150cv", yearFrom: 2015, yearTo: null },
         { label: "2.5 Duratec Hybrid 190cv", yearFrom: 2019, yearTo: null },
@@ -1947,6 +1956,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "CLK 320 V6 218cv", yearFrom: 1997, yearTo: 2010 },
       ],
       CLS: [{ label: "CLS 350d 3.0 286cv", yearFrom: 2018, yearTo: null }],
+      CLE: [
+        { label: "CLE200 2.0 204cv", yearFrom: 2024, yearTo: null },
+        { label: "CLE300 2.0 258cv", yearFrom: 2024, yearTo: null },
+        { label: "CLE450 3.0 381cv", yearFrom: 2024, yearTo: null },
+        { label: "AMG CLE53 3.0 Turbo 449cv", yearFrom: 2024, yearTo: null },
+      ],
       GLS: [
         { label: "GLS 400d 3.0 330cv", yearFrom: 2019, yearTo: null },
         { label: "AMG GLS63 4.0 V8 612cv", yearFrom: 2020, yearTo: null },
@@ -2579,6 +2594,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Legacy: [{ label: "2.0i e-Boxer 150cv", yearFrom: 2014, yearTo: null }],
       Levorg: [{ label: "1.6 GT Turbo 170cv", yearFrom: 2015, yearTo: null }],
       WRX: [{ label: "2.4 Boxer Turbo 275cv", yearFrom: 2022, yearTo: null }],
+      Solterra: [{ label: "Elettrica 71.4 kWh 218cv", yearFrom: 2022, yearTo: null }],
     },
     Suzuki: {
       Swift: [
