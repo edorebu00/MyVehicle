@@ -713,6 +713,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "2.2 Diesel 190cv", yearFrom: 2016, yearTo: null },
         { label: "2.9 V6 Bi-Turbo Quadrifoglio 510cv", yearFrom: 2016, yearTo: null },
         { label: "2.9 V6 Bi-Turbo Quadrifoglio Luna Rossa 520cv", yearFrom: 2026, yearTo: null },
+        { label: "2.9 V6 Bi-Turbo GTA 540cv", yearFrom: 2020, yearTo: 2021 },
+        { label: "2.9 V6 Bi-Turbo GTAm 540cv", yearFrom: 2020, yearTo: 2021 },
       ],
       Junior: [
         { label: "1.2 Hybrid 136cv", yearFrom: 2024, yearTo: null },
@@ -1803,6 +1805,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Delta: [
         { label: "1.4 MultiAir 120cv", yearFrom: 2008, yearTo: 2014 },
         { label: "1.6 MultiJet 105cv", yearFrom: 2008, yearTo: 2014 },
+      ],
+      "Delta Integrale": [
+        { label: "2.0 Turbo 8v HF Integrale 185cv", yearFrom: 1987, yearTo: 1989 },
+        { label: "2.0 Turbo 16v HF Integrale 200cv", yearFrom: 1989, yearTo: 1991 },
+        { label: "2.0 Turbo 16v HF Integrale Evoluzione 210cv", yearFrom: 1991, yearTo: 1992 },
+        { label: "2.0 Turbo 16v HF Integrale Evoluzione II 215cv", yearFrom: 1993, yearTo: 1994 },
       ],
       Musa: [
         { label: "1.4 8v 77cv", yearFrom: 2004, yearTo: 2012 },
