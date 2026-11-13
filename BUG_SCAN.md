@@ -1,43 +1,24 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-12 (UTC), eseguita alle 01:30
+Data scan: 2026-11-13 (UTC), eseguita alle 01:30
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan dell'11/11 `main` ha un solo cambiamento nuovo: la PR #122 (`8c33207`, unita con `7886860`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (Dacia "Sandero Stepway", Hyundai "i20 N" e "i30 N", Volkswagen "ID.7 Tourer").
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff ed42967 origin/main`), quindi le route di
-`web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
+Dallo scan del 12/11 `main` ha un solo cambiamento nuovo: la PR #123 (`e53d253`, unita con `5ae3ba5`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (motorizzazioni di Audi "SQ7", Mercedes-Benz "CLE", Ford "Mustang Mach-E", Subaru "Solterra"
+e MG "MGS5 EV"). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 7886860 origin/main`), quindi le
+route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
 la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #122 fatta leggendo il codice: i quattro modelli sono gia' nell'elenco dei modelli aggiunti
-(`web/lib/vehicleData.ts:152,169,216`), quindi le nuove voci sono raggiungibili dal menu. "ID.7 Tourer" non ha voci in
-`web/lib/engineExtensions.ts`; "Sandero Stepway", "i20 N" e "i30 N" invece si': `getEngineVariants`
-(`web/lib/vehicleData.ts:3252-3266`) somma le due liste togliendo solo le etichette identiche. Per "i20 N" l'etichetta e' la stessa
-e prevale la voce nuova (chiusa al 2023); per gli altri due modelli no: vedi M26.
+Verifica della PR #123 fatta leggendo il codice: i cinque modelli sono gia' nell'elenco dei modelli aggiunti
+(`web/lib/vehicleData.ts:141,163,189,191,211`), quindi le nuove voci sono raggiungibili dal menu. "SQ7", "CLE", "Solterra" e
+"MGS5 EV" non hanno voci in `web/lib/engineExtensions.ts`; "Mustang Mach-E" invece si' (`web/lib/engineExtensions.ts:258-262`),
+con etichette diverse: vedi M27.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga di `web/lib/vehicleData.ts` dei rilievi M2-M15 si riferiscono al file prima delle PR #106-#117
-(con la PR #109 le righe successive alla 1477 si spostano di 3, quelle successive alla 1844 di 7, quelle successive alla 2219 di 13;
-con le PR #110-#111 le righe successive alla 453 si spostano di altre 3, alla 575 di 8, alla 596 di 16, alla 624 di 20;
-con la PR #112 le righe successive alla 1157 si spostano di altre 1, alla 1508 di 2, alla 2309 di 4;
-con la PR #113 le righe successive alla 2204 si spostano di altre 5, alla 2475 di 15, alla 2726 di 25;
-con la PR #114 le righe successive alla 829 si spostano di altre 5, alla 869 di 6, alla 876 di 7, alla 2672 di 14;
-con la PR #115, nel file del 04/11, le righe successive alla 604 si spostano di altre 4, alla 884 di 8, alla 1675 di 13, alla 2472 di 17;
-con la PR #116, nel file del 05/11, le righe successive alla 452 si spostano di altre 2, alla 2772 di 7, alla 2847 di 15;
-con la PR #117, nel file del 06/11, le righe successive alla 848 si spostano di altre 3, alla 1095 di 5, alla 1931 di 6
-(quindi `getEngineVariants`, indicata in M18 e M19 alle righe 3181-3196, era a `web/lib/vehicleData.ts:3202-3217` nel file del 07/11);
-con la PR #118, nel file del 07/11, le righe successive alla 1223 si spostano di altre 1, alla 2008 di 6, alla 2451 di 7
-(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3209-3224` nel file del 08/11);
-con la PR #119, nel file del 08/11, le righe successive alla 477 si spostano di altre 1, alla 727 di 2, alla 984 di 5, alla 1483 di 10
-(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3219-3234` nel file del 09/11);
-con la PR #120, nel file del 09/11, le righe successive alla 958 si spostano di altre 6, alla 1262 di 7, alla 1309 di 8, alla 2617 di 12
-(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3231-3245` nel file del 10/11);
-con la PR #121, nel file del 10/11, le righe successive alla 1192 si spostano di altre 3, alla 1583 di 4, alla 2572 di 5
-(quindi `getEngineVariants` era a `web/lib/vehicleData.ts:3236-3250` nel file dell'11/11);
-con la PR #122, nel file dell'11/11, le righe successive alla 1269 si spostano di altre 5, alla 1565 di 6, alla 1570 di 11, alla 2829 di 16
-(quindi `getEngineVariants` e' ora a `web/lib/vehicleData.ts:3252-3266`).
-I riferimenti di M20 si riferiscono al file del 06/11, quelli di M21 al file del 07/11, quelli di M22 al file del 08/11, quelli di M23
-al file del 09/11, quelli di M24 al file del 10/11, quelli di M25 al file dell'11/11, quelli di M26 al file attuale.
+I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
+spostamenti fino alla PR #122). Con la PR #123, nel file del 12/11, le righe successive alla 652 si spostano di 4, alla 895 di 5,
+alla 1500 di 9, alla 1949 di 15, alla 2581 di 16 (quindi `getEngineVariants`, a 3252-3266 nel file del 12/11, e' ora a
+`web/lib/vehicleData.ts:3268-3282`). I riferimenti di M27 si riferiscono al file attuale.
 
-Un problema nuovo, Minore (M26): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U31).
+Un problema nuovo, Minore (M27): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U32).
 I rilievi M1-M25 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
@@ -212,7 +193,7 @@ offre quindi la versione GPL di un motore che il catalogo considera fuori produz
 della ricerca IA.
 Proposta: confermare l'anno di fine della Panda 1.2 GPL (U29).
 
-### M25 — Catalogo: nuove motorizzazioni di Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe accanto a quelle precedenti ancora aperte (nuovo)
+### M25 — Catalogo: nuove motorizzazioni di Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe accanto a quelle precedenti ancora aperte (invariato)
 File: `web/lib/vehicleData.ts:1193-1199`, `web/lib/vehicleData.ts:2573-2577`, `web/lib/vehicleData.ts:1585-1589`
 In pratica, come in M13 e M21-M23: sotto "C3 Aircross" le voci 2017 ("1.2 PureTech 110cv", "1.5 BlueHDi 100cv") restano con
 `yearTo: null` accanto alle nuove voci 2024-2025 ("1.2 PureTech 100cv", "1.2 PureTech Hybrid 136cv", l'elettrica 113cv); sotto
@@ -222,7 +203,7 @@ veicolo del 2025 il menu offre quindi motori di generazioni diverse insieme; la 
 ricerca IA.
 Proposta: confermare l'anno di fine delle motorizzazioni della generazione precedente di C3 Aircross, Swift e Santa Fe (U30).
 
-### M26 — Catalogo: le nuove motorizzazioni di Hyundai i30 N e Dacia Sandero Stepway si sommano a quelle gia' presenti nelle estensioni (nuovo)
+### M26 — Catalogo: le nuove motorizzazioni di Hyundai i30 N e Dacia Sandero Stepway si sommano a quelle gia' presenti nelle estensioni (invariato)
 File: `web/lib/vehicleData.ts:1577-1581` e `web/lib/engineExtensions.ts:760-763` (i30 N); `web/lib/vehicleData.ts:1270-1274` e
 `web/lib/engineExtensions.ts:771-776` (Sandero Stepway); unione: `web/lib/vehicleData.ts:3252-3266`
 In pratica, come in M18-M20: per "i30 N" il menu mostra sia "2.0 T-GDI Performance 280cv" (2021-2023, nuova) sia
@@ -232,6 +213,16 @@ anche per un'auto del 2025, dopo la fine indicata dalla voce nuova. Per "Sandero
 "1.0 TCe ECO-G 100cv" del 2020 restano aperte accanto alle nuove "1.0 TCe 110cv" e "1.2 TCe ECO-G 120cv GPL" del 2025, quindi per un
 veicolo del 2025 il menu offre due GPL di generazioni diverse. La motorizzazione scelta finisce nel testo della ricerca IA.
 Proposta: tenere una sola voce per ciascuna motorizzazione di i30 N e Sandero Stepway, confermando gli anni di fine (U31).
+
+### M27 — Catalogo: le nuove motorizzazioni della Ford Mustang Mach-E si sommano a quelle gia' presenti nelle estensioni (nuovo)
+File: `web/lib/vehicleData.ts:1506-1509` e `web/lib/engineExtensions.ts:258-262`; unione in `getEngineVariants` (`web/lib/vehicleData.ts:3268-3282`).
+In pratica: `getEngineVariants` toglie solo le etichette identiche, quindi per "Mustang Mach-E" il menu mostra 5 motorizzazioni:
+"Standard Range Elettrica 75.7 kWh 269cv" (dal 2021) accanto a "Elettrica 70 kWh 269cv" (dal 2020), e "GT Elettrica 98.8 kWh 487cv"
+accanto a "GT 91 kWh 487cv", tutte aperte fino a oggi: la stessa versione compare due volte con capacita' della batteria diverse
+(lorda e netta) e anni di inizio diversi. Da confermare anche l'anno di inizio della nuova "SQ7 4.0 TFSI V8 507cv"
+(`web/lib/vehicleData.ts:900`, 2024).
+Proposta: tenere una sola voce per ciascuna motorizzazione della Mach-E con un unico modo di indicare la batteria, e confermare
+l'anno di inizio della SQ7 TFSI (U32).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -287,6 +278,7 @@ Proposta: tenere una sola voce per ciascuna motorizzazione di i30 N e Sandero St
 - U29 — Fiat Panda: confermare l'anno di fine della "1.2 8v 69cv GPL", oggi aperta mentre la stessa motorizzazione a benzina finisce nel 2020 (M24).
 - U30 — Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte accanto a quelle nuove (M25).
 - U31 — Hyundai i30 N e Dacia Sandero Stepway: scegliere un'unica voce per ciascuna motorizzazione tra `ENGINE_DATA` e le estensioni, confermando l'anno di fine della i30 N 280cv e delle Sandero Stepway 2020 (M26).
+- U32 — Ford Mustang Mach-E e Audi SQ7: scegliere un'unica voce per ciascuna motorizzazione della Mach-E tra `ENGINE_DATA` e le estensioni (capacita' lorda o netta della batteria, anno di inizio 2020 o 2021) e confermare l'anno di inizio della SQ7 4.0 TFSI 507cv (M27).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
