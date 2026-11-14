@@ -1,25 +1,25 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-13 (UTC), eseguita alle 01:30
+Data scan: 2026-11-14 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 12/11 `main` ha un solo cambiamento nuovo: la PR #123 (`e53d253`, unita con `5ae3ba5`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (motorizzazioni di Audi "SQ7", Mercedes-Benz "CLE", Ford "Mustang Mach-E", Subaru "Solterra"
-e MG "MGS5 EV"). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 7886860 origin/main`), quindi le
-route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
+Dallo scan del 13/11 `main` ha un solo cambiamento nuovo: la PR #124 (`ba4ff9e`, unita con `f7c246c`), che aggiunge solo dati di
+catalogo in `web/lib/vehicleData.ts` (Alfa Romeo Giulia "GTA" e "GTAm", motorizzazioni di Lancia "Delta Integrale"). Nessun altro
+file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 5ae3ba5 origin/main`), quindi le route di
+`web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
 la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #123 fatta leggendo il codice: i cinque modelli sono gia' nell'elenco dei modelli aggiunti
-(`web/lib/vehicleData.ts:141,163,189,191,211`), quindi le nuove voci sono raggiungibili dal menu. "SQ7", "CLE", "Solterra" e
-"MGS5 EV" non hanno voci in `web/lib/engineExtensions.ts`; "Mustang Mach-E" invece si' (`web/lib/engineExtensions.ts:258-262`),
-con etichette diverse: vedi M27.
+Verifica della PR #124 fatta leggendo il codice: "Giulia" ha gia' motorizzazioni in `ENGINE_DATA` e nessuna voce nelle estensioni,
+quindi le due nuove righe (`web/lib/vehicleData.ts:716-717`) si aggiungono senza sovrapposizioni. "Delta Integrale" e' nell'elenco dei
+modelli aggiunti (`web/lib/vehicleData.ts:179`) e aveva gia' tre voci in `web/lib/engineExtensions.ts:379-383`, con etichette diverse
+da quelle nuove: vedi M28.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti fino alla PR #122). Con la PR #123, nel file del 12/11, le righe successive alla 652 si spostano di 4, alla 895 di 5,
-alla 1500 di 9, alla 1949 di 15, alla 2581 di 16 (quindi `getEngineVariants`, a 3252-3266 nel file del 12/11, e' ora a
-`web/lib/vehicleData.ts:3268-3282`). I riferimenti di M27 si riferiscono al file attuale.
+spostamenti). Con la PR #124, nel file del 13/11, le righe successive alla 715 si spostano di 2 e quelle successive alla 1806 di 8
+(quindi `getEngineVariants`, a 3268-3282 nel file del 13/11, e' ora a `web/lib/vehicleData.ts:3276-3290`; i riferimenti di M27 a
+`web/lib/vehicleData.ts:1506-1509` e `:900` diventano `:1508-1511` e `:902`). I riferimenti di M28 si riferiscono al file attuale.
 
-Un problema nuovo, Minore (M27): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U32).
-I rilievi M1-M25 restano aperti come descritti.
+Un problema nuovo, Minore (M28): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U33).
+I rilievi M1-M27 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -214,7 +214,7 @@ anche per un'auto del 2025, dopo la fine indicata dalla voce nuova. Per "Sandero
 veicolo del 2025 il menu offre due GPL di generazioni diverse. La motorizzazione scelta finisce nel testo della ricerca IA.
 Proposta: tenere una sola voce per ciascuna motorizzazione di i30 N e Sandero Stepway, confermando gli anni di fine (U31).
 
-### M27 — Catalogo: le nuove motorizzazioni della Ford Mustang Mach-E si sommano a quelle gia' presenti nelle estensioni (nuovo)
+### M27 — Catalogo: le nuove motorizzazioni della Ford Mustang Mach-E si sommano a quelle gia' presenti nelle estensioni (invariato)
 File: `web/lib/vehicleData.ts:1506-1509` e `web/lib/engineExtensions.ts:258-262`; unione in `getEngineVariants` (`web/lib/vehicleData.ts:3268-3282`).
 In pratica: `getEngineVariants` toglie solo le etichette identiche, quindi per "Mustang Mach-E" il menu mostra 5 motorizzazioni:
 "Standard Range Elettrica 75.7 kWh 269cv" (dal 2021) accanto a "Elettrica 70 kWh 269cv" (dal 2020), e "GT Elettrica 98.8 kWh 487cv"
@@ -223,6 +223,16 @@ accanto a "GT 91 kWh 487cv", tutte aperte fino a oggi: la stessa versione compar
 (`web/lib/vehicleData.ts:900`, 2024).
 Proposta: tenere una sola voce per ciascuna motorizzazione della Mach-E con un unico modo di indicare la batteria, e confermare
 l'anno di inizio della SQ7 TFSI (U32).
+
+### M28 — Catalogo: le nuove motorizzazioni della Lancia Delta Integrale si sommano a quelle gia' presenti nelle estensioni (nuovo)
+File: `web/lib/vehicleData.ts:1809-1814` e `web/lib/engineExtensions.ts:379-383`; unione in `getEngineVariants` (`web/lib/vehicleData.ts:3276-3290`).
+In pratica: `getEngineVariants` toglie solo le etichette identiche, quindi per "Delta Integrale" il menu mostra 7 motorizzazioni:
+"2.0 Turbo 8v HF Integrale 185cv" (1987-1989) accanto a "2.0 8v Turbo 185cv" (1987-1989), "2.0 Turbo 16v HF Integrale 200cv"
+(1989-1991) accanto a "2.0 16v Turbo 200cv" (1989-1994) e "... Evoluzione 210cv" (1991-1992) accanto a "2.0 16v Turbo Evo 210cv"
+(1991-1994): la stessa versione compare due volte con anni di fine diversi. Da confermare anche gli anni 2020-2021 delle nuove
+Giulia "GTA" e "GTAm" (`web/lib/vehicleData.ts:716-717`).
+Proposta: tenere una sola voce per ciascuna motorizzazione della Delta Integrale (togliendo le tre righe delle estensioni o quelle
+nuove) con anni confermati, e confermare gli anni di GTA/GTAm (U33).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -279,6 +289,7 @@ l'anno di inizio della SQ7 TFSI (U32).
 - U30 — Citroën C3 Aircross, Suzuki Swift e Hyundai Santa Fe: confermare l'anno di fine delle motorizzazioni della generazione precedente, oggi aperte accanto a quelle nuove (M25).
 - U31 — Hyundai i30 N e Dacia Sandero Stepway: scegliere un'unica voce per ciascuna motorizzazione tra `ENGINE_DATA` e le estensioni, confermando l'anno di fine della i30 N 280cv e delle Sandero Stepway 2020 (M26).
 - U32 — Ford Mustang Mach-E e Audi SQ7: scegliere un'unica voce per ciascuna motorizzazione della Mach-E tra `ENGINE_DATA` e le estensioni (capacita' lorda o netta della batteria, anno di inizio 2020 o 2021) e confermare l'anno di inizio della SQ7 4.0 TFSI 507cv (M27).
+- U33 — Lancia Delta Integrale e Alfa Romeo Giulia GTA/GTAm: scegliere un'unica voce per ciascuna motorizzazione della Delta Integrale tra `ENGINE_DATA` e le estensioni (anni di fine 1991/1992 o 1994) e confermare gli anni 2020-2021 di GTA e GTAm (M28).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
