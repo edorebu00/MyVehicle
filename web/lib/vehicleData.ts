@@ -1435,12 +1435,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Grizzly: [
         { label: "1.2 Turbo Benzina 100cv", yearFrom: 2026, yearTo: null },
         { label: "Hybrid 110cv", yearFrom: 2026, yearTo: null },
-        { label: "Elettrica", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 113cv", yearFrom: 2026, yearTo: null },
       ],
       "Grizzly Fastback": [
         { label: "1.2 Turbo Benzina 100cv", yearFrom: 2026, yearTo: null },
         { label: "Hybrid 110cv", yearFrom: 2026, yearTo: null },
-        { label: "Elettrica", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 113cv", yearFrom: 2026, yearTo: null },
       ],
       Ulysse: [
         { label: "2.0 MultiJet 180cv", yearFrom: 2022, yearTo: null },
@@ -2365,6 +2365,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Taycan: [
         { label: "Elettrica 4S 435cv", yearFrom: 2019, yearTo: null },
         { label: "Turbo S 761cv", yearFrom: 2019, yearTo: null },
+        { label: "Turbo GT 1034cv", yearFrom: 2025, yearTo: null },
       ],
       "924": [{ label: "2.0 125cv", yearFrom: 1976, yearTo: 1988 }],
       "928": [{ label: "4.5 V8 240cv", yearFrom: 1977, yearTo: 1995 }],
@@ -2443,7 +2444,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Kangoo: [{ label: "1.5 dCi 90cv", yearFrom: 1997, yearTo: null }],
       Modus: [{ label: "1.5 dCi 85cv", yearFrom: 2004, yearTo: 2012 }],
       R4: [{ label: "1.1 34cv", yearFrom: 1961, yearTo: 1992 }],
-      R5: [{ label: "1.4 Turbo 115cv", yearFrom: 1972, yearTo: 1996 }],
+      R5: [
+        { label: "1.4 Turbo 115cv", yearFrom: 1972, yearTo: 1996 },
+        { label: "E-Tech Elettrica 40 kWh 95cv", yearFrom: 2024, yearTo: null },
+        { label: "E-Tech Elettrica 40 kWh 120cv", yearFrom: 2024, yearTo: null },
+        { label: "E-Tech Elettrica 52 kWh 150cv", yearFrom: 2024, yearTo: null },
+      ],
       R19: [{ label: "1.7 95cv", yearFrom: 1988, yearTo: 1996 }],
       "5 Turbo 3E": [{ label: "Turbo 3E Elettrica 555cv", yearFrom: 2027, yearTo: null }],
       "R5 E-Tech": [
