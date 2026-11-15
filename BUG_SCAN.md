@@ -1,25 +1,24 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-14 (UTC), eseguita alle 01:20
+Data scan: 2026-11-15 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 13/11 `main` ha un solo cambiamento nuovo: la PR #124 (`ba4ff9e`, unita con `f7c246c`), che aggiunge solo dati di
-catalogo in `web/lib/vehicleData.ts` (Alfa Romeo Giulia "GTA" e "GTAm", motorizzazioni di Lancia "Delta Integrale"). Nessun altro
-file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 5ae3ba5 origin/main`), quindi le route di
-`web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti restano quelli verificati negli scan precedenti;
-la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #124 fatta leggendo il codice: "Giulia" ha gia' motorizzazioni in `ENGINE_DATA` e nessuna voce nelle estensioni,
-quindi le due nuove righe (`web/lib/vehicleData.ts:716-717`) si aggiungono senza sovrapposizioni. "Delta Integrale" e' nell'elenco dei
-modelli aggiunti (`web/lib/vehicleData.ts:179`) e aveva gia' tre voci in `web/lib/engineExtensions.ts:379-383`, con etichette diverse
-da quelle nuove: vedi M28.
+Dallo scan del 14/11 `main` ha un solo cambiamento nuovo: la PR #125 (`651fd75`, unita con `d058cbe`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (Renault R5 E-Tech elettrica sotto "R5", Porsche Taycan "Turbo GT 1034cv", potenza 113cv della
+Fiat Grizzly/Grizzly Fastback elettrica). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con
+`git diff 5ae3ba5 origin/main`), quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti
+restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata sul codice cambiato.
+Verifica della PR #125 fatta leggendo il codice: l'etichetta "Elettrica" della Grizzly non e' usata altrove nel codice (cercata con
+grep), quindi cambiarla non ha effetti collaterali; "Taycan" e "Grizzly" non hanno voci nelle estensioni, nessuna sovrapposizione.
+"R5" invece ora contiene le versioni E-Tech gia' presenti sotto il modello separato "R5 E-Tech": vedi M29.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #124, nel file del 13/11, le righe successive alla 715 si spostano di 2 e quelle successive alla 1806 di 8
-(quindi `getEngineVariants`, a 3268-3282 nel file del 13/11, e' ora a `web/lib/vehicleData.ts:3276-3290`; i riferimenti di M27 a
-`web/lib/vehicleData.ts:1506-1509` e `:900` diventano `:1508-1511` e `:902`). I riferimenti di M28 si riferiscono al file attuale.
+spostamenti). Con la PR #125, nel file del 14/11, le righe successive alla 2367 si spostano di 1 e quelle successive alla 2438 di 6
+(quindi `getEngineVariants`, a 3276-3290 nel file del 14/11, e' ora a `web/lib/vehicleData.ts:3282-3296`). I riferimenti di M29 si
+riferiscono al file attuale.
 
-Un problema nuovo, Minore (M28): e' un dato di catalogo da confermare, quindi va in "Richiede intervento umano" (U33).
-I rilievi M1-M27 restano aperti come descritti.
+Un problema nuovo, Minore (M29): e' una scelta di catalogo, quindi va in "Richiede intervento umano" (U34).
+I rilievi M1-M28 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -224,7 +223,7 @@ accanto a "GT 91 kWh 487cv", tutte aperte fino a oggi: la stessa versione compar
 Proposta: tenere una sola voce per ciascuna motorizzazione della Mach-E con un unico modo di indicare la batteria, e confermare
 l'anno di inizio della SQ7 TFSI (U32).
 
-### M28 — Catalogo: le nuove motorizzazioni della Lancia Delta Integrale si sommano a quelle gia' presenti nelle estensioni (nuovo)
+### M28 — Catalogo: le nuove motorizzazioni della Lancia Delta Integrale si sommano a quelle gia' presenti nelle estensioni (invariato)
 File: `web/lib/vehicleData.ts:1809-1814` e `web/lib/engineExtensions.ts:379-383`; unione in `getEngineVariants` (`web/lib/vehicleData.ts:3276-3290`).
 In pratica: `getEngineVariants` toglie solo le etichette identiche, quindi per "Delta Integrale" il menu mostra 7 motorizzazioni:
 "2.0 Turbo 8v HF Integrale 185cv" (1987-1989) accanto a "2.0 8v Turbo 185cv" (1987-1989), "2.0 Turbo 16v HF Integrale 200cv"
@@ -233,6 +232,17 @@ In pratica: `getEngineVariants` toglie solo le etichette identiche, quindi per "
 Giulia "GTA" e "GTAm" (`web/lib/vehicleData.ts:716-717`).
 Proposta: tenere una sola voce per ciascuna motorizzazione della Delta Integrale (togliendo le tre righe delle estensioni o quelle
 nuove) con anni confermati, e confermare gli anni di GTA/GTAm (U33).
+
+### M29 — Catalogo: le versioni elettriche della Renault 5 compaiono sia sotto "R5" sia sotto il modello "R5 E-Tech" (nuovo)
+File: `web/lib/vehicleData.ts:2447-2452` (modello "R5", elenco a `:77`) e `web/lib/vehicleData.ts:2455-2458` (modello "R5 E-Tech",
+elenco dei modelli aggiunti a `:202`).
+In pratica: la PR #125 aggiunge sotto "R5" le voci "E-Tech Elettrica 40 kWh 95cv/120cv" e "E-Tech Elettrica 52 kWh 150cv", mentre il
+modello "R5 E-Tech" offre gia' "Elettrica 40 kWh 120cv" e "Elettrica 52 kWh 150cv" (stessi anni, dal 2024): la stessa auto puo' essere
+salvata con due nomi di modello e due etichette diverse, e la versione 95cv esiste solo sotto "R5". Inoltre sotto "R5" restano anche
+le versioni storiche (1.4 Turbo 1972-1996), quindi il menu mescola due generazioni distanti cinquant'anni. Stesso schema di M17 e
+della copia doppia della Hyundai Inster (PR #98).
+Proposta: scegliere un solo modello per la R5 elettrica (spostando la 95cv sotto "R5 E-Tech" e togliendo le tre righe da "R5",
+oppure il contrario togliendo "R5 E-Tech") (U34).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
@@ -290,6 +300,7 @@ nuove) con anni confermati, e confermare gli anni di GTA/GTAm (U33).
 - U31 — Hyundai i30 N e Dacia Sandero Stepway: scegliere un'unica voce per ciascuna motorizzazione tra `ENGINE_DATA` e le estensioni, confermando l'anno di fine della i30 N 280cv e delle Sandero Stepway 2020 (M26).
 - U32 — Ford Mustang Mach-E e Audi SQ7: scegliere un'unica voce per ciascuna motorizzazione della Mach-E tra `ENGINE_DATA` e le estensioni (capacita' lorda o netta della batteria, anno di inizio 2020 o 2021) e confermare l'anno di inizio della SQ7 4.0 TFSI 507cv (M27).
 - U33 — Lancia Delta Integrale e Alfa Romeo Giulia GTA/GTAm: scegliere un'unica voce per ciascuna motorizzazione della Delta Integrale tra `ENGINE_DATA` e le estensioni (anni di fine 1991/1992 o 1994) e confermare gli anni 2020-2021 di GTA e GTAm (M28).
+- U34 — Renault R5 elettrica: decidere se le versioni E-Tech vadano sotto "R5" o sotto il modello "R5 E-Tech", tenendone una sola copia e includendo la versione 40 kWh 95cv (M29).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
