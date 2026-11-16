@@ -948,7 +948,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "RS Q8": [
         { label: "4.0 V8 Twin Turbo 600cv", yearFrom: 2020, yearTo: null },
-        { label: "Performance 4.0 V8 Twin Turbo 631cv", yearFrom: 2023, yearTo: null },
+        { label: "Performance 4.0 V8 Twin Turbo 640cv", yearFrom: 2024, yearTo: null },
       ],
       "TT RS": [
         { label: "2.5 TFSI 400cv", yearFrom: 2016, yearTo: 2023 },
@@ -2147,6 +2147,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Leaf: [
         { label: "Elettrica 150cv", yearFrom: 2018, yearTo: null },
         { label: "Elettrica e+ 217cv", yearFrom: 2019, yearTo: null },
+        { label: "Elettrica 52 kWh 177cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 75 kWh 217cv", yearFrom: 2026, yearTo: null },
       ],
       "e-NV200": [{ label: "Elettrica 109cv", yearFrom: 2014, yearTo: 2021 }],
       Ariya: [
@@ -2516,8 +2518,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Octavia: [
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
         { label: "2.0 TDI 150cv", yearFrom: 2020, yearTo: null },
-        { label: "RS 2.0 TSI 245cv", yearFrom: 2020, yearTo: null },
+        { label: "RS 2.0 TSI 245cv", yearFrom: 2020, yearTo: 2024 },
         { label: "RS iV 1.4 TSI Plug-in Hybrid 245cv", yearFrom: 2020, yearTo: 2023 },
+        { label: "RS 2.0 TSI 265cv", yearFrom: 2024, yearTo: null },
       ],
       Kamiq: [
         { label: "1.0 TSI 116cv", yearFrom: 2019, yearTo: null },
