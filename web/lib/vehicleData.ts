@@ -207,7 +207,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     SsangYong: ["Actyon", "Musso", "Rodius", "Torres"],
     Seres: ["3", "5"],
     Škoda: ["105", "120", "1000 MB", "Elroq", "Epiq", "Favorit", "Felicia", "Forman", "Kushaq", "Peaq", "Slavia"],
-    Smart: ["#1", "#3", "Crossblade", "Roadster"],
+    Smart: ["#1", "#2", "#3", "Crossblade", "Roadster"],
     Subaru: ["360", "Alcyone", "Ascent", "Baja", "Justy", "Solterra", "SVX", "Tribeca", "Vivio"],
     Suzuki: ["Across", "Alto", "Cappuccino", "Celerio", "Kizashi", "Liana", "S-Presso", "Samurai", "Swace", "Wagon R+", "X-90", "e Vitara"],
     Tata: ["Indica", "Nano"],
@@ -419,6 +419,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Jaecoo 7": [
         { label: "1.6 Turbo 145cv", yearFrom: 2024, yearTo: null },
         { label: "Plug-in Hybrid halcyon 306cv", yearFrom: 2024, yearTo: null },
+        { label: "Super Hybrid System 224cv", yearFrom: 2026, yearTo: null },
       ],
       "Jaecoo 5": [
         { label: "1.6 TGDi 147cv", yearFrom: 2025, yearTo: null },
@@ -436,6 +437,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Omoda 5": [
         { label: "1.6 Turbo 145cv", yearFrom: 2023, yearTo: null },
         { label: "Elettrica 204cv", yearFrom: 2023, yearTo: null },
+        { label: "Super Hybrid System 224cv", yearFrom: 2025, yearTo: null },
       ],
       "Omoda 7": [{ label: "Super Hybrid System Plug-in 279cv", yearFrom: 2026, yearTo: null }],
       "Omoda 9": [{ label: "Super Hybrid System i-AWD 537cv", yearFrom: 2025, yearTo: null }],
@@ -2587,6 +2589,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 66 kWh 272cv", yearFrom: 2023, yearTo: null },
         { label: "Brabus Elettrica 66 kWh AWD 428cv", yearFrom: 2023, yearTo: null },
       ],
+      "#2": [{ label: "Elettrica 35,7 kWh 82cv", yearFrom: 2026, yearTo: null }],
       "#3": [
         { label: "Elettrica 49 kWh 272cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 66 kWh 272cv", yearFrom: 2024, yearTo: null },
