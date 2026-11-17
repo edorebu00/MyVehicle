@@ -1,27 +1,26 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-16 (UTC), eseguita alle 01:20
+Data scan: 2026-11-17 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 15/11 `main` ha un solo cambiamento nuovo: la PR #126 (`e243611`, unita con `b279ea4`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (nuova Nissan Leaf elettrica 2026, Audi RS Q8 Performance 640cv dal 2024, Skoda Octavia RS
-restyling 265cv dal 2024 con la 245cv chiusa al 2024). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con
-`git diff d058cbe origin/main`), quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti
+Dallo scan del 16/11 `main` ha un solo cambiamento nuovo: la PR #127 (`ed9d1b0`, unita con `15268ee`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (nuovo modello Smart "#2" con la versione elettrica 82cv dal 2026, versioni "Super Hybrid
+System 224cv" per Jaecoo 7 dal 2026 e Omoda 5 dal 2025). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con
+`git diff b279ea4 origin/main`), quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti
 restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #126 fatta leggendo il codice: "Leaf", "RS Q8" e "Octavia" non hanno voci in `web/lib/engineExtensions.ts`
-(cercato con grep), quindi `getEngineVariants` (`web/lib/vehicleData.ts:3285-3299`) non somma copie dalle estensioni. Octavia e
-RS Q8 sono coerenti (la voce sostituita e' chiusa o rimpiazzata). La Leaf invece somma la nuova generazione alla precedente
-ancora aperta: vedi M30.
+Verifica della PR #127 fatta leggendo il codice: "#2", "Jaecoo 7" e "Omoda 5" non hanno voci in `web/lib/engineExtensions.ts`
+(le voci Smart delle estensioni, righe 809-819, coprono solo Roadster, "#1" e "#3"), quindi `getEngineVariants`
+(`web/lib/vehicleData.ts:3288-3302`) non somma copie dalle estensioni. Il nuovo modello "#2" e' aggiunto sia all'elenco dei
+modelli (`web/lib/vehicleData.ts:210`) sia alle motorizzazioni (`:2592`), quindi compare correttamente nei menu. Le nuove
+versioni ibride si aggiungono a quelle esistenti senza sostituirne nessuna, coerentemente con quanto gia' fatto per Jaecoo 5.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #126, nel file del 15/11, le righe successive alla 2149 si spostano di 2 e quelle successive alla 2521 di 3
-(quindi M29 e' ora a `web/lib/vehicleData.ts:2449-2454` e `:2457-2460`). I riferimenti di M30 si riferiscono al file attuale.
+spostamenti). Con la PR #127, nel file del 16/11, le righe successive alla 422 si spostano di 1, quelle successive alla 438 di 2 e
+quelle successive alla 2589 di 3.
 
-Un problema nuovo, Minore (M30): e' una scelta di catalogo, quindi va in "Richiede intervento umano" (U35).
-I rilievi M1-M29 restano aperti come descritti.
+Nessun problema nuovo trovato. I rilievi M1-M30 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
-
 ## Bloccante
 
 Nessun problema bloccante trovato.
