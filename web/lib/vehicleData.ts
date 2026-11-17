@@ -1108,6 +1108,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "20d 2.0 190cv", yearFrom: 2017, yearTo: null },
         { label: "30i 2.0 252cv", yearFrom: 2017, yearTo: null },
         { label: "X3 M 3.0 480cv", yearFrom: 2019, yearTo: null },
+        { label: "M50 xDrive 3.0 398cv", yearFrom: 2024, yearTo: null },
       ],
       X4: [
         { label: "20d 2.0 190cv", yearFrom: 2018, yearTo: null },
@@ -3215,6 +3216,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Himalayan: [{ label: "411cc 24cv", yearFrom: 2016, yearTo: null }],
       "Interceptor 650": [{ label: "648cc 47cv", yearFrom: 2018, yearTo: null }],
       "Continental GT 650": [{ label: "648cc 47cv", yearFrom: 2018, yearTo: null }],
+      "Hunter 350": [{ label: "349cc 20cv", yearFrom: 2022, yearTo: null }],
+      "Scram 411": [{ label: "411cc 24cv", yearFrom: 2022, yearTo: null }],
+      "Super Meteor 650": [{ label: "648cc 47cv", yearFrom: 2023, yearTo: null }],
+      "Shotgun 650": [{ label: "648cc 47cv", yearFrom: 2024, yearTo: null }],
+      "Guerrilla 450": [{ label: "452cc 40cv", yearFrom: 2024, yearTo: null }],
     },
     Suzuki: {
       "GSX-R600": [{ label: "599cc 125cv", yearFrom: 2006, yearTo: null }],
@@ -3243,6 +3249,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Tiger 900": [{ label: "888cc 95cv", yearFrom: 2020, yearTo: null }],
       "Bonneville T120": [{ label: "1200cc 80cv", yearFrom: 2016, yearTo: null }],
       "Trident 660": [{ label: "660cc 81cv", yearFrom: 2021, yearTo: null }],
+      "Speed 400": [{ label: "398cc 40cv", yearFrom: 2024, yearTo: null }],
+      "Scrambler 400 X": [{ label: "398cc 40cv", yearFrom: 2024, yearTo: null }],
     },
     Vespa: {
       Primavera: [
