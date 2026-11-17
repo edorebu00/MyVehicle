@@ -21,6 +21,7 @@ quelle successive alla 2589 di 3.
 Nessun problema nuovo trovato. I rilievi M1-M30 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
+
 ## Bloccante
 
 Nessun problema bloccante trovato.
