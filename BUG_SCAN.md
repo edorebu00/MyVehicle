@@ -1,22 +1,23 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-17 (UTC), eseguita alle 01:20
+Data scan: 2026-11-18 (UTC), eseguita alle 01:19
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 16/11 `main` ha un solo cambiamento nuovo: la PR #127 (`ed9d1b0`, unita con `15268ee`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (nuovo modello Smart "#2" con la versione elettrica 82cv dal 2026, versioni "Super Hybrid
-System 224cv" per Jaecoo 7 dal 2026 e Omoda 5 dal 2025). Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con
-`git diff b279ea4 origin/main`), quindi le route di `web/app/api/agent/*` (chat, process-document, search) e i rilievi gia' noti
-restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #127 fatta leggendo il codice: "#2", "Jaecoo 7" e "Omoda 5" non hanno voci in `web/lib/engineExtensions.ts`
-(le voci Smart delle estensioni, righe 809-819, coprono solo Roadster, "#1" e "#3"), quindi `getEngineVariants`
-(`web/lib/vehicleData.ts:3288-3302`) non somma copie dalle estensioni. Il nuovo modello "#2" e' aggiunto sia all'elenco dei
-modelli (`web/lib/vehicleData.ts:210`) sia alle motorizzazioni (`:2592`), quindi compare correttamente nei menu. Le nuove
-versioni ibride si aggiungono a quelle esistenti senza sostituirne nessuna, coerentemente con quanto gia' fatto per Jaecoo 5.
+Dallo scan del 17/11 `main` ha un solo cambiamento nuovo: la PR #128 (`3e7a3d7`, unita con `bcf1e77`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+8 righe: BMW X3 "M50 xDrive 3.0 398cv" dal 2024; Royal Enfield Hunter 350, Scram 411,
+Super Meteor 650, Shotgun 650, Guerrilla 450; Triumph Speed 400 e Scrambler 400 X). Nessun altro file sotto `web/` o `supabase/`
+e' cambiato (verificato con `git diff 15268ee origin/main`), quindi le route di `web/app/api/agent/*` e i rilievi gia' noti restano
+quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata sul codice cambiato.
+Verifica della PR #128 fatta leggendo il codice: tutti i nuovi modelli sono raggiungibili dai menu (Hunter 350, Scram 411,
+Shotgun 650 e Super Meteor 650 in `web/lib/vehicleData.ts:276`; Guerrilla 450, Speed 400 e Scrambler 400 X in
+`web/lib/catalogueSweep.ts:271,275`, letti da `getModels`). Hunter 350, Scram 411 e Super Meteor 650 hanno gia' una voce
+identica in `web/lib/engineExtensions.ts:959-962`, ma `getEngineVariants` (`web/lib/vehicleData.ts:3296-3310`) scarta le voci con
+la stessa sigla, quindi non compaiono doppioni. La nuova versione M50 della BMW X3 (generazione 2024) si affianca alle versioni della
+generazione 2017 ancora aperte fino a oggi: e' lo stesso schema gia' descritto in M21/M23, non un difetto nuovo.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #127, nel file del 16/11, le righe successive alla 422 si spostano di 1, quelle successive alla 438 di 2 e
-quelle successive alla 2589 di 3.
+spostamenti). Con la PR #128, nel file del 17/11, le righe successive alla 1110 si spostano di 1, quelle successive alla 3217 di 6 e
+quelle successive alla 3245 di 8.
 
 Nessun problema nuovo trovato. I rilievi M1-M30 restano aperti come descritti.
 
@@ -244,7 +245,7 @@ della copia doppia della Hyundai Inster (PR #98).
 Proposta: scegliere un solo modello per la R5 elettrica (spostando la 95cv sotto "R5 E-Tech" e togliendo le tre righe da "R5",
 oppure il contrario togliendo "R5 E-Tech") (U34).
 
-### M30 — Catalogo: le motorizzazioni della nuova Nissan Leaf 2026 si sommano a quelle della generazione precedente ancora aperte (nuovo)
+### M30 — Catalogo: le motorizzazioni della nuova Nissan Leaf 2026 si sommano a quelle della generazione precedente ancora aperte (invariato)
 File: `web/lib/vehicleData.ts:2147-2152`
 In pratica: la PR #126 aggiunge "Elettrica 52 kWh 177cv" e "Elettrica 75 kWh 217cv" dal 2026, ma "Elettrica 150cv" (2018) e
 "Elettrica e+ 217cv" (2019) restano con `yearTo: null`. Per una Leaf del 2026 il menu offre quattro voci di due generazioni, e due
