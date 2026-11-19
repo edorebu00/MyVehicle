@@ -1,25 +1,23 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-18 (UTC), eseguita alle 01:19
+Data scan: 2026-11-19 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 17/11 `main` ha un solo cambiamento nuovo: la PR #128 (`3e7a3d7`, unita con `bcf1e77`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+8 righe: BMW X3 "M50 xDrive 3.0 398cv" dal 2024; Royal Enfield Hunter 350, Scram 411,
-Super Meteor 650, Shotgun 650, Guerrilla 450; Triumph Speed 400 e Scrambler 400 X). Nessun altro file sotto `web/` o `supabase/`
-e' cambiato (verificato con `git diff 15268ee origin/main`), quindi le route di `web/app/api/agent/*` e i rilievi gia' noti restano
-quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata sul codice cambiato.
-Verifica della PR #128 fatta leggendo il codice: tutti i nuovi modelli sono raggiungibili dai menu (Hunter 350, Scram 411,
-Shotgun 650 e Super Meteor 650 in `web/lib/vehicleData.ts:276`; Guerrilla 450, Speed 400 e Scrambler 400 X in
-`web/lib/catalogueSweep.ts:271,275`, letti da `getModels`). Hunter 350, Scram 411 e Super Meteor 650 hanno gia' una voce
-identica in `web/lib/engineExtensions.ts:959-962`, ma `getEngineVariants` (`web/lib/vehicleData.ts:3296-3310`) scarta le voci con
-la stessa sigla, quindi non compaiono doppioni. La nuova versione M50 della BMW X3 (generazione 2024) si affianca alle versioni della
-generazione 2017 ancora aperte fino a oggi: e' lo stesso schema gia' descritto in M21/M23, non un difetto nuovo.
+Dallo scan del 18/11 `main` ha un solo cambiamento nuovo: la PR #129 (`d309ffe`, unita con `790a34f`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts:1285-1306` (+6/-2 righe: Dacia Duster "1.8 Hybrid 155cv" e "Hybrid-G 150cv 4x4 GPL" dal 2026,
+Bigster "Hybrid-G 150cv 4x4 GPL" dal 2026, Jogger "1.8 Hybrid 155cv" dal 2026; "1.6 Hybrid 140cv" di Duster e Jogger chiuse al 2026).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff bcf1e77 origin/main`), quindi le route di
+`web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
+sul codice cambiato.
+Verifica della PR #129 fatta leggendo il codice: nessuna delle nuove etichette ha una voce in `web/lib/engineExtensions.ts` (nessun
+doppione), il passaggio 140cv -> 155cv condivide l'anno 2026 (anno di transizione, entrambe le versioni restano selezionabili) e i tre
+modelli sono raggiungibili dal menu (`web/lib/vehicleData.ts:30,152`). L'unico rilievo nuovo e' M31 (dato di catalogo).
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #128, nel file del 17/11, le righe successive alla 1110 si spostano di 1, quelle successive alla 3217 di 6 e
-quelle successive alla 3245 di 8.
+spostamenti). Con la PR #129, nel file del 18/11, le righe successive alla 1289 si spostano di 1, quelle successive alla 1290 di 2,
+quelle successive alla 1294 di 3 e quelle successive alla 1302 di 4.
 
-Nessun problema nuovo trovato. I rilievi M1-M30 restano aperti come descritti.
+Un solo rilievo nuovo, minore e di catalogo (M31). I rilievi M1-M30 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -254,6 +252,14 @@ nel testo della ricerca IA. A differenza della Octavia nella stessa PR, la gener
 di M13 e M21-M25.
 Proposta: confermare l'anno di fine delle due voci 2018/2019 della Leaf (U35).
 
+### M31 — Catalogo: le nuove motorizzazioni del Duster di terza generazione stanno sotto "Duster", mentre "Duster III" resta senza motorizzazioni (nuovo)
+File: `web/lib/vehicleData.ts:1285-1293` (voci "Duster", PR #129); modello separato: `web/lib/vehicleData.ts:152` ("Duster III")
+In pratica l'elenco modelli Dacia contiene sia "Duster" sia "Duster III". Le versioni della generazione 2024 ("1.6 Hybrid 140cv",
+"1.2 TCe ECO-G 120cv GPL" e ora "1.8 Hybrid 155cv" e "Hybrid-G 150cv 4x4 GPL") stanno sotto "Duster", accanto a quelle della
+generazione 2018 ancora aperte ("1.0 TCe 90cv", "1.3 TCe 150cv" con `yearTo: null`); chi sceglie "Duster III" trova solo il campo
+libero. La stessa auto puo' quindi essere salvata con due nomi di modello, come gia' visto in M17 e M29. E' una scelta di catalogo (U36).
+Proposta: decidere se le versioni 2024 vadano sotto "Duster III" (o togliere "Duster III") e confermare l'anno di fine delle versioni 2018.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -312,6 +318,7 @@ Proposta: confermare l'anno di fine delle due voci 2018/2019 della Leaf (U35).
 - U33 — Lancia Delta Integrale e Alfa Romeo Giulia GTA/GTAm: scegliere un'unica voce per ciascuna motorizzazione della Delta Integrale tra `ENGINE_DATA` e le estensioni (anni di fine 1991/1992 o 1994) e confermare gli anni 2020-2021 di GTA e GTAm (M28).
 - U34 — Renault R5 elettrica: decidere se le versioni E-Tech vadano sotto "R5" o sotto il modello "R5 E-Tech", tenendone una sola copia e includendo la versione 40 kWh 95cv (M29).
 - U35 — Nissan Leaf: confermare l'anno di fine delle motorizzazioni 2018/2019 (150cv, e+ 217cv), oggi aperte accanto a quelle 2026 (M30).
+- U36 — Dacia Duster: decidere se le motorizzazioni della generazione 2024 vadano sotto "Duster" o sotto il modello "Duster III" e confermare l'anno di fine delle versioni 2018 (M31).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
