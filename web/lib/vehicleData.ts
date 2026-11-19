@@ -1246,6 +1246,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 TSI 150cv", yearFrom: 2020, yearTo: null },
         { label: "2.0 TSI 300cv", yearFrom: 2020, yearTo: null },
         { label: "1.5 e-Hybrid VZ 272cv", yearFrom: 2024, yearTo: null },
+        { label: "2.0 TSI VZ 325cv", yearFrom: 2026, yearTo: null },
       ],
       Born: [
         { label: "Elettrica 150cv", yearFrom: 2021, yearTo: null },
@@ -1437,6 +1438,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 Turbo Benzina 100cv", yearFrom: 2024, yearTo: null },
         { label: "Hybrid 110cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 113cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica 54 kWh 113cv", yearFrom: 2026, yearTo: null },
       ],
       Topolino: [{ label: "Elettrica quadriciclo 8cv (45 km/h)", yearFrom: 2023, yearTo: null }],
       Grizzly: [
@@ -3000,6 +3002,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica RWD 421cv", yearFrom: 2025, yearTo: null },
         { label: "Performance AWD 639cv", yearFrom: 2025, yearTo: null },
       ],
+    },
+    Xiaomi: {
+      SU7: [
+        { label: "Elettrica RWD 73.6 kWh 299cv", yearFrom: 2024, yearTo: null },
+        { label: "Elettrica Max AWD 101 kWh 673cv", yearFrom: 2024, yearTo: null },
+      ],
+      "SU7 Ultra": [{ label: "Elettrica Tri-Motor AWD 93.7 kWh 1548cv", yearFrom: 2025, yearTo: null }],
     },
   },
   moto: {
