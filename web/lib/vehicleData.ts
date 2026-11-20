@@ -266,6 +266,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
       "890 Adventure",
       "990 Duke",
       "1290 Super Adventure",
+      "1390 Super Duke R",
       "RC 390",
     ],
     Gilera: ["DNA", "GP800", "Saturno"],
@@ -1131,6 +1132,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       i3: [
         { label: "Elettrica 170cv", yearFrom: 2013, yearTo: 2022 },
         { label: "i3 REX (range extender) 170cv", yearFrom: 2013, yearTo: 2022 },
+        { label: "50 xDrive Elettrica 469cv", yearFrom: 2026, yearTo: null },
       ],
       i4: [
         { label: "eDrive40 340cv", yearFrom: 2021, yearTo: null },
@@ -3185,6 +3187,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Duke 790": [{ label: "799cc 105cv", yearFrom: 2018, yearTo: 2021 }],
       "Duke 890": [{ label: "889cc 115cv", yearFrom: 2021, yearTo: null }],
       "1290 Super Duke": [{ label: "1301cc 180cv", yearFrom: 2020, yearTo: null }],
+      "1390 Super Duke R": [{ label: "1350cc 190cv", yearFrom: 2024, yearTo: null }],
       "Adventure 390": [{ label: "373cc 44cv", yearFrom: 2020, yearTo: null }],
       "Adventure 1290": [{ label: "1301cc 160cv", yearFrom: 2021, yearTo: null }],
     },
@@ -3234,6 +3237,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Super Meteor 650": [{ label: "648cc 47cv", yearFrom: 2023, yearTo: null }],
       "Shotgun 650": [{ label: "648cc 47cv", yearFrom: 2024, yearTo: null }],
       "Guerrilla 450": [{ label: "452cc 40cv", yearFrom: 2024, yearTo: null }],
+      "Himalayan 450": [{ label: "452cc 40cv", yearFrom: 2024, yearTo: null }],
     },
     Suzuki: {
       "GSX-R600": [{ label: "599cc 125cv", yearFrom: 2006, yearTo: null }],
