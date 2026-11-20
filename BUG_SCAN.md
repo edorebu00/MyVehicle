@@ -1,23 +1,24 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-19 (UTC), eseguita alle 01:20
+Data scan: 2026-11-20 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 18/11 `main` ha un solo cambiamento nuovo: la PR #129 (`d309ffe`, unita con `790a34f`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts:1285-1306` (+6/-2 righe: Dacia Duster "1.8 Hybrid 155cv" e "Hybrid-G 150cv 4x4 GPL" dal 2026,
-Bigster "Hybrid-G 150cv 4x4 GPL" dal 2026, Jogger "1.8 Hybrid 155cv" dal 2026; "1.6 Hybrid 140cv" di Duster e Jogger chiuse al 2026).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff bcf1e77 origin/main`), quindi le route di
+Dallo scan del 19/11 `main` ha un solo cambiamento nuovo: la PR #130 (`bba2860`, unita con `62c423d`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+9 righe): Cupra Leon "2.0 TSI VZ 325cv" dal 2026 (`:1249`), Fiat Grande Panda
+"Elettrica 54 kWh 113cv" dal 2026 (`:1441`), nuova marca Xiaomi con SU7 (2 versioni dal 2024) e SU7 Ultra (dal 2025) (`:3006-3012`).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 790a34f origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
 sul codice cambiato.
-Verifica della PR #129 fatta leggendo il codice: nessuna delle nuove etichette ha una voce in `web/lib/engineExtensions.ts` (nessun
-doppione), il passaggio 140cv -> 155cv condivide l'anno 2026 (anno di transizione, entrambe le versioni restano selezionabili) e i tre
-modelli sono raggiungibili dal menu (`web/lib/vehicleData.ts:30,152`). L'unico rilievo nuovo e' M31 (dato di catalogo).
+Verifica della PR #130 fatta leggendo il codice: nessuna delle nuove etichette ha una voce in `web/lib/engineExtensions.ts` (nessun
+doppione); Xiaomi, "SU7" e "SU7 Ultra" sono gia' nell'elenco marche/modelli (`web/lib/catalogueSweep.ts:124`, unito in
+`web/lib/vehicleData.ts:287`), quindi le nuove versioni sono raggiungibili dal menu; le potenze sono coerenti con i kW ufficiali
+(220 kW = 299cv, 495 kW = 673cv, 1138 kW = 1548cv, 239 kW = 325cv). L'unico rilievo nuovo e' M32 (dato di catalogo).
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #129, nel file del 18/11, le righe successive alla 1289 si spostano di 1, quelle successive alla 1290 di 2,
-quelle successive alla 1294 di 3 e quelle successive alla 1302 di 4.
+spostamenti). Con la PR #130, nel file del 19/11, le righe successive alla 1248 si spostano di 1, quelle successive alla 1439 di 2
+e quelle successive alla 3003 di 9.
 
-Un solo rilievo nuovo, minore e di catalogo (M31). I rilievi M1-M30 restano aperti come descritti.
+Un solo rilievo nuovo, minore e di catalogo (M32). I rilievi M1-M31 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -260,6 +261,13 @@ generazione 2018 ancora aperte ("1.0 TCe 90cv", "1.3 TCe 150cv" con `yearTo: nul
 libero. La stessa auto puo' quindi essere salvata con due nomi di modello, come gia' visto in M17 e M29. E' una scelta di catalogo (U36).
 Proposta: decidere se le versioni 2024 vadano sotto "Duster III" (o togliere "Duster III") e confermare l'anno di fine delle versioni 2018.
 
+### M32 — Catalogo: la Fiat Grande Panda elettrica ha dal 2026 due versioni 113cv con etichette poco distinguibili (nuovo)
+File: `web/lib/vehicleData.ts:1440-1441` (PR #130)
+In pratica, per un'auto del 2026 il menu propone sia "Elettrica 113cv" (la versione 2024, senza indicazione della batteria e con
+`yearTo: null`) sia "Elettrica 54 kWh 113cv". Chi ha la versione con batteria standard non capisce quale scegliere, e la stessa auto
+puo' finire salvata con due etichette diverse. E' una scelta di catalogo (U37).
+Proposta: rinominare la prima in "Elettrica 44 kWh 113cv" (o simile) e confermare se resta in vendita dopo il 2026.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -319,6 +327,7 @@ Proposta: decidere se le versioni 2024 vadano sotto "Duster III" (o togliere "Du
 - U34 — Renault R5 elettrica: decidere se le versioni E-Tech vadano sotto "R5" o sotto il modello "R5 E-Tech", tenendone una sola copia e includendo la versione 40 kWh 95cv (M29).
 - U35 — Nissan Leaf: confermare l'anno di fine delle motorizzazioni 2018/2019 (150cv, e+ 217cv), oggi aperte accanto a quelle 2026 (M30).
 - U36 — Dacia Duster: decidere se le motorizzazioni della generazione 2024 vadano sotto "Duster" o sotto il modello "Duster III" e confermare l'anno di fine delle versioni 2018 (M31).
+- U37 — Fiat Grande Panda: distinguere nelle etichette le due versioni elettriche 113cv (batteria) e confermare l'anno di fine di quella 2024 (M32).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
