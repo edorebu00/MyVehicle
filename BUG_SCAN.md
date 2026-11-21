@@ -1,24 +1,27 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-20 (UTC), eseguita alle 01:20
+Data scan: 2026-11-21 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 19/11 `main` ha un solo cambiamento nuovo: la PR #130 (`bba2860`, unita con `62c423d`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+9 righe): Cupra Leon "2.0 TSI VZ 325cv" dal 2026 (`:1249`), Fiat Grande Panda
-"Elettrica 54 kWh 113cv" dal 2026 (`:1441`), nuova marca Xiaomi con SU7 (2 versioni dal 2024) e SU7 Ultra (dal 2025) (`:3006-3012`).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 790a34f origin/main`), quindi le route di
+Dallo scan del 20/11 `main` ha un solo cambiamento nuovo: la PR #131 (`5c7baff`, unita con `4686c29`), che modifica solo dati di
+catalogo: `web/lib/vehicleData.ts` (+4 righe: modello KTM "1390 Super Duke R" in `CATALOGUE_EXTENSIONS` `:269` e relativa
+motorizzazione `:3190`, BMW i3 "50 xDrive Elettrica 469cv" dal 2026 `:1135`, Royal Enfield "Himalayan 450" `:3240`) e
+`web/lib/catalogueSweep.ts:271` (aggiunge "Himalayan 450" all'elenco modelli Royal Enfield).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 62c423d origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
 sul codice cambiato.
-Verifica della PR #130 fatta leggendo il codice: nessuna delle nuove etichette ha una voce in `web/lib/engineExtensions.ts` (nessun
-doppione); Xiaomi, "SU7" e "SU7 Ultra" sono gia' nell'elenco marche/modelli (`web/lib/catalogueSweep.ts:124`, unito in
-`web/lib/vehicleData.ts:287`), quindi le nuove versioni sono raggiungibili dal menu; le potenze sono coerenti con i kW ufficiali
-(220 kW = 299cv, 495 kW = 673cv, 1138 kW = 1548cv, 239 kW = 325cv). L'unico rilievo nuovo e' M32 (dato di catalogo).
+Verifica della PR #131 fatta leggendo il codice: i nuovi modelli sono raggiungibili dal menu (`getModels`, `web/lib/vehicleData.ts:291-296`,
+unisce gli elenchi senza doppioni); le potenze e cilindrate sono coerenti con i dati ufficiali (1350cc 190cv, 452cc 40cv); la nuova
+BMW i3 sta sotto "i3" accanto alle versioni della prima generazione, gia' chiuse al 2022, quindi non c'e' sovrapposizione di anni.
+Unica osservazione: la motorizzazione "1350cc 190cv" della 1390 Super Duke R esiste ora sia in `ENGINE_DATA` sia in
+`web/lib/engineExtensions.ts:912` con etichetta identica, e il modello era gia' in `web/lib/catalogueSweep.ts:262`; `getEngineVariants`
+(`web/lib/vehicleData.ts:3313-3325`) scarta il doppione per etichetta, quindi nessun effetto per l'utente (vedi "Rilievi esaminati").
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #130, nel file del 19/11, le righe successive alla 1248 si spostano di 1, quelle successive alla 1439 di 2
-e quelle successive alla 3003 di 9.
+spostamenti). Con la PR #131, nel file `web/lib/vehicleData.ts` del 20/11, le righe successive alla 268 si spostano di 1, quelle
+successive alla 1133 di 2, quelle successive alla 3187 di 3 e quelle successive alla 3236 di 4.
 
-Un solo rilievo nuovo, minore e di catalogo (M32). I rilievi M1-M31 restano aperti come descritti.
+Nessun problema nuovo trovato. I rilievi M1-M32 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -291,6 +294,11 @@ Proposta: rinominare la prima in "Elettrica 44 kWh 113cv" (o simile) e confermar
 - PR #120: "GR Yaris" ha ora le stesse due etichette sia in `ENGINE_DATA` (`web/lib/vehicleData.ts:2639-2642`) sia in
   `web/lib/engineExtensions.ts:522-525`; prevale la voce di `ENGINE_DATA`, che chiude la 261cv al 2023 (prima era aperta).
   Le righe nelle estensioni sono ormai inutilizzate ma innocue: toglierle sarebbe riordino, non correzione di un difetto.
+
+- PR #131: KTM "1390 Super Duke R" ha ora la stessa etichetta "1350cc 190cv" sia in `ENGINE_DATA` (`web/lib/vehicleData.ts:3190`)
+  sia in `web/lib/engineExtensions.ts:912`, e il modello compare sia in `CATALOGUE_EXTENSIONS` (`:269`) sia in
+  `web/lib/catalogueSweep.ts:262`. Le funzioni di unione scartano i doppioni, quindi il menu mostra una sola voce: ridondanza
+  innocua, toglierla sarebbe riordino.
 
 ## Richiede intervento umano
 - U1 — Il limite d'uso condiviso si appoggia a righe che l'account puo' rimuovere: serve una struttura dedicata in `supabase/`.
