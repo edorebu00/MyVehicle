@@ -1,27 +1,24 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-21 (UTC), eseguita alle 01:20
+Data scan: 2026-11-22 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 20/11 `main` ha un solo cambiamento nuovo: la PR #131 (`5c7baff`, unita con `4686c29`), che modifica solo dati di
-catalogo: `web/lib/vehicleData.ts` (+4 righe: modello KTM "1390 Super Duke R" in `CATALOGUE_EXTENSIONS` `:269` e relativa
-motorizzazione `:3190`, BMW i3 "50 xDrive Elettrica 469cv" dal 2026 `:1135`, Royal Enfield "Himalayan 450" `:3240`) e
-`web/lib/catalogueSweep.ts:271` (aggiunge "Himalayan 450" all'elenco modelli Royal Enfield).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 62c423d origin/main`), quindi le route di
+Dallo scan del 21/11 `main` ha un solo cambiamento nuovo: la PR #132 (`54213b9`, unita con `93d1391`), che modifica solo dati di
+catalogo: `web/lib/vehicleData.ts` (+14 righe: marca "Xpeng" con modello "P7+" in `VEHICLE_DATA` `:93` e relative motorizzazioni
+`:3021-3027`, Leapmotor "B03X" `:449-452`, Kia EV9 "GT 508cv" `:1768`, KTM "990 Duke" `:3204`) e `web/lib/catalogueSweep.ts:61`
+(aggiunge "B03X" all'elenco modelli Leapmotor).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 4686c29 origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
 sul codice cambiato.
-Verifica della PR #131 fatta leggendo il codice: i nuovi modelli sono raggiungibili dal menu (`getModels`, `web/lib/vehicleData.ts:291-296`,
-unisce gli elenchi senza doppioni); le potenze e cilindrate sono coerenti con i dati ufficiali (1350cc 190cv, 452cc 40cv); la nuova
-BMW i3 sta sotto "i3" accanto alle versioni della prima generazione, gia' chiuse al 2022, quindi non c'e' sovrapposizione di anni.
-Unica osservazione: la motorizzazione "1350cc 190cv" della 1390 Super Duke R esiste ora sia in `ENGINE_DATA` sia in
-`web/lib/engineExtensions.ts:912` con etichetta identica, e il modello era gia' in `web/lib/catalogueSweep.ts:262`; `getEngineVariants`
-(`web/lib/vehicleData.ts:3313-3325`) scarta il doppione per etichetta, quindi nessun effetto per l'utente (vedi "Rilievi esaminati").
+Verifica della PR #132 fatta leggendo il codice: B03X, EV9 GT e 990 Duke sono raggiungibili dal menu (`getModels`,
+`web/lib/vehicleData.ts:292-297`; "990 Duke" era gia' in `CATALOGUE_EXTENSIONS` `:268`) e non hanno doppioni nelle estensioni.
+Le nuove motorizzazioni Xpeng invece stanno sotto una marca scritta diversamente da quella gia' presente ("XPeng"): vedi M33.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti (vedi gli scan precedenti per gli
-spostamenti). Con la PR #131, nel file `web/lib/vehicleData.ts` del 20/11, le righe successive alla 268 si spostano di 1, quelle
-successive alla 1133 di 2, quelle successive alla 3187 di 3 e quelle successive alla 3236 di 4.
+I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #132, nel file
+`web/lib/vehicleData.ts` del 21/11, le righe successive alla 92 si spostano di 1, quelle successive alla 447 di 5, quelle successive
+alla 1762 di 6, quelle successive alla 3014 di 13 e quelle successive alla 3190 di 14.
 
-Nessun problema nuovo trovato. I rilievi M1-M32 restano aperti come descritti.
+Un problema nuovo trovato (M33, minore). I rilievi M1-M32 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -270,6 +267,17 @@ In pratica, per un'auto del 2026 il menu propone sia "Elettrica 113cv" (la versi
 `yearTo: null`) sia "Elettrica 54 kWh 113cv". Chi ha la versione con batteria standard non capisce quale scegliere, e la stessa auto
 puo' finire salvata con due etichette diverse. E' una scelta di catalogo (U37).
 Proposta: rinominare la prima in "Elettrica 44 kWh 113cv" (o simile) e confermare se resta in vendita dopo il 2026.
+
+### M33 — Catalogo: la marca XPeng compare due volte nel menu, e le nuove motorizzazioni stanno solo sotto la copia nuova (nuovo)
+File: `web/lib/vehicleData.ts:93` ("Xpeng" in `VEHICLE_DATA`) e `:3021` ("Xpeng" in `ENGINE_DATA`), PR #132; marca gia' esistente:
+`web/lib/vehicleData.ts:219` (`CATALOGUE_EXTENSIONS`, "XPeng": G6, G9, P7) e `web/lib/catalogueSweep.ts:99` ("XPeng", che contiene
+gia' "P7+"); unione delle marche: `getMakes`, `web/lib/vehicleData.ts:285-290`; ricerca motorizzazioni: `getEngineVariants`, `:3327-3341`
+In pratica `getMakes` unisce le chiavi con un `Set`, che distingue maiuscole e minuscole: il menu delle marche mostra sia "Xpeng"
+(un solo modello, P7+, con le tre motorizzazioni nuove) sia "XPeng" (dieci modelli, P7+ compreso, senza motorizzazioni). Chi sceglie
+la marca gia' esistente "XPeng" e poi "P7+" trova solo il campo libero, e la stessa auto puo' finire salvata con due marche diverse.
+Proposta: rinominare la chiave "Xpeng" in "XPeng" sia in `VEHICLE_DATA` sia in `ENGINE_DATA`, cosi' le marche si uniscono.
+Assegnabile (modifica sotto `web/`, nessuna scelta di prodotto: "XPeng" e' la grafia gia' usata nel repo), rinviato per l'arretrato.
+Nota minore: le etichette B03X usano la virgola decimale ("39,8 kWh") mentre B05/B10 accanto usano il punto ("56.2 kWh"): solo estetico.
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
