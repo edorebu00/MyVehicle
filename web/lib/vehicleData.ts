@@ -90,6 +90,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     Volkswagen: ["Polo", "Golf", "Scirocco", "Corrado", "Beetle", "Lupo", "Fox", "Jetta", "Passat", "Phaeton", "Arteon", "Sharan", "Touran", "Eos", "Tiguan", "T-Roc", "T-Cross", "Taigo", "Touareg", "Amarok", "Caddy", "Multivan", "Up!", "ID.3", "ID.4"],
     Volvo: ["240", "S40", "S60", "S80", "S90", "C30", "C70", "V40", "V50", "V60", "V70", "V90", "XC40", "XC60", "XC70", "XC90", "EX30", "EC40"],
     XEV: ["Yoyo"],
+    Xpeng: ["P7+"],
   },
   moto: {
     Aprilia: ["RS 660", "Tuono 660", "RSV4", "Tuareg 660", "SR GT", "Scarabeo", "Shiver 900"],
@@ -445,6 +446,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Omoda E5": [{ label: "Elettrica 62 kWh 204cv", yearFrom: 2024, yearTo: null }],
     },
     Leapmotor: {
+      B03X: [
+        { label: "Elettrica 39,8 kWh 176cv", yearFrom: 2026, yearTo: null },
+        { label: "Elettrica 53 kWh 197cv", yearFrom: 2026, yearTo: null },
+      ],
       B05: [
         { label: "Elettrica 56.2 kWh 218cv", yearFrom: 2026, yearTo: null },
         { label: "Elettrica 67.1 kWh 218cv", yearFrom: 2026, yearTo: null },
@@ -1760,6 +1765,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       EV9: [
         { label: "Elettrica 204cv", yearFrom: 2023, yearTo: null },
         { label: "GT-Line 384cv", yearFrom: 2023, yearTo: null },
+        { label: "GT 508cv", yearFrom: 2025, yearTo: null },
       ],
       EV3: [
         { label: "Elettrica 204cv", yearFrom: 2024, yearTo: null },
@@ -3012,6 +3018,13 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       "SU7 Ultra": [{ label: "Elettrica Tri-Motor AWD 93.7 kWh 1548cv", yearFrom: 2025, yearTo: null }],
     },
+    Xpeng: {
+      "P7+": [
+        { label: "RWD Elettrica 61,7 kWh 245cv", yearFrom: 2026, yearTo: null },
+        { label: "RWD Long Range Elettrica 74,9 kWh 313cv", yearFrom: 2026, yearTo: null },
+        { label: "AWD Performance Elettrica 74,9 kWh 503cv", yearFrom: 2026, yearTo: null },
+      ],
+    },
   },
   moto: {
     Beta: {
@@ -3188,6 +3201,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Duke 890": [{ label: "889cc 115cv", yearFrom: 2021, yearTo: null }],
       "1290 Super Duke": [{ label: "1301cc 180cv", yearFrom: 2020, yearTo: null }],
       "1390 Super Duke R": [{ label: "1350cc 190cv", yearFrom: 2024, yearTo: null }],
+      "990 Duke": [{ label: "947cc 123cv", yearFrom: 2024, yearTo: null }],
       "Adventure 390": [{ label: "373cc 44cv", yearFrom: 2020, yearTo: null }],
       "Adventure 1290": [{ label: "1301cc 160cv", yearFrom: 2021, yearTo: null }],
     },
