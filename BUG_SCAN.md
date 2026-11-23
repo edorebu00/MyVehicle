@@ -1,24 +1,23 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-22 (UTC), eseguita alle 01:20
+Data scan: 2026-11-23 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 21/11 `main` ha un solo cambiamento nuovo: la PR #132 (`54213b9`, unita con `93d1391`), che modifica solo dati di
-catalogo: `web/lib/vehicleData.ts` (+14 righe: marca "Xpeng" con modello "P7+" in `VEHICLE_DATA` `:93` e relative motorizzazioni
-`:3021-3027`, Leapmotor "B03X" `:449-452`, Kia EV9 "GT 508cv" `:1768`, KTM "990 Duke" `:3204`) e `web/lib/catalogueSweep.ts:61`
-(aggiunge "B03X" all'elenco modelli Leapmotor).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 4686c29 origin/main`), quindi le route di
-`web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
-sul codice cambiato.
-Verifica della PR #132 fatta leggendo il codice: B03X, EV9 GT e 990 Duke sono raggiungibili dal menu (`getModels`,
-`web/lib/vehicleData.ts:292-297`; "990 Duke" era gia' in `CATALOGUE_EXTENSIONS` `:268`) e non hanno doppioni nelle estensioni.
-Le nuove motorizzazioni Xpeng invece stanno sotto una marca scritta diversamente da quella gia' presente ("XPeng"): vedi M33.
+Dallo scan del 22/11 `main` ha un solo cambiamento nuovo: la PR #133 (`479da9b`, unita con `9400607`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+7 righe): BYD "Seal 6" e "Shark 6" `:592-596`, Opel Frontera "1.2 Turbo 100cv" `:2240`,
+Royal Enfield "Flying Flea C6" `:3261`.
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 93d1391 origin/main`), quindi le route di
+`web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi (skill di revisione
+a effort alto sulla PR #133, poi verifica di persona) si e' concentrata sul codice cambiato.
+Verifica della PR #133 fatta leggendo il codice: Seal 6, Shark 6 e Flying Flea C6 sono raggiungibili dal menu tramite
+`CATALOGUE_SWEEP` (`web/lib/catalogueSweep.ts:23` e `:271`; `getModels`, `web/lib/vehicleData.ts:292-297`), "Frontera" era gia' in
+`VEHICLE_DATA` (`:71`); nessuna marca scritta in modo diverso e nessun doppione nelle estensioni.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #132, nel file
-`web/lib/vehicleData.ts` del 21/11, le righe successive alla 92 si spostano di 1, quelle successive alla 447 di 5, quelle successive
-alla 1762 di 6, quelle successive alla 3014 di 13 e quelle successive alla 3190 di 14.
+I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #133, nel file
+`web/lib/vehicleData.ts` del 22/11, le righe successive alla 591 si spostano di 5, quelle successive alla 2234 di 6 e quelle successive
+alla 3254 di 7.
 
-Un problema nuovo trovato (M33, minore). I rilievi M1-M32 restano aperti come descritti.
+Un rilievo nuovo (M34, minore, solo dati da confermare). I rilievi M1-M33 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -278,6 +277,17 @@ la marca gia' esistente "XPeng" e poi "P7+" trova solo il campo libero, e la ste
 Proposta: rinominare la chiave "Xpeng" in "XPeng" sia in `VEHICLE_DATA` sia in `ENGINE_DATA`, cosi' le marche si uniscono.
 Assegnabile (modifica sotto `web/`, nessuna scelta di prodotto: "XPeng" e' la grafia gia' usata nel repo), rinviato per l'arretrato.
 Nota minore: le etichette B03X usano la virgola decimale ("39,8 kWh") mentre B05/B10 accanto usano il punto ("56.2 kWh"): solo estetico.
+
+### M34 — Catalogo: anni di inizio e diciture delle nuove voci della PR #133 da confermare (nuovo)
+File: `web/lib/vehicleData.ts:592-596` (BYD Seal 6, Shark 6), `:2240` (Opel Frontera "1.2 Turbo 100cv"), `:3261` (Flying Flea C6)
+In pratica l'elenco degli anni nel modulo del veicolo parte dal `yearFrom` della motorizzazione scelta: Shark 6 e Frontera
+"1.2 Turbo 100cv" hanno `yearFrom: 2026`, quindi un veicolo immatricolato nel 2025 (se la commercializzazione europea e' davvero
+iniziata nel 2025, come sembra) non puo' essere inserito con l'anno giusto. Dati non verificabili dal codice: da confermare con fonti.
+Note estetiche: le etichette Seal 6 mettono l'allestimento dopo l'alimentazione ("DM-i Plug-in Hybrid Boost 183cv") mentre Seal U DM-i
+(`:576-577`) lo mette prima ("Comfort DM-i Plug-in Hybrid 218cv"); la nuova voce Frontera senza ibrido e' in fondo all'elenco, lontana
+dalla "1.2 Turbo Hybrid 100cv" quasi omonima (`:2235`); l'etichetta Shark 6 ripete "Hybrid" due volte.
+Proposta: confermare le date di lancio e, se 2025, portare `yearFrom` a 2025; allineare l'ordine delle parole nelle etichette BYD.
+Non assegnato: richiede la conferma di dati esterni (stesso schema di M10-M15).
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
