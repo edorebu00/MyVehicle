@@ -50,7 +50,7 @@ export const CATALOGUE_SWEEP: Record<VehicleType, Record<string, string[]>> = {
     Innocenti: ["950 Spider", "A40", "C", "IM3", "J4", "J5", "Koral", "Mini De Tomaso", "Regent", "Small"],
     Isuzu: ["Amigo", "Ascender", "Aska", "Axiom", "Bighorn", "Campo", "Elf", "Gemini", "Impulse", "Midi", "MU-X", "Panther", "Piazza", "Rodeo", "Wizard"],
     Iveco: ["Crossway", "EuroStar", "Eurotech", "EuroTrakker", "Powerstar", "S-Way", "T-Way", "Trakker", "TurboDaily", "TurboStar", "X-Way", "Zeta"],
-    Jaecoo: ["Jaecoo 5", "Jaecoo 6", "Jaecoo 8"],
+    Jaecoo: ["Jaecoo 5", "Jaecoo 6", "Jaecoo 8", "Jaecoo 9"],
     Jaguar: ["240", "340", "420", "Mark 1", "Mark V", "Mark VII", "Mark X", "Sovereign", "XJ6", "XJ12", "XJR-15", "XK120", "XK140", "XK150", "XK8"],
     Jeep: ["Comanche", "Commando", "DJ", "FC-150", "FC-170", "J10", "J20", "Jeepster", "M38", "Recon", "Scrambler", "Wagoneer S"],
     Kia: ["Amanti", "Besta", "Bongo", "Cadenza", "Clarus", "EV2", "Forte", "K5", "K7", "K8", "K9", "Opirus", "Quoris", "Ray", "Retona", "Rondo", "Seltos", "Sephia", "Syros", "Tasman", "Telluride"],
