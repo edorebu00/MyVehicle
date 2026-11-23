@@ -589,6 +589,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica 86,4 kWh 517cv", yearFrom: 2023, yearTo: 2025 },
         { label: "Elettrica 108,8 kWh 517cv", yearFrom: 2025, yearTo: null },
       ],
+      "Seal 6": [
+        { label: "DM-i Plug-in Hybrid Boost 183cv", yearFrom: 2025, yearTo: null },
+        { label: "DM-i Plug-in Hybrid Comfort 212cv", yearFrom: 2025, yearTo: null },
+      ],
+      "Shark 6": [{ label: "Super Hybrid DM-o Plug-in Hybrid 436cv", yearFrom: 2026, yearTo: null }],
     },
     Chevrolet: {
       Aveo: [{ label: "1.2 16v 86cv", yearFrom: 2011, yearTo: 2015 }],
@@ -2232,6 +2237,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.2 Turbo Hybrid 136cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica 44 kWh 113cv", yearFrom: 2024, yearTo: null },
         { label: "Elettrica Extended Range 54 kWh 113cv", yearFrom: 2025, yearTo: null },
+        { label: "1.2 Turbo 100cv", yearFrom: 2026, yearTo: null },
       ],
       Karl: [{ label: "1.0 75cv", yearFrom: 2015, yearTo: 2019 }],
     },
@@ -3252,6 +3258,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Shotgun 650": [{ label: "648cc 47cv", yearFrom: 2024, yearTo: null }],
       "Guerrilla 450": [{ label: "452cc 40cv", yearFrom: 2024, yearTo: null }],
       "Himalayan 450": [{ label: "452cc 40cv", yearFrom: 2024, yearTo: null }],
+      "Flying Flea C6": [{ label: "Elettrica 21cv", yearFrom: 2026, yearTo: null }],
     },
     Suzuki: {
       "GSX-R600": [{ label: "599cc 125cv", yearFrom: 2006, yearTo: null }],
