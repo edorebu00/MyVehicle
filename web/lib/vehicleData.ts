@@ -1996,7 +1996,12 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "GLS 400d 3.0 330cv", yearFrom: 2019, yearTo: null },
         { label: "AMG GLS63 4.0 V8 612cv", yearFrom: 2020, yearTo: null },
       ],
-      "AMG GT": [{ label: "4.0 V8 Turbo 476cv", yearFrom: 2014, yearTo: null }],
+      "AMG GT": [
+        { label: "4.0 V8 Turbo 476cv", yearFrom: 2014, yearTo: null },
+        { label: "GT 43 2.0 Turbo Hybrid 422cv", yearFrom: 2024, yearTo: null },
+        { label: "GT 55 4MATIC+ 4.0 V8 476cv", yearFrom: 2023, yearTo: null },
+        { label: "GT 63 4MATIC+ 4.0 V8 585cv", yearFrom: 2023, yearTo: null },
+      ],
       EQV: [{ label: "Elettrica 204cv", yearFrom: 2020, yearTo: null }],
       "Classe A": [
         { label: "A180 1.3 136cv", yearFrom: 2018, yearTo: null },
@@ -2386,6 +2391,8 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Cayenne: [
         { label: "3.0 V6 340cv", yearFrom: 2018, yearTo: null },
         { label: "Turbo GT 4.0 640cv", yearFrom: 2021, yearTo: null },
+        { label: "Electric 408cv", yearFrom: 2026, yearTo: null },
+        { label: "Turbo Electric 857cv", yearFrom: 2026, yearTo: null },
       ],
       Taycan: [
         { label: "Elettrica 4S 435cv", yearFrom: 2019, yearTo: null },
