@@ -167,7 +167,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
     Hummer: ["EV", "H1"],
     Innocenti: ["Elba", "Mille"],
     Honda: ["Beat", "City", "CR-Z", "e:Ny1", "Element", "Legend", "NSX", "Odyssey", "Passport", "Pilot", "S660", "Stream"],
-    Hyundai: ["Accent", "Elantra", "Excel", "i20 N", "i30 N", "Inster", "Ioniq 9", "Nexo", "Palisade", "Pony", "Sonata", "Stellar", "Tucson"],
+    Hyundai: ["Accent", "Elantra", "Excel", "i20 N", "i30 N", "Inster", "Ioniq 3", "Ioniq 9", "Nexo", "Palisade", "Pony", "Sonata", "Stellar", "Tucson"],
     Infiniti: ["G35", "G37", "M35", "FX35", "FX50", "Q50", "Q60", "QX50", "QX55", "QX60", "QX80"],
     Ineos: ["Grenadier", "Quartermaster"],
     Daewoo: ["Espero", "Lanos", "Leganza", "Nubira", "Tico"],
@@ -235,6 +235,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
       "Road Glide",
       "Shovelhead",
       "Softail Standard",
+      "Sprint 440",
       "V-Rod",
     ],
     Honda: [
@@ -271,7 +272,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
       "RC 390",
     ],
     Gilera: ["DNA", "GP800", "Saturno"],
-    "Moto Guzzi": ["Falcone", "Griso", "Le Mans", "Norge", "Stelvio", "V100 Mandello", "V7 Stone", "V9 Roamer"],
+    "Moto Guzzi": ["Falcone", "Griso", "Le Mans", "Norge", "Stelvio", "The Trip 500", "V100 Mandello", "V7 Stone", "V9 Roamer"],
     "MV Agusta": ["750 Sport", "F4", "Rush", "Superveloce", "Turismo Veloce Lusso"],
     Norton: ["Commando", "Dominator", "V4 SS"],
     Piaggio: ["1", "Ape", "Vespa 946"],
@@ -1647,6 +1648,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica AWD 313cv", yearFrom: 2025, yearTo: null },
         { label: "Performance AWD 435cv", yearFrom: 2025, yearTo: null },
       ],
+      "Ioniq 3": [
+        { label: "Standard Range 42.2 kWh 147cv", yearFrom: 2026, yearTo: null },
+        { label: "Long Range 61 kWh 135cv", yearFrom: 2026, yearTo: null },
+      ],
       i40: [{ label: "1.7 CRDi 136cv", yearFrom: 2011, yearTo: 2019 }],
       Atos: [{ label: "1.0 55cv", yearFrom: 1998, yearTo: 2008 }],
       Coupe: [{ label: "2.0 16v 143cv", yearFrom: 1996, yearTo: 2009 }],
@@ -1900,6 +1905,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       Freelander: [{ label: "2.2 TD4 150cv", yearFrom: 2006, yearTo: 2014 }],
       "Range Rover Velar": [{ label: "2.0 D200 200cv", yearFrom: 2017, yearTo: null }],
+      "Range Rover Electric": [{ label: "Elettrica AWD 118 kWh 550cv", yearFrom: 2026, yearTo: null }],
     },
     Maserati: {
       Ghibli: [
@@ -3030,6 +3036,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "Elettrica Max AWD 101 kWh 673cv", yearFrom: 2024, yearTo: null },
       ],
       "SU7 Ultra": [{ label: "Elettrica Tri-Motor AWD 93.7 kWh 1548cv", yearFrom: 2025, yearTo: null }],
+      YU7: [
+        { label: "Elettrica RWD 96.3 kWh 320cv", yearFrom: 2025, yearTo: null },
+        { label: "Elettrica Max AWD 101.7 kWh 691cv", yearFrom: 2025, yearTo: null },
+      ],
     },
     Xpeng: {
       "P7+": [
@@ -3110,13 +3120,17 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     Aprilia: {
       "RS 660": [{ label: "659cc 100cv", yearFrom: 2020, yearTo: null }],
       "Tuono 660": [{ label: "659cc 95cv", yearFrom: 2021, yearTo: null }],
-      RSV4: [{ label: "1099cc 217cv", yearFrom: 2021, yearTo: null }],
+      RSV4: [
+        { label: "1099cc 217cv", yearFrom: 2021, yearTo: null },
+        { label: "Obscure Spe.Ed. 1099cc 220cv", yearFrom: 2027, yearTo: null },
+      ],
       "Tuareg 660": [{ label: "659cc 80cv", yearFrom: 2022, yearTo: null }],
       "SR GT": [
         { label: "125cc 15cv", yearFrom: 2022, yearTo: null },
         { label: "200cc 18cv", yearFrom: 2022, yearTo: null },
       ],
       "Shiver 900": [{ label: "896cc 95cv", yearFrom: 2017, yearTo: null }],
+      "RS 457": [{ label: "457cc 48cv", yearFrom: 2024, yearTo: null }],
       Scarabeo: [
         { label: "125cc 15cv", yearFrom: 2011, yearTo: null },
         { label: "300cc 22cv", yearFrom: 2011, yearTo: null },
@@ -3138,9 +3152,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
     },
     Ducati: {
       "Panigale V4": [
-        { label: "1103cc 214cv", yearFrom: 2018, yearTo: null },
-        { label: "V4 S 1103cc 214cv", yearFrom: 2018, yearTo: null },
+        { label: "1103cc 214cv", yearFrom: 2018, yearTo: 2026 },
+        { label: "V4 S 1103cc 214cv", yearFrom: 2018, yearTo: 2026 },
         { label: "V4 R 998cc 218cv", yearFrom: 2019, yearTo: null },
+        { label: "1103cc 218cv", yearFrom: 2027, yearTo: null },
+        { label: "V4 S 1103cc 218cv", yearFrom: 2027, yearTo: null },
       ],
       "Panigale V2": [{ label: "955cc 155cv", yearFrom: 2020, yearTo: null }],
       Monster: [
@@ -3168,6 +3184,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Street Bob": [{ label: "1746cc 78cv", yearFrom: 2018, yearTo: null }],
       "Road King": [{ label: "1868cc 92cv", yearFrom: 2017, yearTo: null }],
       "Pan America": [{ label: "1250cc 150cv", yearFrom: 2021, yearTo: null }],
+      "Sprint 440": [{ label: "440cc 27cv", yearFrom: 2027, yearTo: null }],
     },
     Honda: {
       CBR600RR: [{ label: "599cc 121cv", yearFrom: 2007, yearTo: 2020 }],
@@ -3226,6 +3243,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       V9: [{ label: "850cc 55cv", yearFrom: 2016, yearTo: null }],
       "V85 TT": [{ label: "850cc 80cv", yearFrom: 2019, yearTo: null }],
       California: [{ label: "1380cc 96cv", yearFrom: 2013, yearTo: 2020 }],
+      "The Trip 500": [{ label: "457cc 48cv", yearFrom: 2027, yearTo: null }],
     },
     "MV Agusta": {
       Brutale: [{ label: "798cc 140cv", yearFrom: 2016, yearTo: null }],
