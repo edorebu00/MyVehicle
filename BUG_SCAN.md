@@ -1,23 +1,19 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-23 (UTC), eseguita alle 01:20
+Data scan: 2026-11-24 (UTC), eseguita alle 01:30
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 22/11 `main` ha un solo cambiamento nuovo: la PR #133 (`479da9b`, unita con `9400607`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+7 righe): BYD "Seal 6" e "Shark 6" `:592-596`, Opel Frontera "1.2 Turbo 100cv" `:2240`,
-Royal Enfield "Flying Flea C6" `:3261`.
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 93d1391 origin/main`), quindi le route di
+Dallo scan del 23/11 `main` ha un solo cambiamento nuovo: la PR #134 (`2bd489b`, unita con `7c90ae1`), che modifica solo dati di
+catalogo: `web/lib/vehicleData.ts` (+7 righe: Mercedes-AMG GT 43/55/63 `:1999-2004`, Porsche Cayenne elettrica `:2394-2395`) e
+`web/lib/catalogueSweep.ts:53` (aggiunge il modello "Jaecoo 9").
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 9400607 origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi (skill di revisione
-a effort alto sulla PR #133, poi verifica di persona) si e' concentrata sul codice cambiato.
-Verifica della PR #133 fatta leggendo il codice: Seal 6, Shark 6 e Flying Flea C6 sono raggiungibili dal menu tramite
-`CATALOGUE_SWEEP` (`web/lib/catalogueSweep.ts:23` e `:271`; `getModels`, `web/lib/vehicleData.ts:292-297`), "Frontera" era gia' in
-`VEHICLE_DATA` (`:71`); nessuna marca scritta in modo diverso e nessun doppione nelle estensioni.
+a effort alto sulla PR #134, poi verifica di persona) si e' concentrata sul codice cambiato.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #133, nel file
-`web/lib/vehicleData.ts` del 22/11, le righe successive alla 591 si spostano di 5, quelle successive alla 2234 di 6 e quelle successive
-alla 3254 di 7.
+I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #134, nel file
+`web/lib/vehicleData.ts` del 23/11, le righe successive alla 1999 si spostano di 4 e quelle successive alla 2388 di 6.
 
-Un rilievo nuovo (M34, minore, solo dati da confermare). I rilievi M1-M33 restano aperti come descritti.
+Un rilievo nuovo (M35, minore, dati di catalogo). I rilievi M1-M34 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -289,6 +285,24 @@ dalla "1.2 Turbo Hybrid 100cv" quasi omonima (`:2235`); l'etichetta Shark 6 ripe
 Proposta: confermare le date di lancio e, se 2025, portare `yearFrom` a 2025; allineare l'ordine delle parole nelle etichette BYD.
 Non assegnato: richiede la conferma di dati esterni (stesso schema di M10-M15).
 
+### M35 — Catalogo: nuove voci della PR #134 (AMG GT, Cayenne elettrica, Jaecoo 9) incomplete o sovrapposte (nuovo)
+File: `web/lib/vehicleData.ts:1999-2004` (AMG GT), `:2394-2395` (Cayenne), `web/lib/catalogueSweep.ts:53` e `web/lib/vehicleData.ts:420-432` (Jaecoo)
+In pratica:
+- AMG GT: la voce della prima generazione "4.0 V8 Turbo 476cv" (dal 2014) resta aperta fino all'anno corrente (`yearTo: null`)
+  accanto alla nuova "GT 55 4MATIC+ 4.0 V8 476cv" (dal 2023): per un'auto del 2024 il menu mostra due motori 4.0 V8 476cv quasi
+  identici, e scegliendo il primo si puo' salvare una prima generazione con un anno in cui non era piu' prodotta (stesso schema di M21-M23).
+  La "GT 43 ... 422cv" parte dal 2024 sotto "AMG GT", mentre la GT 43 4 porte (dal 2018) e' un modello separato ("AMG GT 4-Door",
+  `web/lib/catalogueSweep.ts:70`) senza motorizzazioni: possibile confusione per chi ha la 4 porte. Potenza 422cv da confermare (421 CV?).
+- Cayenne: le etichette "Electric 408cv" e "Turbo Electric 857cv" sono in inglese, mentre tutte le altre voci elettriche del catalogo
+  (279 in `vehicleData.ts`, 25 in `engineExtensions.ts`, comprese Macan e Taycan accanto) usano "Elettrica": verificato con grep.
+- Jaecoo 9: il messaggio della PR parla di motorizzazioni, ma e' stato aggiunto solo il nome del modello a `CATALOGUE_SWEEP`;
+  `ENGINE_DATA.auto.Jaecoo` non ha la chiave "Jaecoo 9", quindi scegliendolo compare solo il campo libero del motore e l'elenco
+  completo degli anni, a differenza di Jaecoo 5/7/8.
+Proposta: chiudere la "4.0 V8 Turbo 476cv" all'ultimo anno della prima generazione (2021?), rinominare le Cayenne in "Elettrica 408cv" /
+"Elettrica Turbo 857cv", aggiungere le motorizzazioni della Jaecoo 9.
+Non assegnato: l'arretrato blocca i nuovi task; inoltre anno di fine, potenze e motorizzazioni richiedono la conferma di dati esterni
+(stesso schema di M10-M15). Solo la rinomina delle etichette Cayenne sarebbe assegnabile senza dati esterni.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -354,6 +368,7 @@ Non assegnato: richiede la conferma di dati esterni (stesso schema di M10-M15).
 - U35 — Nissan Leaf: confermare l'anno di fine delle motorizzazioni 2018/2019 (150cv, e+ 217cv), oggi aperte accanto a quelle 2026 (M30).
 - U36 — Dacia Duster: decidere se le motorizzazioni della generazione 2024 vadano sotto "Duster" o sotto il modello "Duster III" e confermare l'anno di fine delle versioni 2018 (M31).
 - U37 — Fiat Grande Panda: distinguere nelle etichette le due versioni elettriche 113cv (batteria) e confermare l'anno di fine di quella 2024 (M32).
+- U38 — Mercedes-AMG GT, Porsche Cayenne e Jaecoo 9: confermare l'anno di fine della prima generazione AMG GT, la potenza della GT 43 e le motorizzazioni della Jaecoo 9 (M35).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
