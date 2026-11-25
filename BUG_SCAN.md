@@ -1,19 +1,18 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-24 (UTC), eseguita alle 01:30
+Data scan: 2026-11-25 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 23/11 `main` ha un solo cambiamento nuovo: la PR #134 (`2bd489b`, unita con `7c90ae1`), che modifica solo dati di
-catalogo: `web/lib/vehicleData.ts` (+7 righe: Mercedes-AMG GT 43/55/63 `:1999-2004`, Porsche Cayenne elettrica `:2394-2395`) e
-`web/lib/catalogueSweep.ts:53` (aggiunge il modello "Jaecoo 9").
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 9400607 origin/main`), quindi le route di
-`web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi (skill di revisione
-a effort alto sulla PR #134, poi verifica di persona) si e' concentrata sul codice cambiato.
+Dallo scan del 24/11 `main` ha un solo cambiamento nuovo: la PR #135 (`e0f573e`, unita con `68b3558`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+23/-5 righe: Hyundai Ioniq 3, Range Rover Electric, Xiaomi YU7, Aprilia RSV4 Obscure e RS 457,
+Ducati Panigale V4 2027, Harley-Davidson Sprint 440, Moto Guzzi The Trip 500).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 7c90ae1 origin/main`), quindi le route di
+`web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
+sulle righe cambiate, verificate di persona insieme al codice che le usa (`web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`).
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
-I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti. Con la PR #134, nel file
-`web/lib/vehicleData.ts` del 23/11, le righe successive alla 1999 si spostano di 4 e quelle successive alla 2388 di 6.
+I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti.
 
-Un rilievo nuovo (M35, minore, dati di catalogo). I rilievi M1-M34 restano aperti come descritti.
+Un rilievo nuovo (M36, minore, dati di catalogo). I rilievi M1-M35 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -303,6 +302,18 @@ Proposta: chiudere la "4.0 V8 Turbo 476cv" all'ultimo anno della prima generazio
 Non assegnato: l'arretrato blocca i nuovi task; inoltre anno di fine, potenze e motorizzazioni richiedono la conferma di dati esterni
 (stesso schema di M10-M15). Solo la rinomina delle etichette Cayenne sarebbe assegnabile senza dati esterni.
 
+### M36 — Catalogo: cinque nuove motorizzazioni della PR #135 iniziano nel 2027, oltre l'anno corrente (nuovo)
+File: `web/lib/vehicleData.ts:3125` (Aprilia RSV4 "Obscure Spe.Ed."), `:3158-3159` (Ducati Panigale V4 "1103cc 218cv" e
+"V4 S 1103cc 218cv"), `:3187` (Harley-Davidson "Sprint 440"), `:3246` (Moto Guzzi "The Trip 500"); codice che le usa:
+`web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`.
+In pratica: con `yearTo: null` l'ultimo anno e' `CURRENT_YEAR` (2026) e il ciclo va da 2026 a `min(2027, 2026)`, quindi scegliendo una
+di queste motorizzazioni il menu degli anni propone solo il 2026, un anno in cui quella versione non esiste ancora (stesso schema di M9).
+Per Sprint 440 e The Trip 500 e' l'unica motorizzazione del modello. Le vecchie Panigale V4 sono chiuse al 2026, quindi per il 2027
+non c'e' ancora sovrapposizione. Da confermare anche la Hyundai Ioniq 3 (`:1651-1654`): la "Long Range 61 kWh" ha 135cv, meno della
+"Standard Range" da 147cv.
+Proposta: togliere per ora le voci 2027 (o spostarle a quando l'anno sara' selezionabile) e confermare le potenze della Ioniq 3.
+Non assegnato: l'arretrato blocca i nuovi task; inoltre tenere o togliere voci future e' una scelta di catalogo (vedi U8, U17).
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -369,6 +380,7 @@ Non assegnato: l'arretrato blocca i nuovi task; inoltre anno di fine, potenze e 
 - U36 — Dacia Duster: decidere se le motorizzazioni della generazione 2024 vadano sotto "Duster" o sotto il modello "Duster III" e confermare l'anno di fine delle versioni 2018 (M31).
 - U37 — Fiat Grande Panda: distinguere nelle etichette le due versioni elettriche 113cv (batteria) e confermare l'anno di fine di quella 2024 (M32).
 - U38 — Mercedes-AMG GT, Porsche Cayenne e Jaecoo 9: confermare l'anno di fine della prima generazione AMG GT, la potenza della GT 43 e le motorizzazioni della Jaecoo 9 (M35).
+- U39 — Aprilia RSV4 Obscure, Ducati Panigale V4 2027, Harley-Davidson Sprint 440, Moto Guzzi The Trip 500: decidere se tenere in catalogo versioni con inizio 2027; confermare le potenze della Hyundai Ioniq 3 (M36).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
