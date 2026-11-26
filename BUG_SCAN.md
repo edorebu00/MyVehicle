@@ -1,18 +1,21 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-25 (UTC), eseguita alle 01:20
+Data scan: 2026-11-26 (UTC), eseguita alle 01:25
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 24/11 `main` ha un solo cambiamento nuovo: la PR #135 (`e0f573e`, unita con `68b3558`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+23/-5 righe: Hyundai Ioniq 3, Range Rover Electric, Xiaomi YU7, Aprilia RSV4 Obscure e RS 457,
-Ducati Panigale V4 2027, Harley-Davidson Sprint 440, Moto Guzzi The Trip 500).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 7c90ae1 origin/main`), quindi le route di
+Dallo scan del 25/11 `main` ha un solo cambiamento nuovo: la PR #136 (`4a117c5`, unita con `4ae3bed`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+8/-1: Ford Ranger Raptor corretto in "3.0 EcoBoost V6 Raptor 292cv" dal 2023, Kove 450R,
+Triumph Tiger 1200) e `web/lib/catalogueSweep.ts` (+3/-3: Royal Enfield Continental GT 750, Yamaha RW350/RW700, Kove 450R).
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 68b3558 origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
-sulle righe cambiate, verificate di persona insieme al codice che le usa (`web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`).
+sulle righe cambiate, verificate di persona insieme al codice che le usa (`getEngineVariants` in `web/lib/vehicleData.ts:3366-3380`,
+le estensioni in `web/lib/engineExtensions.ts:922` e il menu degli anni in `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`).
+La correzione del Ranger Raptor toglie la vecchia etichetta: i veicoli gia' salvati la conservano come testo e nessuna altra pagina
+la confronta con il catalogo, quindi non ci sono effetti sui dati esistenti.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti.
 
-Un rilievo nuovo (M36, minore, dati di catalogo). I rilievi M1-M35 restano aperti come descritti.
+Un rilievo nuovo (M37, minore, dati di catalogo, stesso schema di M9 e M36). I rilievi M1-M36 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -314,6 +317,15 @@ non c'e' ancora sovrapposizione. Da confermare anche la Hyundai Ioniq 3 (`:1651-
 Proposta: togliere per ora le voci 2027 (o spostarle a quando l'anno sara' selezionabile) e confermare le potenze della Ioniq 3.
 Non assegnato: l'arretrato blocca i nuovi task; inoltre tenere o togliere voci future e' una scelta di catalogo (vedi U8, U17).
 
+### M37 — Catalogo: due nuove motorizzazioni della PR #136 iniziano nel 2027, oltre l'anno corrente (nuovo)
+File: `web/lib/vehicleData.ts:3228` (Kove "450R" "443cc 65cv", unica motorizzazione del modello), `:3318` (Triumph "Tiger 1200"
+"1160cc 158cv"); codice che le usa: `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`.
+In pratica: come in M36, con `yearTo: null` l'ultimo anno e' `CURRENT_YEAR` (2026), quindi scegliendo queste motorizzazioni il menu
+degli anni propone solo il 2026, anno in cui non esistono. Per la Tiger 1200 la versione "1160cc 150cv" (2022-2026, prevale su quella
+di `web/lib/engineExtensions.ts:922` con la stessa etichetta) resta corretta.
+Proposta: togliere per ora le voci 2027 o reinserirle quando il 2027 sara' selezionabile.
+Non assegnato: l'arretrato blocca i nuovi task; inoltre e' la stessa scelta di catalogo di U39.
+
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
   catalogo recenti (#99-#104) modificano direttamente `ENGINE_DATA`. Nessun effetto per l'utente; spostare i dati sarebbe
@@ -381,6 +393,7 @@ Non assegnato: l'arretrato blocca i nuovi task; inoltre tenere o togliere voci f
 - U37 — Fiat Grande Panda: distinguere nelle etichette le due versioni elettriche 113cv (batteria) e confermare l'anno di fine di quella 2024 (M32).
 - U38 — Mercedes-AMG GT, Porsche Cayenne e Jaecoo 9: confermare l'anno di fine della prima generazione AMG GT, la potenza della GT 43 e le motorizzazioni della Jaecoo 9 (M35).
 - U39 — Aprilia RSV4 Obscure, Ducati Panigale V4 2027, Harley-Davidson Sprint 440, Moto Guzzi The Trip 500: decidere se tenere in catalogo versioni con inizio 2027; confermare le potenze della Hyundai Ioniq 3 (M36).
+- U40 — Kove 450R e Triumph Tiger 1200 158cv: stessa decisione di U39 sulle versioni con inizio 2027 (M37).
 
 ## Gia' in PR
 - #98: copia doppia di Hyundai Inster.
