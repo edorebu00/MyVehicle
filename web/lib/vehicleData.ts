@@ -1547,7 +1547,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       ],
       Ranger: [
         { label: "2.0 EcoBlue 170cv", yearFrom: 2019, yearTo: null },
-        { label: "3.0 EcoBlue Raptor 240cv", yearFrom: 2022, yearTo: null },
+        { label: "3.0 EcoBoost V6 Raptor 292cv", yearFrom: 2023, yearTo: null },
       ],
       Galaxy: [{ label: "2.0 EcoBlue 150cv", yearFrom: 2015, yearTo: null }],
       Transit: [
@@ -3224,6 +3224,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Versys 1000": [{ label: "1043cc 120cv", yearFrom: 2019, yearTo: null }],
       "Vulcan S": [{ label: "649cc 61cv", yearFrom: 2015, yearTo: null }],
     },
+    Kove: {
+      "450R": [{ label: "443cc 65cv", yearFrom: 2027, yearTo: null }],
+    },
     KTM: {
       "Duke 125": [{ label: "125cc 15cv", yearFrom: 2017, yearTo: null }],
       "Duke 390": [{ label: "373cc 44cv", yearFrom: 2013, yearTo: null }],
@@ -3310,6 +3313,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Street Triple": [{ label: "765cc 128cv", yearFrom: 2017, yearTo: null }],
       "Speed Triple": [{ label: "1160cc 178cv", yearFrom: 2021, yearTo: null }],
       "Tiger 900": [{ label: "888cc 95cv", yearFrom: 2020, yearTo: null }],
+      "Tiger 1200": [
+        { label: "1160cc 150cv", yearFrom: 2022, yearTo: 2026 },
+        { label: "1160cc 158cv", yearFrom: 2027, yearTo: null },
+      ],
       "Bonneville T120": [{ label: "1200cc 80cv", yearFrom: 2016, yearTo: null }],
       "Trident 660": [{ label: "660cc 81cv", yearFrom: 2021, yearTo: null }],
       "Speed 400": [{ label: "398cc 40cv", yearFrom: 2024, yearTo: null }],
