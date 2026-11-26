@@ -99,7 +99,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     BMW: ["S 1000 RR", "R 1250 GS", "F 850 GS", "R nineT", "G 310 R", "F 900 R"],
     CFMoto: ["300NK", "450MT", "700CL-X"],
     Bimota: ["Tesi H2", "KB4"],
-    Ducati: ["Panigale V4", "Panigale V2", "Monster", "Multistrada", "Scrambler", "Diavel", "Streetfighter V4", "Hypermotard"],
+    Ducati: ["Panigale V4", "Panigale V2", "Monster", "Multistrada", "Scrambler", "Diavel", "Streetfighter V4", "Streetfighter V2", "Hypermotard", "Hypermotard 698 Mono"],
     Fantic: ["Caballero"],
     Generic: ["Trigger", "XOR"],
     Gilera: ["Runner", "Nexus", "Fuoco"],
@@ -2725,6 +2725,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "GR Yaris": [
         { label: "1.6 Turbo 261cv", yearFrom: 2020, yearTo: 2023 },
         { label: "1.6 Turbo 280cv", yearFrom: 2024, yearTo: null },
+        { label: "Morizo RR 1.6 Turbo 280cv", yearFrom: 2026, yearTo: null },
       ],
       Verso: [
         { label: "1.8 147cv", yearFrom: 2009, yearTo: 2018 },
@@ -2749,6 +2750,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1.5 Hybrid 130cv GR Sport", yearFrom: 2022, yearTo: null },
         { label: "GR Yaris 1.6 Turbo 261cv", yearFrom: 2020, yearTo: 2023 },
         { label: "GR Yaris 1.6 Turbo 280cv", yearFrom: 2024, yearTo: null },
+        { label: "GR Yaris Morizo RR 1.6 Turbo 280cv", yearFrom: 2026, yearTo: null },
       ],
       Corolla: [
         { label: "1.2 Turbo 116cv", yearFrom: 2019, yearTo: null },
@@ -3173,7 +3175,9 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1262cc 159cv", yearFrom: 2019, yearTo: 2022 },
       ],
       "Streetfighter V4": [{ label: "1103cc 208cv", yearFrom: 2020, yearTo: null }],
+      "Streetfighter V2": [{ label: "890cc 120cv", yearFrom: 2025, yearTo: null }],
       Hypermotard: [{ label: "950cc 114cv", yearFrom: 2019, yearTo: null }],
+      "Hypermotard 698 Mono": [{ label: "659cc 110cv", yearFrom: 2024, yearTo: null }],
     },
     "Harley-Davidson": {
       Sportster: [
