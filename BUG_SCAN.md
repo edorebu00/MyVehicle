@@ -1,21 +1,21 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-26 (UTC), eseguita alle 01:25
+Data scan: 2026-11-27 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 25/11 `main` ha un solo cambiamento nuovo: la PR #136 (`4a117c5`, unita con `4ae3bed`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+8/-1: Ford Ranger Raptor corretto in "3.0 EcoBoost V6 Raptor 292cv" dal 2023, Kove 450R,
-Triumph Tiger 1200) e `web/lib/catalogueSweep.ts` (+3/-3: Royal Enfield Continental GT 750, Yamaha RW350/RW700, Kove 450R).
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 68b3558 origin/main`), quindi le route di
+Dallo scan del 26/11 `main` ha un solo cambiamento nuovo: la PR #137 (`1fd5f38`, unita con `227c1bf`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+5/-1: Ducati "Streetfighter V2" e "Hypermotard 698 Mono" aggiunti alla lista modelli e alle
+motorizzazioni, Toyota GR Yaris "Morizo RR 1.6 Turbo 280cv" dal 2026 sotto "GR Yaris" e "Yaris").
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 4ae3bed origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
-sulle righe cambiate, verificate di persona insieme al codice che le usa (`getEngineVariants` in `web/lib/vehicleData.ts:3366-3380`,
-le estensioni in `web/lib/engineExtensions.ts:922` e il menu degli anni in `web/app/(dashboard)/veicoli/nuovo/page.tsx:63-71`).
-La correzione del Ranger Raptor toglie la vecchia etichetta: i veicoli gia' salvati la conservano come testo e nessuna altra pagina
-la confronta con il catalogo, quindi non ci sono effetti sui dati esistenti.
+sulle righe cambiate, verificate di persona insieme al codice che le usa (`getModels` in `web/lib/vehicleData.ts:296-301`, che
+deduplica con un `Set` i modelli presenti anche in `web/lib/catalogueSweep.ts:252`; `getEngineVariants` in
+`web/lib/vehicleData.ts:3370-3384`, che unisce le estensioni di `web/lib/engineExtensions.ts` scartando solo le etichette uguali).
+L'aggiunta di "Streetfighter V2" e "Hypermotard 698 Mono" anche in `VEHICLE_DATA` non crea doppioni nel menu dei modelli.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti.
 
-Un rilievo nuovo (M37, minore, dati di catalogo, stesso schema di M9 e M36). I rilievi M1-M36 restano aperti come descritti.
+Un rilievo nuovo (M38, minore, dati di catalogo, stesso schema di M21-M23 e M35). I rilievi M1-M37 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -325,6 +325,16 @@ degli anni propone solo il 2026, anno in cui non esistono. Per la Tiger 1200 la 
 di `web/lib/engineExtensions.ts:922` con la stessa etichetta) resta corretta.
 Proposta: togliere per ora le voci 2027 o reinserirle quando il 2027 sara' selezionabile.
 Non assegnato: l'arretrato blocca i nuovi task; inoltre e' la stessa scelta di catalogo di U39.
+
+### M38 — Catalogo: Ducati Streetfighter V2 con due motori sovrapposti dopo la PR #137 (nuovo)
+File: `web/lib/vehicleData.ts:3178` ("890cc 120cv", dal 2025) e `web/lib/engineExtensions.ts:854` ("955cc 153cv", dal 2022,
+`yearTo: null`); codice che li unisce: `web/lib/vehicleData.ts:3370-3384`.
+In pratica: le due etichette sono diverse, quindi `getEngineVariants` le tiene entrambe; per una Streetfighter V2 del 2025 o 2026 il
+menu propone sia il nuovo 890cc sia il vecchio 955cc, che dal 2025 non e' piu' prodotto, e si puo' salvare una combinazione
+motore/anno inesistente (stesso schema di M21-M23). Nella stessa PR, la "Hypermotard 698 Mono" (`web/lib/vehicleData.ts:3180`)
+riporta "659cc 110cv": la scheda di serie del monocilindrico e' intorno ai 77-78cv, quindi la potenza va ricontrollata.
+Proposta: chiudere la voce "955cc 153cv" in `engineExtensions.ts` con `yearTo: 2024` e correggere la potenza della 698 Mono.
+Non assegnato: l'arretrato blocca i nuovi task.
 
 ## Rilievi esaminati e non trasformati in task
 - `web/lib/engineExtensions.ts:3-6` dice di aggiungere le nuove motorizzazioni li' "invece di gonfiare ENGINE_DATA", ma le PR di
