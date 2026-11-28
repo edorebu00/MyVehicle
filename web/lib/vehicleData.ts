@@ -10,7 +10,7 @@ import type { EngineVariant, VehicleType } from "./types";
  */
 export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
   auto: {
-    Abarth: ["500", "500C", "595", "595C", "695", "124 Spider", "Grande Punto", "Punto Evo"],
+    Abarth: ["500", "500C", "595", "595C", "695", "124 Spider", "Grande Punto", "Punto Evo", "600e"],
     AIXAM: ["City", "Coupé", "GTO", "Miniauto"],
     "Aston Martin": ["DBX", "DB11", "DBS Superleggera", "Rapide S", "V12", "V8 Vantage"],
     "Alfa Romeo": ["Giulia", "Giulietta", "Stelvio", "Tonale", "Junior", "MiTo", "159", "156", "166", "164", "155", "147", "146", "145", "75", "33", "4C", "Brera", "Spider", "GTV", "GT"],
@@ -109,7 +109,7 @@ export const VEHICLE_DATA: Record<VehicleType, Record<string, string[]>> = {
     Honda: ["CBR600RR", "CBR1000RR-R", "CB650R", "Africa Twin", "CB500F", "Hornet", "SH 125/150", "Forza", "Vision"],
     Husqvarna: ["Svartpilen 401", "Vitpilen 401", "Norden 901"],
     Kawasaki: ["Ninja 400", "Ninja 650", "Ninja ZX-10R", "Z650", "Z900", "Versys 650", "Versys 1000", "Vulcan S"],
-    KTM: ["Duke 125", "Duke 390", "Duke 790", "Duke 890", "1290 Super Duke", "Adventure 390", "Adventure 1290"],
+    KTM: ["Duke 125", "Duke 390", "Duke 790", "Duke 890", "Duke 890 R", "1290 Super Duke", "Adventure 390", "Adventure 1290"],
     Kymco: ["People", "Agility"],
     Malaguti: ["Centro", "Madison"],
     "Moto Guzzi": ["V7", "V9", "V85 TT", "California"],
@@ -1926,12 +1926,16 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       Grecale: [
         { label: "2.0 Mild Hybrid 300cv", yearFrom: 2022, yearTo: null },
         { label: "Trofeo 3.0 V6 530cv", yearFrom: 2022, yearTo: null },
+        { label: "Folgore Elettrica 557cv", yearFrom: 2023, yearTo: null },
       ],
       GranTurismo: [
         { label: "4.7 V8 460cv", yearFrom: 2007, yearTo: 2019 },
         { label: "Folgore Elettrica 761cv", yearFrom: 2023, yearTo: null },
       ],
-      MC20: [{ label: "3.0 V6 Turbo 630cv", yearFrom: 2020, yearTo: null }],
+      MC20: [
+        { label: "3.0 V6 Turbo 630cv", yearFrom: 2020, yearTo: null },
+        { label: "GT2 Stradale 3.0 V6 Turbo 640cv", yearFrom: 2024, yearTo: null },
+      ],
     },
     Mazda: {
       Mazda2: [
@@ -3236,6 +3240,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Duke 390": [{ label: "373cc 44cv", yearFrom: 2013, yearTo: null }],
       "Duke 790": [{ label: "799cc 105cv", yearFrom: 2018, yearTo: 2021 }],
       "Duke 890": [{ label: "889cc 115cv", yearFrom: 2021, yearTo: null }],
+      "Duke 890 R": [{ label: "889cc 121cv", yearFrom: 2023, yearTo: null }],
       "1290 Super Duke": [{ label: "1301cc 180cv", yearFrom: 2020, yearTo: null }],
       "1390 Super Duke R": [{ label: "1350cc 190cv", yearFrom: 2024, yearTo: null }],
       "990 Duke": [{ label: "947cc 123cv", yearFrom: 2024, yearTo: null }],
