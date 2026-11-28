@@ -1,21 +1,20 @@
 # Scansione notturna dei bug — MyVehicle
 
-Data scan: 2026-11-27 (UTC), eseguita alle 01:20
+Data scan: 2026-11-28 (UTC), eseguita alle 01:20
 Ambito: `web/` (esclusi `node_modules/`, `.next/`, `package-lock.json` e i file generati con l'intestazione "GENERATO DA").
-Dallo scan del 26/11 `main` ha un solo cambiamento nuovo: la PR #137 (`1fd5f38`, unita con `227c1bf`), che modifica solo dati di
-catalogo in `web/lib/vehicleData.ts` (+5/-1: Ducati "Streetfighter V2" e "Hypermotard 698 Mono" aggiunti alla lista modelli e alle
-motorizzazioni, Toyota GR Yaris "Morizo RR 1.6 Turbo 280cv" dal 2026 sotto "GR Yaris" e "Yaris").
-Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 4ae3bed origin/main`), quindi le route di
+Dallo scan del 27/11 `main` ha un solo cambiamento nuovo: la PR #138 (`3bcceec`, unita con `429dd28`), che modifica solo dati di
+catalogo in `web/lib/vehicleData.ts` (+8/-3: Abarth "600e" aggiunto alla lista modelli, KTM "Duke 890 R" aggiunto a modelli e
+motorizzazioni, Maserati Grecale "Folgore Elettrica 557cv" e MC20 "GT2 Stradale 3.0 V6 Turbo 640cv").
+Nessun altro file sotto `web/` o `supabase/` e' cambiato (verificato con `git diff 227c1bf origin/main`), quindi le route di
 `web/app/api/agent/*` e i rilievi gia' noti restano quelli verificati negli scan precedenti; la revisione di oggi si e' concentrata
 sulle righe cambiate, verificate di persona insieme al codice che le usa (`getModels` in `web/lib/vehicleData.ts:296-301`, che
-deduplica con un `Set` i modelli presenti anche in `web/lib/catalogueSweep.ts:252`; `getEngineVariants` in
-`web/lib/vehicleData.ts:3370-3384`, che unisce le estensioni di `web/lib/engineExtensions.ts` scartando solo le etichette uguali).
-L'aggiunta di "Streetfighter V2" e "Hypermotard 698 Mono" anche in `VEHICLE_DATA` non crea doppioni nel menu dei modelli.
+deduplica con un `Set`; `getEngineVariants` in `web/lib/vehicleData.ts:3374-3388`, che scarta solo le etichette uguali).
+Abarth "600e" era gia' in `web/lib/catalogueSweep.ts:13` e ha gia' motorizzazioni (`web/lib/vehicleData.ts:717-721`): nessun doppione.
 PR aperte al momento dello scan: #98 (`claude/worker-6-2026-10-10`), #96 (`claude/worker-4-2026-10-10`), #91 (`claude/worker-7-2026-10-07`), #68 (solo `supabase/`).
 Le PR aperte dei lavoratori sono 3: per la regola sull'arretrato oggi non vengono creati task.
 I numeri di riga dei rilievi precedenti si riferiscono al file del giorno in cui sono stati scritti.
 
-Un rilievo nuovo (M38, minore, dati di catalogo, stesso schema di M21-M23 e M35). I rilievi M1-M37 restano aperti come descritti.
+Due rilievi nuovi (M39 e M40, minori, dati di catalogo). I rilievi M1-M38 restano aperti come descritti.
 
 Ogni problema qui sotto e' stato verificato leggendo di persona il codice indicato.
 
@@ -334,6 +333,21 @@ menu propone sia il nuovo 890cc sia il vecchio 955cc, che dal 2025 non e' piu' p
 motore/anno inesistente (stesso schema di M21-M23). Nella stessa PR, la "Hypermotard 698 Mono" (`web/lib/vehicleData.ts:3180`)
 riporta "659cc 110cv": la scheda di serie del monocilindrico e' intorno ai 77-78cv, quindi la potenza va ricontrollata.
 Proposta: chiudere la voce "955cc 153cv" in `engineExtensions.ts` con `yearTo: 2024` e correggere la potenza della 698 Mono.
+Non assegnato: l'arretrato blocca i nuovi task.
+
+### M39 — Catalogo: Maserati MC20 GT2 Stradale selezionabile in due modi dopo la PR #138 (nuovo)
+File: `web/lib/vehicleData.ts:1937` (motorizzazione "GT2 Stradale 3.0 V6 Turbo 640cv" sotto "MC20") e
+`web/lib/catalogueSweep.ts:67` (modello a se' "GT2 Stradale" tra le Maserati, senza motorizzazioni).
+In pratica: la stessa auto compare sia come modello "GT2 Stradale" (che ricade sul campo motore libero) sia come motorizzazione
+della MC20; due utenti con la stessa vettura possono salvarla in modi diversi.
+Proposta: togliere "GT2 Stradale" dalla lista Maserati di `catalogueSweep.ts`, lasciando la voce sotto MC20.
+Non assegnato: l'arretrato blocca i nuovi task.
+
+### M40 — Catalogo: anni della KTM Duke 890 R da ricontrollare (nuovo)
+File: `web/lib/vehicleData.ts:3243` ("889cc 121cv", `yearFrom: 2023`, `yearTo: null`).
+In pratica: la Duke 890 R e' in vendita dal model year 2020 ed e' stata sostituita dalla 990 Duke (gia' a catalogo dal 2024,
+riga 3246); con questi anni una 890 R del 2020-2022 non trova la propria motorizzazione e una del 2025 la trova ancora.
+Proposta: verificare e portare l'intervallo a `yearFrom: 2020`, `yearTo: 2023`. E' un dato da confermare (come M2).
 Non assegnato: l'arretrato blocca i nuovi task.
 
 ## Rilievi esaminati e non trasformati in task
