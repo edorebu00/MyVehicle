@@ -239,6 +239,7 @@ const CATALOGUE_EXTENSIONS: Partial<Record<VehicleType, Record<string, string[]>
       "V-Rod",
     ],
     Honda: [
+      "CB1000GT",
       "CB1000R",
       "CB500X",
       "CBR650R",
@@ -3164,7 +3165,10 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "1103cc 218cv", yearFrom: 2027, yearTo: null },
         { label: "V4 S 1103cc 218cv", yearFrom: 2027, yearTo: null },
       ],
-      "Panigale V2": [{ label: "955cc 155cv", yearFrom: 2020, yearTo: null }],
+      "Panigale V2": [
+        { label: "955cc 155cv", yearFrom: 2020, yearTo: 2024 },
+        { label: "890cc 120cv", yearFrom: 2025, yearTo: null },
+      ],
       Monster: [
         { label: "937cc 111cv", yearFrom: 2021, yearTo: null },
         { label: "821cc 112cv", yearFrom: 2014, yearTo: 2020 },
@@ -3207,6 +3211,11 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
         { label: "755cc 92cv", yearFrom: 2023, yearTo: null },
         { label: "CB600F 599cc 102cv", yearFrom: 2007, yearTo: 2013 },
       ],
+      "CB1000 Hornet": [
+        { label: "999cc 152cv", yearFrom: 2024, yearTo: null },
+        { label: "SP 999cc 157cv", yearFrom: 2025, yearTo: null },
+      ],
+      CB1000GT: [{ label: "999cc 150cv", yearFrom: 2026, yearTo: null }],
       "SH 125/150": [
         { label: "125cc 13cv", yearFrom: 2013, yearTo: null },
         { label: "150cc 14cv", yearFrom: 2013, yearTo: null },
@@ -3226,6 +3235,7 @@ const ENGINE_DATA: Record<VehicleType, Record<string, Record<string, EngineVaria
       "Ninja 400": [{ label: "399cc 45cv", yearFrom: 2018, yearTo: null }],
       "Ninja 650": [{ label: "649cc 68cv", yearFrom: 2017, yearTo: null }],
       "Ninja ZX-10R": [{ label: "998cc 203cv", yearFrom: 2016, yearTo: null }],
+      "ZX-4RR": [{ label: "399cc 80cv", yearFrom: 2024, yearTo: null }],
       Z650: [{ label: "649cc 68cv", yearFrom: 2017, yearTo: null }],
       Z900: [{ label: "948cc 125cv", yearFrom: 2017, yearTo: null }],
       "Versys 650": [{ label: "649cc 68cv", yearFrom: 2015, yearTo: null }],
